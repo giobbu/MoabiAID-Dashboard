@@ -1,0 +1,64 @@
+{% extends "dashboard/base.html" %}
+{% block title %}
+Index
+{% endblock %}
+{% block stylesheet %}
+{{ block.super }}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
+    integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+    crossorigin="" />
+
+{% endblock %}
+{% block canonical_url %}
+{% endblock %}
+{% block shortlink_url %}
+{% endblock %}
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-10">
+        <div class="jumbotron jumbotron-fluid">
+            <div class="container">
+                <h1 class="display-3">MOBI-AID Trucks Dashboard</h1>
+                <p class="lead">A dashboard of trucks in Brussels</p>
+                <hr class="my-2">
+                <p>More info</p>
+                <p class="lead">
+                    <a class="btn btn-primary btn-lg" href="Jumbo action link" role="button">Go To Dashboard</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-7">
+         <div id="mapid"></div>
+    </div>
+    <div class="col-3">
+        <h3>Truck Information</h3>
+        <p>There are currently x trucks in Brussels.</p>
+        <p>x of them are class B (< 3.5 T) y of them are class C (> 3.5T)</p>
+        <h4>Per commune</h4>
+        <table>
+        {% comment %} TODO: populate with DB query {% endcomment %}
+            <thead>
+                <th>Commune</th>
+                <th>Total trucks</th>
+                <th>Cat. B</th>
+                <th>Cat. C</th>
+
+            </thead>
+        </table>
+    </div>
+</div>
+{% endblock %}
+{% block javascript %}
+{{ block.super }}
+<script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
+    integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
+    crossorigin=""></script>
+
+{% load static %}
+<script type="text/javascript" src="{% static 'dashboard/js/index.js' %}"></script>
+{% endblock %}

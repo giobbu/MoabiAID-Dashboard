@@ -1,0 +1,69 @@
+#mapid { height: 50em; }
+
+/* Set variables with site color scheme */
+:root{
+    --mobi-blue: #8cbddb;
+}
+
+/* Manage font */
+body, button, input, select, textarea {
+	font-family: "Raleway", sans-serif;
+	font-weight: 300;
+	text-transform: none;
+	font-size: 18px;
+}
+
+/* Customize header */
+.site-header{
+    background-color: var(--mobi-blue);
+    margin-bottom: 1em;
+}
+
+.site-header a {
+    color: white;
+}
+
+.navbar-brand{
+    font-size: 1.7em;
+    font-weight: 550;
+}
+
+.header-image{
+    height: 1.1em;
+}
+
+.navbar-nav .nav-link{
+    margin: auto;
+    font-size: 0.9em;
+    font-weight: 500;
+    color: whitesmoke;
+    /* font-size: 1.2rem; */
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+}
+
+/* Make this specific in case we have nav-item classes outside of navbar */
+nav .navbar-nav .nav-item.active{
+    color: darkgrey;
+    font-weight: 450;
+}
+
+/* Customize footer */
+#page-container {
+    position: relative;
+    min-height: 100vh;
+}
+
+#page {
+    padding-bottom: 5.3rem /* height of the footer + spacing between footer and page content */
+}
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height:3.3rem;
+    line-height: 3.3rem;
+    background-color: var(--mobi-blue);
+    color: white;
+}
+

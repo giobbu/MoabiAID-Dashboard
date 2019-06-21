@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge" /> -->
+
+    <title>MOBI-AID | {% block title %}{% endblock %}</title>
+
+    {% load static %}
+
+    {# Stylesheets #}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" id="generate-fonts-css"
+        href="//fonts.googleapis.com/css?family=Raleway:100,200,300,regular,500,600,700,800,900|Open+Sans:300,300italic,regular,italic,600,600italic,700,700italic,800,800italic"
+        type="text/css" media="all">
+
+    {# Stylesheet for elements in base template #}
+    <link rel="stylesheet" type="text/css" href="{% static "dashboard/css/style.css" %}">
+
+    {# Stylsheets to be loaded by extending template in this block #}
+    {% block stylesheet %}{% endblock stylesheet %}
+
+    <!-- Note: Set actual urls in inheriting templates -->
+    <link rel='canonical' href="{% block canonical_url %}{% endblock %}" />
+    <link rel='shortlink' href="{% block shortlink_url %}{% endblock %}" />
+
+    <link rel="shortcut icon" type="image/png" href="{% static 'dashboard/images/favicon.ico' %}" />
+
+</head>
+
+<body itemtype="http://schema.org/WebPage" itemscope="itemscope" class="home page">
+    <div id="page-container">
+        <header itemtype="http://schema.org/WPHeader" itemscope="itemscope" id="masthead" role="banner"
+            class="site-header">
+            <nav itemtype="http://schema.org/SiteNavigationElement" itemscope="itemscope" id="site-navigation"
+                role="navigation" class="navbar main-navigation">
+                <div class="container-fluid" id="site-header">
+                    <div class="row justify-content-left">
+                        <!-- <a class="screen-reader-text skip-link" href="#content" title="Skip to content">Skip to content</a> -->
+                        <a class="navbar-brand col-fluid-1" href="{% url 'home' %}" title="OLIDA" rel="home">
+                            <img class="img-fluid header-image"
+                                src="{% static "dashboard/images/truck_icon.png" %}" alt="OLIDA" title="OLIDA" />
+                            <span id="site-name">Mobi-AID</span>
+                        </a>
+                        <div class="navbar-nav flex-row col-fluid pl-5" style="color=white">
+                            <a class="nav-item nav-link {% if nbar == 'home' %}active{% endif %}"
+                                href="{% url 'home' %}">HOME</a>
+                            <a class="nav-item nav-link {% if nbar == 'browse' %}active{% endif %}"
+                                href="{% url 'dashboard' %}">Dashboard</a>
+                            <a class="nav-item nav-link {% if nbar == 'docs' %}active{% endif %}"
+                                href="{% url 'charts' %}">Charts</a>
+                        </div>
+                    </div>
+                </div> <!-- #Site header container (Navbar + Header)-->
+            </nav><!-- #site-navigation -->
+        </header>
+
+
+        <div class="container-fluid hfeed site" id="page">
+            {% block content %}
+            {% endblock content %}
+        </div> <!-- Main content, to be filled by extending templates-->
+
+        <footer class="site-info footer" itemtype="http://schema.org/WPFooter" itemscope="itemscope" role="contentinfo">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <span>
+                        Copyright &copy; 2019 · <a href={% url 'home' %} title="MOBI-AID" itemprop="url">OLIDA</a> All
+                        Rights
+                        Reserved.
+                        · Powered by <a href="https://www.djangoproject.com/">Django</a> and <a
+                            href="https://getbootstrap.com/">Bootstrap</a> ·
+                    </span>
+                </div>
+
+            </div>
+        </footer>
+    </div>
+
+    <script src="http://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+        crossorigin="anonymous"></script>
+
+
+    <!-- Bootstrap JS and related -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+    </script>
+    <!-- TODO: Update scripts and check if we still need them + update to django style -->
+    {% comment %} <script type="text/javascript" src="{% static "dashboard/js/base.js" %}"></script> {% endcomment %}
+
+    {% comment %} Define paths as global JS variables to access them from external script files {% endcomment %}
+    <script type='text/javascript'>
+        var ajaxLoaderPath = '{% static 'dashboard/images/ajax-loader.gif' %}';
+    </script>
+
+    {% block javascript %}{% endblock javascript %}
+
+
+</body>
+
+</html>
