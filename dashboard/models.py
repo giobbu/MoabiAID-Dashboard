@@ -37,6 +37,7 @@ class Commune(models.Model):
     # Administrative data
     name = models.TextField()
     population = models.PositiveIntegerField()
+    postal_code = models.PositiveSmallIntegerField()
     area = models.PositiveSmallIntegerField()
 
     # Geographical features
@@ -45,6 +46,12 @@ class Commune(models.Model):
     boundaries = models.PolygonField()
 
     #etc.
+
+    def get_boundaries(self):
+        """
+        Retrieves the commune boundaries and name for transmission by serilizing boundaries to GeoJSON
+        """
+        return {'name': self.name, 'borders': self.boundaries.geojson}
 
     class Meta:
         required_db_features = ['gis_enabled']

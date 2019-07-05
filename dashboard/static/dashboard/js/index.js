@@ -9,4 +9,14 @@ $(document).ready(function () {
         id: 'mapbox.streets',
         accessToken: 'pk.eyJ1IjoiYXJkaWxsZW4iLCJhIjoiY2p4NXd1YXdkMDBiMzN5cWpnazF0bTcwYSJ9.PnYEXt4qwH8DUEbhiy8zQw'
     }).addTo(mymap);
+
+    $.ajax({
+        type: "get",
+        url: "/data/",
+        data: "data",
+        dataType: "json",
+        success: function (response) {
+            //TODO: Retrieve GeoJSON and add to map
+        }
+    });
 });

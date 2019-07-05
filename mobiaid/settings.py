@@ -25,7 +25,7 @@ SECRET_KEY = '3_@wy_itc&y++5w4j+0@%em!^nls#qvykmg9v%uftli-r0@n0p'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['testserver']
 
 
 # Application definition
@@ -81,10 +81,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': 'mobiaid',
-        'USER': 'mobi',
-        'PASSWORD': 'mlg',
+        'USER': 'postgres',
+        'PASSWORD': 'password',
         'HOST': 'localhost',
-        'PORT': ''
+        'PORT': '5433'
     }
 }
 
