@@ -11,6 +11,6 @@ def get_data(table, req_data):
     if table == 'Commune':
         data = get_commune_data(req_data)
     if table == 'Truck':
-        pass # TODO: implement retrieval of truck data and other database entities here
+        data = get_truck_data(req_data)
 
     return data

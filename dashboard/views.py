@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 
 from .data.request_handlers import *
 
@@ -20,11 +20,13 @@ def data(request):
     table = request.GET.get('table')
     req_data = request.GET.get('data')
 
-    result_data = { # Wrap in dict as some data requests might return a list
-        'data': get_data(table, req_data)
-        }
-
-    return JsonResponse(result_data)
+    result_data = get_data(table, req_data)
+    if isinstance(result_data, str):
+        response = HttpResponse(result_data, content_type='text/json') # Data already serialized
+    else:
+        response = JsonResponse({'data': result_data})
+    print(response.content)
+    return response
 
     
 

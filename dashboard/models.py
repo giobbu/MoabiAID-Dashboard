@@ -1,4 +1,5 @@
 from django.contrib.gis.db import models
+from django.contrib.gis import geos
 from polymorphic.models import PolymorphicModel
 
 import django.contrib.postgres.indexes as psql_indexes
@@ -9,7 +10,7 @@ import django.contrib.postgres.indexes as psql_indexes
 class Truck(models.Model):
 
     # Truck identifiers
-    obu_id = models.PositiveSmallIntegerField()
+    obu_id = models.BigIntegerField()
     measurement_date = models.DateField()
 
     # Truck attributes
@@ -43,15 +44,22 @@ class Commune(models.Model):
     # Geographical features
 
     center = models.PointField()
-    boundaries = models.PolygonField()
+    boundaries = models.MultiPolygonField()
 
     #etc.
 
     def get_boundaries(self):
         """
-        Retrieves the commune boundaries and name for transmission by serilizing boundaries to GeoJSON
+        Retrieves the commune boundaries and name
         """
-        return {'name': self.name, 'borders': self.boundaries.geojson}
+        return {'name': self.name, 'borders': self.boundaries}
+
+    def save(self, *args, **kwargs):
+        # if boundaries ends up as a Polgon, make it into a MultiPolygon
+        if self.boundaries and isinstance(self.boundaries, geos.Polygon):
+            self.boundaries = geos.MultiPolygon(self.boundaries)
+
+        super(Commune).save(*args, **kwargs)
 
     class Meta:
         required_db_features = ['gis_enabled']

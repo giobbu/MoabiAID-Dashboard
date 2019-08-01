@@ -1,7 +1,10 @@
 """
 Module that manages database acces, all requests for data should come through here
 """
+from django.core.serializers import serialize
+
 from dashboard.models import *
+from .figures import *
 
 def get_commune_data(req_data):
     """
@@ -12,9 +15,17 @@ def get_commune_data(req_data):
     if req_data == 'all':
         data = list(communes.values())
     elif req_data == 'borders':
-        for c in communes:
-            data.append(c.get_boundaries())
+        data = serialize('geojson', communes, geometry_field='boundaries')#, srid=3857)
 
     #TODO: Implement retrieval of other data attributes here
+    # print(data)
+    return data
 
+def get_truck_data(req_data):
+    trucks = Truck.objects.all()
+    data = []
+    if req_data == 'in_commune':
+        data = trucks_in_commune(trucks, Commune.objects.all())
+
+    print(data)
     return data
