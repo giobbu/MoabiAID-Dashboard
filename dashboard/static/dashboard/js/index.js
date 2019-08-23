@@ -27,8 +27,9 @@ $(document).ready(function () {
                 function (response) {
                     res_data = response.data
                     var ticDiv = $("#trucks-in-commune")
-                    ticDiv.find("#total-trucks").text(`There are currently ${res_data.total_trucks} trucks in Brussels.`)
-                    ticDiv.find("#truck-classes").text(`${res_data.cat_b} of them are class B (< 3.5 T) ${res_data.cat_c} of them are class C (> 3.5T)`)
+                    ticDiv.find("#total-trucks").html(`There are currently <strong>${res_data.total_trucks}</strong> trucks in Brussels.`)
+                    ticDiv.find("#truck-classes")
+                    .html(`<strong>${res_data.cat_b}</strong> of them are class <strong>B</strong> (< 3.5 T) and <strong>${res_data.cat_c}</strong> of them are class <strong>C</strong> (> 3.5T)`)
                     ticDiv.find("table").DataTable(res_data.table)
 
                     var commune_trucks = {};

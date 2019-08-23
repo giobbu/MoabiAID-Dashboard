@@ -20,7 +20,9 @@ def data(request):
     table = request.GET.get('table')
     req_data = request.GET.get('data')
 
-    result_data = get_data(table, req_data)
+    data_type = request.GET.get('usage')
+
+    result_data = get_data(table, req_data, data_type)
     if isinstance(result_data, str):
         response = HttpResponse(result_data, content_type='text/json') # Data already serialized
     else:

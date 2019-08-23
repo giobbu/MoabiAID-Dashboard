@@ -15,7 +15,7 @@ def get_commune_data(req_data):
     if req_data == 'all':
         data = list(communes.values())
     elif req_data == 'borders':
-        data = serialize('geojson', communes, geometry_field='boundaries')#, srid=3857)
+        data = serialize('geojson', communes, geometry_field='boundaries')
 
     #TODO: Implement retrieval of other data attributes here
     # print(data)
@@ -25,7 +25,18 @@ def get_truck_data(req_data):
     trucks = Truck.objects.all()
     data = []
     if req_data == 'in_commune':
-        data = trucks_in_commune(trucks, Commune.objects.all())
+        data = trucks_in_commune_table(trucks, Commune.objects.all())
 
     print(data)
+    return data
+
+def get_chart(chart_name):
+    communes = Commune.objects.all()
+    trucks = Truck.objects.all()
+
+    data = []
+
+    if chart_name == 'cat_dist':
+        data = category_distribution(trucks, communes)
+
     return data
