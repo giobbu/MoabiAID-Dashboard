@@ -16,18 +16,22 @@ def charts(request):
     context = {'nbar': 'charts'} # Manages nav-bar from here instead of JS
     return render(request, 'dashboard/charts.html', context=context)
 
+def about(request):
+    context = {'nbar': 'about'}
+    return render(request, 'dashboard/about.html', context=context)
+
 def data(request):
     table = request.GET.get('table')
     req_data = request.GET.get('data')
 
-    data_type = request.GET.get('usage')
+    usage = request.GET.get('data_usage')
 
-    result_data = get_data(table, req_data, data_type)
+    result_data = get_data(table, req_data, usage)
     if isinstance(result_data, str):
         response = HttpResponse(result_data, content_type='text/json') # Data already serialized
     else:
         response = JsonResponse({'data': result_data})
-    print(response.content)
+    # print(response.content)
     return response
 
     

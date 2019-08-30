@@ -60,26 +60,18 @@ function drawChart(chart_name) {
 
             $(divSelector).empty();
             // console.log(divSelector);
-            // Charts that could not be drawn with amCharts should insert an image
-            if (chart_name == "combination_evidence_venn") {
-                img_path = chart_data.path;
-                $("<img>", {
-                    "class": "img-responsive",
-                    "src": img_path,
-                    "alt": ""
-                }).appendTo(divSelector);
-                return img_path
-            };
-            // console.log($(divSelector));
+            // console.log(chart_data);
             // Generate chart
             var divID = chart_name + "_figure_div"; // Same as in insertDrawDiv
-            chart = am4core.createFromConfig(chart_data, divID);
+            chart = am4core.createFromConfig(chart_data.data, divID);
 
-            // Add an icon to the legend with some information about the chart on hover and details on tooltips
-            addDetails(chart);
+            // // Add an icon to the legend with some information about the chart on hover and details on tooltips
+            // addDetails(chart);
 
-            // Format labels
+            // // Format labels
             formatLabels(chart);
+            // console.log(chart);
+            
         });
     // TODO: add fail and always callbacks as necessary
     return chart
@@ -191,7 +183,7 @@ $(document).ready(function () {
     $(".chart-row").each(function () {
         chart_name = $(this).prop("id"); //id of a chart div should correspond to the chart name as accepted by server side handlers
 
-        console.log("Drawing chart");
+        // console.log("Drawing chart");
         
 
         $(`<h3> ${chart_name} </h3>`).appendTo(this);

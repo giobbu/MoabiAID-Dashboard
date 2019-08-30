@@ -1,0 +1,41 @@
+/* Page navigation for pages that have a toc */
+.toc {
+    position: sticky;
+    top: 1em;
+}
+/* .page-nav {
+    border-left: 0.8px solid #77757a;
+    
+} */
+.page-nav a {
+    color: #77757a;
+    font-size: 0.8em;
+    font-weight: 500;
+}
+
+.page-nav a:hover {
+    color: var(--mobi-blue);
+}
+
+.page-nav li .active {
+    font-weight: bold;
+    color: var(--mobi-blue);
+    border-left: 2px solid var(--mobi-blue);
+    }
+
+.nav-item .nav {
+    padding-left: 2em;
+}
+
+
+.toc-title {
+    /* text-decoration: underline; */
+    /* color: var(--dida-light-blue); */
+    border-bottom: 1px groove var(--mobi-blue); /*#c8bfd4;*/
+}
+
+.scroll-content {
+    position: relative;
+    height: 100%;
+    overflow-y: scroll;
+}

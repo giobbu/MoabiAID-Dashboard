@@ -27,7 +27,7 @@ def get_truck_data(req_data):
     if req_data == 'in_commune':
         data = trucks_in_commune_table(trucks, Commune.objects.all())
 
-    print(data)
+    # print(data)
     return data
 
 def get_chart(chart_name):
@@ -36,7 +36,11 @@ def get_chart(chart_name):
 
     data = []
 
+    # print(f'retrieving chart {chart_name}')
+
     if chart_name == 'cat_dist':
         data = category_distribution(trucks, communes)
+    
+    # print(data)
 
     return data

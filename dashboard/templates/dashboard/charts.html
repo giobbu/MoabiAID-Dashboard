@@ -5,6 +5,7 @@ Charts
 {% block stylesheet %}
 {{ block.super }}
 {% load static %}
+<link rel="stylesheet" href="{% static '/dashboard/css/charts.css' %}">
 {% endblock %}
 {% block canonical_url %}
 {% endblock %}
@@ -17,6 +18,9 @@ Charts
 </div>
 {% endblock %}
 {% block javascript %}
+<script src="https://www.amcharts.com/lib/4/core.js"></script>
+<script src="https://www.amcharts.com/lib/4/charts.js"></script>
+<script src="https://www.amcharts.com/lib/4/themes/material.js"></script>
 <script src="{% static '/dashboard/js/drawUtils.js' %}"></script>
 <script src="{% static '/dashboard/js/charts.js' %}"></script>
 {% endblock %}

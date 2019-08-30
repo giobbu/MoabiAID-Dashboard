@@ -32,7 +32,8 @@
 
 </head>
 
-<body itemtype="http://schema.org/WebPage" itemscope="itemscope" class="home page">
+<body data-spy="scroll" data-target="#toc" data-offset="50" itemtype="http://schema.org/WebPage" itemscope="itemscope" class="home page">
+<a id="top"></a> <!-- Anchor link for pages that have a side navigation-->
     <div id="page-container">
         <header itemtype="http://schema.org/WPHeader" itemscope="itemscope" id="masthead" role="banner"
             class="site-header">
@@ -50,9 +51,11 @@
                             <a class="nav-item nav-link {% if nbar == 'home' %}active{% endif %}"
                                 href="{% url 'home' %}">HOME</a>
                             <a class="nav-item nav-link {% if nbar == 'dashboard' %}active{% endif %}"
-                                href="{% url 'dashboard' %}">Dashboard</a>
+                                href="{% url 'dashboard' %}">DASHBOARD</a>
                             <a class="nav-item nav-link {% if nbar == 'charts' %}active{% endif %}"
-                                href="{% url 'charts' %}">Charts</a>
+                                href="{% url 'charts' %}">CHARTS</a>
+                            <a class="nav-item nav-link {% if nbar == 'about' %}active{% endif %}"
+                                href="{% url 'about' %}">ABOUT</a>
                         </div>
                     </div>
                 </div> <!-- #Site header container (Navbar + Header)-->
@@ -69,7 +72,7 @@
             <div class="container">
                 <div class="row justify-content-center">
                     <span>
-                        Copyright &copy; 2019 · <a href={% url 'home' %} title="MOBI-AID" itemprop="url">OLIDA</a> All
+                        Copyright &copy; 2019 · <a href={% url 'home' %} title="MOBI-AID" itemprop="url">MOBI-AID</a> All
                         Rights
                         Reserved.
                         · Powered by <a href="https://www.djangoproject.com/">Django</a> and <a

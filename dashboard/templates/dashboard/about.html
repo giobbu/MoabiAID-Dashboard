@@ -1,0 +1,78 @@
+{% extends "dashboard/base_toc.html" %}
+{% block title %}
+ABOUT
+{% endblock %}
+{% block stylesheet %}
+{{ block.super }}
+{% load static %}
+<link rel="stylesheet" href="{% static '/dashboard/css/toc.css' %}">
+{% endblock %}
+{% block canonical_url %}
+{% endblock %}
+{% block shortlink_url %}
+{% endblock %}
+{% block nav_list %}
+<li class="nav-item">
+    <a href="#General" class="nav-link">General</a>
+</li>
+<li class="nav-item">
+    <a href="#Contact" class="nav-link">Contact</a>
+</li>
+<li class="nav-item">
+    <a href="#Support" class="nav-link">Support</a>
+</li>
+{% endblock nav_list %}
+{% block text_content %}
+<h1 id="General">General information</h1>
+<p>
+    <strong>Brussels Mobi-AID (Brussels MOBIlity-Advanced Indicators Dashboard)</strong> aims to facilitate the
+    visualisation and analysis of data related
+    to the movement of trucks in the <strong>Brussels Capital Region (BCR)</strong>. This should provide better insights
+    into the dynamics of truck mobility
+    in Brussels, that should inform policy makers on decisiosns regarding mobility. The ultimate goal would be to create
+    a model that can be used to route
+    truck traffic in real time and result in better mobility in the Brussels Capital Region.
+</p>
+<p>
+    To achieve this, a dashboard was implemented that allows visitors to view the real-time traffic of trucks in BCR and
+    to view charts and other
+    insights for historical data. We also make predictions on the expected traffic situation in the future using Machine
+    Learning models that we
+    developed for this purpose. Future research and findings regarding this subject should also be made available
+    through this platform.
+</p>
+<p>
+    The Mobi-AID platform is developed by the Machine Learning Group (MLG) of the Université libre de Bruxelles (ULB).
+    The truck data is provided
+    by Bruxelles Mobilité and is annotated with additional data from Waze and other useful sources of open data on
+    mobility.
+</p>
+
+<h1 id="Contact">Contact</h1>
+<p>
+    If you have questions regarding the dashboard or would like to request access to our data, feel free to contact us
+    at <strong>TODO: Make MOBI-AID mail adress?</strong>
+</p>
+
+<h1 id="Support">Supported By:</h1>
+<div class="row my-2">
+    <div class="col">
+        <img src="{% static '/dashboard/images/logo_ulb.jpg' %}" class="img-fluid" alt="">
+    </div>
+    <div class="col">
+        <img src="{% static '/dashboard/images/Mlg-logo.png' %}" class="img-fluid" alt="">
+    </div>
+</div>
+<div class="row my-2">
+    <div class="col">
+        <img src="{% static '/dashboard/images/logoEU.jpg' %}" class="img-fluid" alt="">
+    </div>
+</div>
+<div class="row my-2">
+    <div class="col">
+        <img src="{% static '/dashboard/images/bxl_mobilite.jpg' %}" class="img-fluid" alt="">
+    </div>
+</div>
+{% endblock %}
+{% block javascript %}
+{% endblock %}

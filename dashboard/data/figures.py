@@ -180,7 +180,7 @@ def clustered_bar_chart(data, category, values):
                 'valueX': val,
                 'categoryY': category
             },
-            'name': val[2:].capitalize(),
+            'name': val.replace('_', ' '),
             'columns': {
                 'template': {
                     'tooltipText': "{name}: {valueX}",
@@ -206,7 +206,7 @@ def clustered_bar_chart(data, category, values):
 
     return chart_dict
 
-def category_distribution(trucks, communes):
+def category_distribution(trucks, communes, sort_key='cat_c'):
 
     data = []
 
@@ -229,4 +229,5 @@ def category_distribution(trucks, communes):
         
         data.append(commune_data)
 
-    return clustered_bar_chart(data, 'commune', ['cat_a', 'cat_b'])
+    data.sort(key=lambda com: com[sort_key]) # Sort the list on the given key 
+    return clustered_bar_chart(data, 'commune', ['cat_b', 'cat_c'])
