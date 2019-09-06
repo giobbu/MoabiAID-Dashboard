@@ -92,7 +92,7 @@ local_settings.py
 db.sqlite3
 
 # Generated files
-dida_app/static/dida_app/exported
+dashboard/static/dashboard/exported
 
 # Visual studio code
 .vscode
