@@ -52,8 +52,8 @@
                                 href="{% url 'home' %}">HOME</a>
                             <a class="nav-item nav-link {% if nbar == 'dashboard' %}active{% endif %}"
                                 href="{% url 'dashboard' %}">DASHBOARD</a>
-                            <a class="nav-item nav-link {% if nbar == 'charts' %}active{% endif %}"
-                                href="{% url 'charts' %}">CHARTS</a>
+                            {% comment %} <a class="nav-item nav-link {% if nbar == 'charts' %}active{% endif %}"
+                                href="{% url 'charts' %}">CHARTS</a> {% endcomment %}
                             <a class="nav-item nav-link {% if nbar == 'about' %}active{% endif %}"
                                 href="{% url 'about' %}">ABOUT</a>
                         </div>

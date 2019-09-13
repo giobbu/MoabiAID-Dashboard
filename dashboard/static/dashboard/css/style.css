@@ -16,7 +16,6 @@ body, button, input, select, textarea {
 /* Customize header */
 .site-header{
     background-color: var(--mobi-blue);
-    margin-bottom: 1em;
 }
 
 .site-header a {

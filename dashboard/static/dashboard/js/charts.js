@@ -114,41 +114,41 @@ function generateTable(name, data, divSelector) {
 
 }
 
-function drawVariantsTable(data, divSelector) {
-    var tabsID = "vartable-tabs";
-    var contenID = "variant-tables";
-    $(divSelector).replaceWith(`<ul class="nav nav-tabs" role="tablist" id=${tabsID}></ul> <div class="tab-content" id=${contenID}></div>`);
+// function drawVariantsTable(data, divSelector) {
+//     var tabsID = "vartable-tabs";
+//     var contenID = "variant-tables";
+//     $(divSelector).replaceWith(`<ul class="nav nav-tabs" role="tablist" id=${tabsID}></ul> <div class="tab-content" id=${contenID}></div>`);
 
-    var navTabs = $(`#${tabsID}`);
-    // console.log($(divSelector));
-    var tabContent = $(`#${contenID}`);
+//     var navTabs = $(`#${tabsID}`);
+//     // console.log($(divSelector));
+//     var tabContent = $(`#${contenID}`);
 
-    var first = true;
-    for (const varTable in data) {
-        var contentSelector = `#${varTable}`;
-        var tableName = `${varTable.toUpperCase()}`;
+//     var first = true;
+//     for (const varTable in data) {
+//         var contentSelector = `#${varTable}`;
+//         var tableName = `${varTable.toUpperCase()}`;
 
-        console.log(contentSelector);
-        if (first) { // First tab is active
-            navTabs.append(`<li class="nav-item">
-                <a class="nav-link active" id="${varTable}-tab" data-toggle="tab" href="${contentSelector}" role="tab" 
-                aria-controls="varTable" aria-selected="true">${tableName}</a></li>`);
-            tabContent.append(`<div class="tab-pane fade show active table-row" id="${varTable}" role="tabpanel" aria-labelledby="${varTable}-tab"></div>`);
-            first = false;
-        } else {
-            navTabs.append(`<li class="nav-item">
-                <a class="nav-link" id="${varTable}-tab" data-toggle="tab" href="${contentSelector}" role="tab" 
-                aria-controls="varTable" aria-selected="false">${tableName}</a></li>`);
-            tabContent.append(`<div class="tab-pane fade table-row" id="${varTable}" role="tabpanel" aria-labelledby="${varTable}-tab"></div>`);
-        }
+//         console.log(contentSelector);
+//         if (first) { // First tab is active
+//             navTabs.append(`<li class="nav-item">
+//                 <a class="nav-link active" id="${varTable}-tab" data-toggle="tab" href="${contentSelector}" role="tab" 
+//                 aria-controls="varTable" aria-selected="true">${tableName}</a></li>`);
+//             tabContent.append(`<div class="tab-pane fade show active table-row" id="${varTable}" role="tabpanel" aria-labelledby="${varTable}-tab"></div>`);
+//             first = false;
+//         } else {
+//             navTabs.append(`<li class="nav-item">
+//                 <a class="nav-link" id="${varTable}-tab" data-toggle="tab" href="${contentSelector}" role="tab" 
+//                 aria-controls="varTable" aria-selected="false">${tableName}</a></li>`);
+//             tabContent.append(`<div class="tab-pane fade table-row" id="${varTable}" role="tabpanel" aria-labelledby="${varTable}-tab"></div>`);
+//         }
 
 
 
-        var divSelector = insertDrawDiv(varTable);
+//         var divSelector = insertDrawDiv(varTable);
 
-        generateTable(tableName, data[varTable], divSelector);
-    }
-}
+//         generateTable(tableName, data[varTable], divSelector);
+//     }
+// }
 
 function drawTable(table_name) {
 
@@ -158,12 +158,12 @@ function drawTable(table_name) {
     var table = null;
     var dataRequest = requestData(table_name, 'table')
         .done(function (table_data) {
-            if (table_name == 'Variant') {
-                // Make sub-tables
-                drawVariantsTable(table_data, divSelector);
-            } else {
+            // if (table_name == 'Variant') {
+            //     // Make sub-tables
+            //     drawVariantsTable(table_data, divSelector);
+            // } else {
                 table = generateTable(table_name, table_data, divSelector);
-            };
+            // };
             // var tableId = table_name + "_table";
             // $(divSelector).replaceWith(`<table id=${tableId} class='display'></table>`);
             // var tableSelector = `#${tableId}`;
@@ -179,23 +179,45 @@ function drawTable(table_name) {
  * Script that populates a page with figures
  */
 
-$(document).ready(function () {
-    $(".chart-row").each(function () {
-        chart_name = $(this).prop("id"); //id of a chart div should correspond to the chart name as accepted by server side handlers
+// $("#v-pills-charts-tab").one("click", function () { //TODO: this should probably best be triggerd when the charts tab is selected for the first time
+//     am4core.useTheme(am4themes_animated);
+//     am4core.useTheme(am4themes_material);
+//     $(".chart-row").each(function (index) {
+//         // First chart is shown by default
+//         if (index != 0) {
+//             $(this).hide()
+//         }
 
-        // console.log("Drawing chart");
+//         chart_name = $(this).prop("id"); //id of a chart div should correspond to the chart name as accepted by server side handlers
+
+//         // console.log("Drawing chart");
         
+//         $(`<h3> ${chart_name} </h3>`).appendTo(this);
+//         chart = drawChart(chart_name);
+//         // TODO: Eventual additional client-side processing/customization for specific charts
+//     });
 
-        $(`<h3> ${chart_name} </h3>`).appendTo(this);
-        chart = drawChart(chart_name);
-        // TODO: Eventual additional client-side processing/customization for specific charts
-    });
+//     // Bind event handlers to dropdown
 
-    // $(".table-row").each(function () {
-    //     table_name = $(this).prop("id"); //id of a table div should correspond to the table name as accepted by server side handlers
+//     $("#chart-select-drop .dropdown-item").click(function () {
+//         var showChart = $(this).data("chart");
 
-    //     $(`<h3> ${table_name} </h3>`).appendTo(this);
-    //     table = drawTable(table_name);
-    //     // TODO: Eventual additional client-side processing/customization for specific tables
-    // });
-});
+//         // Make sure all other chart divs are hidden and show the selected one
+//         // NOTE: It might be better to store the currently shown chart somewhere and only toggle the currently shown and newly selected ones
+//         $(".chart-row").each( function () {
+//             if ($(this).attr("id") == showChart) {
+//                 $(this).show();
+//             } else {
+//                 $(this).hide();
+//             }
+//         })
+//     });
+
+//     // $(".table-row").each(function () {
+//     //     table_name = $(this).prop("id"); //id of a table div should correspond to the table name as accepted by server side handlers
+
+//     //     $(`<h3> ${table_name} </h3>`).appendTo(this);
+//     //     table = drawTable(table_name);
+//     //     // TODO: Eventual additional client-side processing/customization for specific tables
+//     // });
+// });

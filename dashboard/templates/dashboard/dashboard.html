@@ -5,6 +5,9 @@ Dashboard
 {% block stylesheet %}
 {{ block.super }}
 {% load static %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
+    integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+    crossorigin="" />
 <link rel="stylesheet" href="{% static '/dashboard/css/dashboard.css' %}">
 {% endblock %}
 {% block canonical_url %}
@@ -16,195 +19,98 @@ Dashboard
 <div class="row">
     <nav class="col-md-2 d-none d-md-block bg-light sidebar">
         <div class="sidebar-sticky">
-            <ul class="nav flex-column">
+            <ul class="nav flex-column nav-pills" id="dashboard-sidebar" role="tablist" aria-orientation="vertical">
                 <li class="nav-item">
-                    <a class="nav-link active" href="#">
+                    <a class="nav-link active" id="v-pills-rt-tab" data-toggle="pill" href="#v-pills-rt" role="tab"
+                        aria-controls="v-pills-rt" aria-selected="true">
                         <div class="row align-items-center text-center">
-                            <img class="img-fluid nav-icon pr-2" src="{% static '/dashboard/images/Real-time.svg' %}" alt="">
+                            <img class="img-fluid nav-icon pr-2" src="{% static '/dashboard/images/Real-time.svg' %}"
+                                alt="">
                             <span class="sidebar-text">Real-time</span>
                         </div>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" href="#">
+                    <a class="nav-link" id="v-pills-charts-tab" data-toggle="pill" href="#v-pills-charts" role="tab"
+                        aria-controls="v-pills-charts" aria-selected="false">
                         <div class="row align-items-center text-center">
-                            <img class="img-fluid nav-icon pr-2" src="{% static '/dashboard/images/Chart_icon.svg' %}" alt="">
+                            <img class="img-fluid nav-icon pr-2" src="{% static '/dashboard/images/Chart_icon.svg' %}"
+                                alt="">
                             <span class="sidebar-text">Charts</span>
+                        </div>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="v-pills-analytics-tab" data-toggle="pill" href="#v-pills-analytics"
+                        role="tab" aria-controls="v-pills-analytics" aria-selected="false">
+                        <div class="row align-items-center text-center">
+                            <img class="img-fluid nav-icon pr-2"
+                                src="{% static '/dashboard/images/analytic-icon.svg' %}" alt="">
+                            <span class="sidebar-text">Analytics</span>
+                        </div>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="v-pills-pred-tab" data-toggle="pill" href="#v-pills-pred" role="tab"
+                        aria-controls="v-pills-pred" aria-selected="false">
+                        <div class="row align-items-center text-center">
+                            <img class="img-fluid nav-icon pr-2"
+                                src="{% static '/dashboard/images/predictions-icon.svg' %}" alt="">
+                            <span class="sidebar-text">Predictions</span>
                         </div>
                     </a>
                 </li>
             </ul>
         </div>
     </nav>
-
-    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
-        <div style="position: absolute; inset: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;"
-            class="chartjs-size-monitor">
-            <div class="chartjs-size-monitor-expand"
-                style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;">
-                <div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div>
+    <div class="col-md-9">
+        <div class="tab-content" id="v-pills-tabContent">
+            <div class="tab-pane fade show active" id="v-pills-rt" role="tabpanel" aria-labelledby="v-pills-rt-tab">
+                <h1>Real Time</h1>
+                <div id="rt-map"></div>
             </div>
-            <div class="chartjs-size-monitor-shrink"
-                style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;">
-                <div style="position:absolute;width:200%;height:200%;left:0; top:0"></div>
-            </div>
-        </div>
-        <div
-            class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-            <h1 class="h2">Dashboard</h1>
-            <div class="btn-toolbar mb-2 mb-md-0">
-                <div class="btn-group mr-2">
-                    <button type="button" class="btn btn-sm btn-outline-secondary">Share</button>
-                    <button type="button" class="btn btn-sm btn-outline-secondary">Export</button>
+            <div class="tab-pane fade" id="v-pills-charts" role="tabpanel" aria-labelledby="v-pills-charts-tab">
+                <h1>Charts</h1>
+                <div class="dropdown" id="chart-select-drop">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="select-chart"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Select Chart
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="select-chart">
+                        <a class="dropdown-item" href="#" data-chart="cat_dist">Truck Category Distribution</a>
+                        <a class="dropdown-item" href="#" data-chart="hourly_counts">Daily Truck counts per hour</a>
+                        <a class="dropdown-item" href="#" data-chart="commune_dist">Truck counts per commune</a>
+                    </div>
                 </div>
-                <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                        class="feather feather-calendar">
-                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                        <line x1="16" y1="2" x2="16" y2="6"></line>
-                        <line x1="8" y1="2" x2="8" y2="6"></line>
-                        <line x1="3" y1="10" x2="21" y2="10"></line>
-                    </svg>
-                    This week
-                </button>
+                <div class="row chart-row active-chart" id="cat_dist">
+                </div>
+                {% comment %} Approach: add a div for every chart (with id as chart name) and display/hide divs with
+                some controls (dropdown?) {% endcomment %}
+            </div>
+            <div class="tab-pane fade" id="v-pills-analytics" role="tabpanel" aria-labelledby="v-pills-analytics-tab">
+                <h1>Analytics</h1>
+            </div>
+            <div class="tab-pane fade" id="v-pills-pred" role="tabpanel" aria-labelledby="v-pills-pred-tab">
+                <h1>Predictions</h1>
             </div>
         </div>
+    </div>
 
-        <canvas class="my-4 w-100 chartjs-render-monitor" id="myChart" width="1486" height="627"
-            style="display: block; width: 1486px; height: 627px;"></canvas>
 
-        <h2>Section title</h2>
-        <div class="table-responsive">
-            <table class="table table-striped table-sm">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Header</th>
-                        <th>Header</th>
-                        <th>Header</th>
-                        <th>Header</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1,001</td>
-                        <td>Lorem</td>
-                        <td>ipsum</td>
-                        <td>dolor</td>
-                        <td>sit</td>
-                    </tr>
-                    <tr>
-                        <td>1,002</td>
-                        <td>amet</td>
-                        <td>consectetur</td>
-                        <td>adipiscing</td>
-                        <td>elit</td>
-                    </tr>
-                    <tr>
-                        <td>1,003</td>
-                        <td>Integer</td>
-                        <td>nec</td>
-                        <td>odio</td>
-                        <td>Praesent</td>
-                    </tr>
-                    <tr>
-                        <td>1,003</td>
-                        <td>libero</td>
-                        <td>Sed</td>
-                        <td>cursus</td>
-                        <td>ante</td>
-                    </tr>
-                    <tr>
-                        <td>1,004</td>
-                        <td>dapibus</td>
-                        <td>diam</td>
-                        <td>Sed</td>
-                        <td>nisi</td>
-                    </tr>
-                    <tr>
-                        <td>1,005</td>
-                        <td>Nulla</td>
-                        <td>quis</td>
-                        <td>sem</td>
-                        <td>at</td>
-                    </tr>
-                    <tr>
-                        <td>1,006</td>
-                        <td>nibh</td>
-                        <td>elementum</td>
-                        <td>imperdiet</td>
-                        <td>Duis</td>
-                    </tr>
-                    <tr>
-                        <td>1,007</td>
-                        <td>sagittis</td>
-                        <td>ipsum</td>
-                        <td>Praesent</td>
-                        <td>mauris</td>
-                    </tr>
-                    <tr>
-                        <td>1,008</td>
-                        <td>Fusce</td>
-                        <td>nec</td>
-                        <td>tellus</td>
-                        <td>sed</td>
-                    </tr>
-                    <tr>
-                        <td>1,009</td>
-                        <td>augue</td>
-                        <td>semper</td>
-                        <td>porta</td>
-                        <td>Mauris</td>
-                    </tr>
-                    <tr>
-                        <td>1,010</td>
-                        <td>massa</td>
-                        <td>Vestibulum</td>
-                        <td>lacinia</td>
-                        <td>arcu</td>
-                    </tr>
-                    <tr>
-                        <td>1,011</td>
-                        <td>eget</td>
-                        <td>nulla</td>
-                        <td>Class</td>
-                        <td>aptent</td>
-                    </tr>
-                    <tr>
-                        <td>1,012</td>
-                        <td>taciti</td>
-                        <td>sociosqu</td>
-                        <td>ad</td>
-                        <td>litora</td>
-                    </tr>
-                    <tr>
-                        <td>1,013</td>
-                        <td>torquent</td>
-                        <td>per</td>
-                        <td>conubia</td>
-                        <td>nostra</td>
-                    </tr>
-                    <tr>
-                        <td>1,014</td>
-                        <td>per</td>
-                        <td>inceptos</td>
-                        <td>himenaeos</td>
-                        <td>Curabitur</td>
-                    </tr>
-                    <tr>
-                        <td>1,015</td>
-                        <td>sodales</td>
-                        <td>ligula</td>
-                        <td>in</td>
-                        <td>libero</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </main>
 </div>
 
 {% endblock %}
 {% block javascript %}
+{{ block.super }}
+<script src="https://www.amcharts.com/lib/4/core.js"></script>
+<script src="https://www.amcharts.com/lib/4/charts.js"></script>
+<script src="//www.amcharts.com/lib/4/themes/animated.js"></script>
+<script src="https://www.amcharts.com/lib/4/themes/material.js"></script>
+<script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
+    integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
+    crossorigin=""></script>
+<script src="{% static '/dashboard/js/drawUtils.js' %}"></script>
+<script src="{% static '/dashboard/js/charts.js' %}"></script>
+<script src="{% static '/dashboard/js/maps.js' %}"></script>
+<script src="{% static '/dashboard/js/dashboard.js' %}"></script>
 {% endblock %}
