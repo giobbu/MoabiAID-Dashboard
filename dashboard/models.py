@@ -8,16 +8,22 @@ import django.contrib.postgres.indexes as psql_indexes
 # Create your models here.
 
 class Truck(models.Model):
+    """
+    A truck
+    
+    :param models: [description]
+    :type models: [type]
+    """
 
     # Truck identifiers
     obu_id = models.BigIntegerField()
     measurement_date = models.DateField()
 
     # Truck attributes
-    weight_category = models.PositiveSmallIntegerField() #TODO: verify this
-    average_velocity = models.FloatField()
-    country_code = models.CharField(max_length=3) #TODO: update according to maximal length of a country code
-    euro_value = models.PositiveSmallIntegerField() # TODO: check if we need to handle possible 6d and RDE values
+    weight_category = models.PositiveSmallIntegerField(null=True) #TODO: verify this
+    average_velocity = models.FloatField(null=True)
+    country_code = models.CharField(max_length=3, null=True) #TODO: update according to maximal length of a country code
+    euro_value = models.PositiveSmallIntegerField(null=True) # TODO: check if we need to handle possible 6d and RDE values
 
     # Geographic information
     last_position = models.PointField()

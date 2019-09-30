@@ -31,6 +31,16 @@ Dashboard
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" id="v-pills-maps-tab" data-toggle="pill" href="#v-pills-maps" role="tab"
+                        aria-controls="v-pills-rt" aria-selected="true">
+                        <div class="row align-items-center text-center">
+                            <img class="img-fluid nav-icon pr-2" src="{% static '/dashboard/images/MapIcon.svg' %}"
+                                alt="">
+                            <span class="sidebar-text">Maps</span>
+                        </div>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" id="v-pills-charts-tab" data-toggle="pill" href="#v-pills-charts" role="tab"
                         aria-controls="v-pills-charts" aria-selected="false">
                         <div class="row align-items-center text-center">
@@ -68,6 +78,21 @@ Dashboard
             <div class="tab-pane fade show active" id="v-pills-rt" role="tabpanel" aria-labelledby="v-pills-rt-tab">
                 <h1>Real Time</h1>
                 <div id="rt-map"></div>
+            </div>
+            <div class="tab-pane fade" id="v-pills-maps" role="tabpanel" aria-labelledby="v-pills-maps-tab">
+                <h1>Maps</h1>
+                <div class="dropdown" id="map-select-drop">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="select-chart"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Select Map type
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="select-chart">
+                        <a class="dropdown-item" href="#" data-chart="cat_dist">Trucks per street</a>
+                        <a class="dropdown-item" href="#" data-chart="hourly_counts">Trucks per commune</a>
+                        <a class="dropdown-item" href="#" data-chart="commune_dist">Truck positions</a>
+                    </div>
+                </div>
+                <div id="hist-map"></div>
             </div>
             <div class="tab-pane fade" id="v-pills-charts" role="tabpanel" aria-labelledby="v-pills-charts-tab">
                 <h1>Charts</h1>
@@ -109,6 +134,7 @@ Dashboard
 <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
     integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
     crossorigin=""></script>
+<script src="https://cdn.jsdelivr.net/npm/leaflet-realtime@2/dist/leaflet-realtime.min.js"></script>
 <script src="{% static '/dashboard/js/drawUtils.js' %}"></script>
 <script src="{% static '/dashboard/js/charts.js' %}"></script>
 <script src="{% static '/dashboard/js/maps.js' %}"></script>

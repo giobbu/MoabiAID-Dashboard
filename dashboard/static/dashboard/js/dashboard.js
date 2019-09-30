@@ -1,7 +1,23 @@
 $(document).ready(function () {
-    drawBxlMap("rt-map");
 
-    $("#v-pills-charts-tab").one("click", function () { //TODO: this should probably best be triggerd when the charts tab is selected for the first time
+    // Real time tab
+    var rtMap = drawBxlMap("rt-map");
+    var rtMeasure = "count"; // Modify this variable to select other meaures
+
+    $.get("/data/", {
+        data_usage: "real-time",
+        table: "Street" // IF this is relevant
+        // TODO: determine wether we just send all possible measures for a street or only request the data that is actually used
+    })
+    .done(function (streetData) {
+        drawStreetColors(rtMap, streetData, rtMeasure);
+    })
+    .fail(function () {
+        alert("Could not retrieve real-time data");
+    });
+
+    // Charts tab
+    $("#v-pills-charts-tab").one("click", function () { // TODO: this should probably best be triggerd when the charts tab is selected for the first time
         am4core.useTheme(am4themes_animated);
         am4core.useTheme(am4themes_material);
         $(".chart-row").each(function (index) {

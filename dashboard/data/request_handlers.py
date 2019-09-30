@@ -2,6 +2,7 @@
 Module that handles incoming data requests related to a certain view and delegates to the appropriate submodules 
 """
 from .db import *
+from dashboard.utils import BadRequestError
 
 def get_data(table, req_data, usage):
     """
@@ -18,5 +19,7 @@ def get_data(table, req_data, usage):
 
     elif usage == 'chart':
         data = get_chart(req_data) #TODO finish chart data requests
+    else:
+        raise BadRequestError(f'At least one of the provided request parameters (data_usage: {usage}, table: {table}, data: {req_data}) is invalid')
 
     return data
