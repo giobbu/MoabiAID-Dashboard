@@ -16,6 +16,15 @@ $(document).ready(function () {
         alert("Could not retrieve real-time data");
     });
 
+    //Maps tab
+    $('#v-pills-maps-tab').one("click", function () {
+        console.log("Map tab clicked");
+        
+        var histMap = drawBxlMap("hist-map");
+
+        //TODO add layers and hook up map controls
+    });
+
     // Charts tab
     $("#v-pills-charts-tab").one("click", function () { // TODO: this should probably best be triggerd when the charts tab is selected for the first time
         am4core.useTheme(am4themes_animated);
@@ -23,7 +32,7 @@ $(document).ready(function () {
         $(".chart-row").each(function (index) {
             // First chart is shown by default
             if (index != 0) {
-                $(this).hide()
+                $(this).hide();
             }
     
             chart_name = $(this).prop("id"); //id of a chart div should correspond to the chart name as accepted by server side handlers
@@ -45,7 +54,7 @@ $(document).ready(function () {
                 } else {
                     $(this).hide();
                 }
-            })
+            });
         });
     });
 });

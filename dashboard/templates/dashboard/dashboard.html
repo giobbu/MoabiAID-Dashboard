@@ -16,6 +16,8 @@ Dashboard
 {% endblock %}
 {% block content %}
 
+{% load crispy_forms_tags %}
+
 <div class="row">
     <nav class="col-md-2 d-none d-md-block bg-light sidebar">
         <div class="sidebar-sticky">
@@ -80,19 +82,37 @@ Dashboard
                 <div id="rt-map"></div>
             </div>
             <div class="tab-pane fade" id="v-pills-maps" role="tabpanel" aria-labelledby="v-pills-maps-tab">
-                <h1>Maps</h1>
-                <div class="dropdown" id="map-select-drop">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="select-chart"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Select Map type
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="select-chart">
-                        <a class="dropdown-item" href="#" data-chart="cat_dist">Trucks per street</a>
-                        <a class="dropdown-item" href="#" data-chart="hourly_counts">Trucks per commune</a>
-                        <a class="dropdown-item" href="#" data-chart="commune_dist">Truck positions</a>
+                <div class="row">
+                    <div class="col">
+                        <h1>Maps</h1>
                     </div>
                 </div>
-                <div id="hist-map"></div>
+                <div class="row">
+                    <div class="col-2">
+                        <div class="dropdown" id="map-select-drop">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="select-chart"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Select Map type
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="select-chart">
+                                <a class="dropdown-item" href="#" data-chart="cat_dist">Trucks per street</a>
+                                <a class="dropdown-item" href="#" data-chart="hourly_counts">Trucks per commune</a>
+                                <a class="dropdown-item" href="#" data-chart="commune_dist">Truck positions</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        {% comment %} TODO: Provide map controls in accordance with chosen map {% endcomment %}
+                        <div id="map-controls">
+                            {% crispy map_controls%}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div id="hist-map"></div>
+                    </div>
+                </div>
             </div>
             <div class="tab-pane fade" id="v-pills-charts" role="tabpanel" aria-labelledby="v-pills-charts-tab">
                 <h1>Charts</h1>
@@ -139,4 +159,5 @@ Dashboard
 <script src="{% static '/dashboard/js/charts.js' %}"></script>
 <script src="{% static '/dashboard/js/maps.js' %}"></script>
 <script src="{% static '/dashboard/js/dashboard.js' %}"></script>
+{{map_controls.media}}
 {% endblock %}

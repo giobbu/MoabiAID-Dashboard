@@ -1,6 +1,8 @@
 /* 
 Overall dashboard style
  */
+
+
 .nav-icon{
     height: 1.4em;
 }
@@ -26,3 +28,5 @@ Chart related styling
 }
 
 #rt-map { height: 100em; }
+
+#hist-map { height: 100em; }

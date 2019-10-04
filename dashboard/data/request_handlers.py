@@ -19,6 +19,8 @@ def get_data(table, req_data, usage):
 
     elif usage == 'chart':
         data = get_chart(req_data) #TODO finish chart data requests
+    elif usage == 'real-time':
+        data = get_rt(table)
     else:
         raise BadRequestError(f'At least one of the provided request parameters (data_usage: {usage}, table: {table}, data: {req_data}) is invalid')
 

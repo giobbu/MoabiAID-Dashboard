@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
 
 from .data.request_handlers import *
+from .utils import MapControls
 
 # Create your views here.
 def home(request):
@@ -9,12 +10,15 @@ def home(request):
     return render(request, 'dashboard/index.html', context=context)
 
 def dashboard(request):
-    context = {'nbar': 'dashboard'} # Manages nav-bar from here instead of JS
+    context = {
+        'nbar': 'dashboard',
+        'map_controls': MapControls()
+        } 
     return render(request, 'dashboard/dashboard.html', context=context)
 
-def charts(request):
-    context = {'nbar': 'charts'} # Manages nav-bar from here instead of JS
-    return render(request, 'dashboard/charts.html', context=context)
+# def charts(request):
+#     context = {'nbar': 'charts'} # Manages nav-bar from here instead of JS
+#     return render(request, 'dashboard/charts.html', context=context)
 
 def about(request):
     context = {'nbar': 'about'}

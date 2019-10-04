@@ -1,5 +1,19 @@
 #mapid { height: 100em; }
 
+.legend {
+	line-height: 18px;
+    color: #555;
+    background-color: white;
+    opacity: 0.9;
+}
+.legend i {
+	width: 18px;
+	height: 18px;
+	float: left;
+	margin-right: 8px;
+	opacity: 0.8;
+}
+
 /* Set variables with site color scheme */
 :root{
     --mobi-blue: #8cbddb;
