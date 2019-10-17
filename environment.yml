@@ -149,6 +149,7 @@ dependencies:
     - prompt-toolkit==2.0.9
     - psycopg2==2.8.1
     - ptyprocess==0.6.0
+    - py4j
     - py==1.8.0
     - pycodestyle==2.5.0
     - pydot==1.4.1
@@ -157,6 +158,7 @@ dependencies:
     - pylint-plugin-utils==0.5
     - pyparsing==2.4.0
     - pyrsistent==0.14.11
+    - pyspark
     - pytest==4.5.0
     - pytest-django==3.4.8
     - pytz==2018.9

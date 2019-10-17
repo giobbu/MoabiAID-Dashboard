@@ -19,8 +19,8 @@ Dashboard
 {% load crispy_forms_tags %}
 
 <div class="row">
-    <nav class="col-md-2 d-none d-md-block bg-light sidebar">
-        <div class="sidebar-sticky">
+    <nav class="col-md-1 d-none d-md-block sidebar">
+        <div class="sidebar-sticky h-100 bg-light">
             <ul class="nav flex-column nav-pills" id="dashboard-sidebar" role="tablist" aria-orientation="vertical">
                 <li class="nav-item">
                     <a class="nav-link active" id="v-pills-rt-tab" data-toggle="pill" href="#v-pills-rt" role="tab"
@@ -75,10 +75,20 @@ Dashboard
             </ul>
         </div>
     </nav>
-    <div class="col-md-9">
+    <div class="col-md-10">
         <div class="tab-content" id="v-pills-tabContent">
             <div class="tab-pane fade show active" id="v-pills-rt" role="tabpanel" aria-labelledby="v-pills-rt-tab">
                 <h1>Real Time</h1>
+                <div class="dropdown" id="measure-select-drop">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="select-measure"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Select a measure
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="select-measure">
+                        <a class="dropdown-item" href="#" data-measure="truck_count">Trucks on street segment</a>
+                        <a class="dropdown-item" href="#" data-measure="truck_velocity">Average Velocity</a>
+                    </div>
+                </div>
                 <div id="rt-map"></div>
             </div>
             <div class="tab-pane fade" id="v-pills-maps" role="tabpanel" aria-labelledby="v-pills-maps-tab">

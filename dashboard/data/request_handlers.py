@@ -2,6 +2,7 @@
 Module that handles incoming data requests related to a certain view and delegates to the appropriate submodules 
 """
 from .db import *
+from .realtime import get_rt
 from dashboard.utils import BadRequestError
 
 def get_data(table, req_data, usage):

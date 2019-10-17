@@ -1,4 +1,5 @@
 version: "3.7"
+
 volumes:
   dbbackups:
   postgis-data:
@@ -38,17 +39,29 @@ services:
       - PGPORT=5432
       - PGHOST=db
     restart: on-failure
-    depends_on: 
+    depends_on:
       - postgres
 
   mobiaid:
     image: mobiaid
     build: .
-    command: python manage.py runserver 0.0.0.0:3000
-    volumes: 
+    command: python manage.py runserver 0.0.0.0:3000 # NOTE: This should be replaced with a more general startup script in production
+    volumes:
       - .:/app
+      - /mnt/data/Shared_Documents/MLG/large_scale_mobility_analysis-master/streaming_docker/new_streaming:/streaming_files
     ports:
       - "3000:3000"
-    depends_on: 
+    depends_on:
       - postgres
 
+  streaming:
+    image: streaming
+    # command: startup_script.sh #TODO: This script starts kafka, There should be a cleaner more docker-style way
+    privileged: true
+    stdin_open: true
+    tty: true
+    ports:
+      - 9092:9092 #Port for the Kafka bootstrap server
+      - 8888:8888 #Port for Jupyter 
+    volumes:
+      - /mnt/data/Shared_Documents/MLG/large_scale_mobility_analysis-master:/home/guest/host

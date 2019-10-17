@@ -1,16 +1,19 @@
 $(document).ready(function () {
 
+    //TODO: add interaction (hover?) for sidebar
+
+
     // Real time tab
     var rtMap = drawBxlMap("rt-map");
-    var rtMeasure = "count"; // Modify this variable to select other meaures
+    var rtMeasure = "truck_count"; // Default measure
 
     $.get("/data/", {
         data_usage: "real-time",
-        table: "Street" // IF this is relevant
+        table: "state_street" // IF this is relevant
         // TODO: determine wether we just send all possible measures for a street or only request the data that is actually used
     })
     .done(function (streetData) {
-        drawStreetColors(rtMap, streetData, rtMeasure);
+        drawStreetColors(rtMap, streetData.data, rtMeasure);
     })
     .fail(function () {
         alert("Could not retrieve real-time data");
