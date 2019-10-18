@@ -1,22 +1,66 @@
-/* 
-Overall dashboard style
- */
-
+/*
+Collapsing sidebar
+*/
 
 .nav-icon{
-    height: 1.4em;
+    height: 1.7rem;
 }
 
 .sidebar-text{
     color: black;
+    font-size: 16px;
 }
 
 .nav-item{
     margin-top: 0.5em;
+    
+    align-content: center;
+}
+
+.nav-pills .nav-link{
+    height: 2.5em;
+    padding-left: 1em;
+}
+
+.nav-pills .nav-link:hover{
+    background-color: var(--mobi-blue);
+    opacity: 0.6;
 }
 
 .nav-pills .nav-link.active{
     background-color: var(--mobi-blue);
+    opacity: 0.9;
+}
+
+.sidebar{
+    padding-left: 2px; /*Remove default padding from column*/
+    padding-right: 10px;
+}
+
+#dashboard-sidebar{
+    background-color: #d0dde1;  
+    min-width: 50%;
+    max-width: 50%;
+    transition: min-width 0.5s ease-in, max-width 0.5s ease-in;
+}
+
+#dashboard-sidebar:hover{
+   min-width: 100%;
+   max-width: 100%;
+}
+
+#dashboard-sidebar .sidebar-text{
+    visibility: hidden;
+    width: 0;
+    opacity: 0;
+    transition: visibility 0s ease-in-out 0s, opacity 1s ease-in-out 0.5s, width 0s ease-in-out 0.5s;
+}
+
+#dashboard-sidebar:hover .sidebar-text{
+    visibility: visible;
+    opacity: 1;
+    width: auto;
+    transition: visibility 0s ease-out 0.5s
 }
 
 /*
@@ -31,19 +75,3 @@ Chart related styling
 
 #hist-map { height: 100em; }
 
-/*
-Collapsing sidebar
-*/
-
-.sidebar{
-    padding-left: 2px; /*Remove default padding from column*/
-}
-
-#sidebar.active{
-    min-width: 5em;
-    max-width: 5em;
-}
-
-#sidebar.active .sidebar-text{
-    display: none;
-}

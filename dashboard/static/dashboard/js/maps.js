@@ -88,10 +88,10 @@ function colorStreet(street, measure) {
     streetCol = '#b3b3b3';
 
     if (propVal >= highBound) {
-        streetCol = '#00ff00';
+        streetCol = '#0ac20a';
 
     } else if (propVal >= lowBound) {
-        streetCol = '#ff531a';
+        streetCol = '#f2800d';
 
     } else if (propVal > 0) {
         streetCol = '#ff0000';

@@ -20,8 +20,8 @@ Dashboard
 
 <div class="row">
     <nav class="col-md-1 d-none d-md-block sidebar">
-        <div class="sidebar-sticky h-100 bg-light">
-            <ul class="nav flex-column nav-pills" id="dashboard-sidebar" role="tablist" aria-orientation="vertical">
+        <div class="sidebar-sticky h-100" id="dashboard-sidebar">
+            <ul class="nav flex-column nav-pills" role="tablist" aria-orientation="vertical">
                 <li class="nav-item">
                     <a class="nav-link active" id="v-pills-rt-tab" data-toggle="pill" href="#v-pills-rt" role="tab"
                         aria-controls="v-pills-rt" aria-selected="true">
@@ -34,7 +34,7 @@ Dashboard
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" id="v-pills-maps-tab" data-toggle="pill" href="#v-pills-maps" role="tab"
-                        aria-controls="v-pills-rt" aria-selected="true">
+                        aria-controls="v-pills-rt" aria-selected="false">
                         <div class="row align-items-center text-center">
                             <img class="img-fluid nav-icon pr-2" src="{% static '/dashboard/images/MapIcon.svg' %}"
                                 alt="">
