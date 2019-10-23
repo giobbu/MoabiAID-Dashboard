@@ -6,6 +6,8 @@ from pathlib import Path
 
 from shapely import geometry
 
+from kafka import KafkaConsumer
+
 # from pyspark.sql import SparkSession
 
 # spark = SparkSession \
@@ -19,11 +21,15 @@ from shapely import geometry
 # def get_state():
 #     pass
 
+
+
 STREAMING_FILES = Path('/streaming_files')
 def get_rt(data):
     data_file = STREAMING_FILES / (data + '.json')
     with data_file.open('rb') as json_file:
         rt_data = json.load(json_file)
+
+    # rt_data = get_latest_kafka(data)
 
     if 'street' in data and rt_data['features'][0]['geometry']['type'] == 'Polygon':
        # Convert streets to LineString if these are polygons

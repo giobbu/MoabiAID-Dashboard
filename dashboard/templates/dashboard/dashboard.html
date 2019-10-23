@@ -8,6 +8,7 @@ Dashboard
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
     integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
     crossorigin="" />
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
 <link rel="stylesheet" href="{% static '/dashboard/css/dashboard.css' %}">
 {% endblock %}
 {% block canonical_url %}
@@ -79,17 +80,26 @@ Dashboard
         <div class="tab-content" id="v-pills-tabContent">
             <div class="tab-pane fade show active" id="v-pills-rt" role="tabpanel" aria-labelledby="v-pills-rt-tab">
                 <h1>Real Time</h1>
-                <div class="dropdown" id="measure-select-drop">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="select-measure"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Select a measure
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="select-measure">
-                        <a class="dropdown-item" href="#" data-measure="truck_count">Trucks on street segment</a>
-                        <a class="dropdown-item" href="#" data-measure="truck_velocity">Average Velocity</a>
+                <div class="row">
+                    <div class="col-8">
+                        <div class="dropdown" id="measure-select-drop">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="select-measure"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Select a measure
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="select-measure">
+                                <a class="dropdown-item" href="#" data-measure="truck_count">Trucks on street
+                                    segment</a>
+                                <a class="dropdown-item" href="#" data-measure="truck_velocity">Average Velocity</a>
+                            </div>
+                        </div>
+                        <div id="rt-map"></div>
+                    </div>
+                    <div class="col">
+                        <table id="rt-table" class="display" width="100%"></table>
                     </div>
                 </div>
-                <div id="rt-map"></div>
+
             </div>
             <div class="tab-pane fade" id="v-pills-maps" role="tabpanel" aria-labelledby="v-pills-maps-tab">
                 <div class="row">
@@ -165,6 +175,7 @@ Dashboard
     integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
     crossorigin=""></script>
 <script src="https://cdn.jsdelivr.net/npm/leaflet-realtime@2/dist/leaflet-realtime.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
 <script src="{% static '/dashboard/js/drawUtils.js' %}"></script>
 <script src="{% static '/dashboard/js/charts.js' %}"></script>
 <script src="{% static '/dashboard/js/maps.js' %}"></script>

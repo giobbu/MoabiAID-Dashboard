@@ -36,7 +36,7 @@ function requestData(reqData, usage) {
         },
         dataType: "json"
     });
-    return data_request
+    return data_request;
 }
 
 /*
