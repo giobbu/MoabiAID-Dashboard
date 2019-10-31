@@ -5,31 +5,40 @@ $(document).ready(function () {
 
     // Real time tab
     var rtMap = drawBxlMap("rt-map");
-    var rtMeasure = "truck_count"; // Default measure
+    var rtMeasure = "flow"; // Default measure
 
     $.get("/data/", {
             data_usage: "real-time",
             table: "state_street" // IF this is relevant
         })
         .done(function (streetData) {
-            streets = streetData.data;
-            drawStreetColors(rtMap, streets, rtMeasure);
+            var streets = streetData.data;
+            var {layers, timeKey} = drawStreetColors(rtMap, streets, rtMeasure, 'now');
 
             //Extract top 10 streets and draw table
             top_streets = [];
             street_properties = streets.features.map(function (s) {
-                return s.properties;
+                var sID = s.properties.id_street;
+                var propList = s.properties.list_table;
+                return {
+                    id_street: sID,
+                    flow: propList.flow[timeKey],
+                    //Etc if we want to use other properties
+                };
             });
             street_properties.sort(function (a, b) {
-                return a.truck_count - b.truck_count;
+                return a.flow - b.flow;
             });
 
             $('#rt-table').DataTable( {
                 data: street_properties.slice(0,10),
                 columns : [
                     { data: 'id_street'},
-                    { data: 'truck_count'}
-                ]
+                    { data: 'flow'}
+                ],
+                paging: false,
+                info: false,
+                searching: false
             });
 
 

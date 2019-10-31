@@ -52,7 +52,6 @@ dependencies:
   - libpng
   - libpq
   - libspatialindex
-  - libspatialite
   - libssh2
   - libstdcxx-ng
   - libtiff
@@ -72,7 +71,6 @@ dependencies:
   - pixman
   - poppler
   - poppler-data
-  - postgresql
   - proj4
   - pthread-stubs
   - pylint
@@ -175,6 +173,6 @@ dependencies:
     - urllib3==1.24.2
     - wcwidth==0.1.7
     - werkzeug==0.15.2
-  - gdal
-  - libgdal
+  - gdal=2.4
+  - libgdal=2.4
 

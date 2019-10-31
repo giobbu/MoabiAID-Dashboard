@@ -6,20 +6,32 @@ from django.core.serializers import serialize
 from dashboard.models import *
 from .figures import *
 
+
 def get_commune_data(req_data):
     """
     Handles retrieval of the data on the communes
     """
     communes = Commune.objects.all()
+    print(communes)
     data = []
     if req_data == 'all':
         data = list(communes.values())
     elif req_data == 'borders':
+        print('Serializing border data')
+        # data = {
+        #     'type': 'FeatureCollection',
+        #     'crs': {
+        #         'type': 'name',
+        #         'properties': {'name': 'EPSG:4326'}
+        #     },
+        #     'features': [c.json for c in communes]
+        # }
         data = serialize('geojson', communes, geometry_field='boundaries')
 
-    #TODO: Implement retrieval of other data attributes here
-    # print(data)
+    # TODO: Implement retrieval of other data attributes here
+    print(data)
     return data
+
 
 def get_truck_data(req_data):
     trucks = Truck.objects.all()
@@ -29,6 +41,7 @@ def get_truck_data(req_data):
 
     # print(data)
     return data
+
 
 def get_chart(chart_name):
     communes = Commune.objects.all()
@@ -40,7 +53,7 @@ def get_chart(chart_name):
 
     if chart_name == 'cat_dist':
         data = category_distribution(trucks, communes)
-    
+
     # print(data)
 
     return data

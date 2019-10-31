@@ -82,21 +82,30 @@ Dashboard
                 <h1>Real Time</h1>
                 <div class="row">
                     <div class="col-8">
+                        <h2>Live map</h2>
                         <div class="dropdown" id="measure-select-drop">
                             <button class="btn btn-secondary dropdown-toggle" type="button" id="select-measure"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Select a measure
                             </button>
                             <div class="dropdown-menu" aria-labelledby="select-measure">
-                                <a class="dropdown-item" href="#" data-measure="truck_count">Trucks on street
+                                <a class="dropdown-item" href="#" data-measure="flow">Trucks on street
                                     segment</a>
-                                <a class="dropdown-item" href="#" data-measure="truck_velocity">Average Velocity</a>
+                                <a class="dropdown-item" href="#" data-measure="vel">Average Velocity</a>
                             </div>
                         </div>
                         <div id="rt-map"></div>
                     </div>
                     <div class="col">
-                        <table id="rt-table" class="display" width="100%"></table>
+                        <h2>Top 10 most busy streets</h2>
+                        <table id="rt-table" class="display" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>Street ID</th>
+                                    <th>Truck count</th>
+                                </tr>
+                            </thead>
+                        </table>
                     </div>
                 </div>
 
@@ -176,6 +185,7 @@ Dashboard
     crossorigin=""></script>
 <script src="https://cdn.jsdelivr.net/npm/leaflet-realtime@2/dist/leaflet-realtime.min.js"></script>
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+<script src="{% static '/dashboard/js/utils.js' %}"></script>
 <script src="{% static '/dashboard/js/drawUtils.js' %}"></script>
 <script src="{% static '/dashboard/js/charts.js' %}"></script>
 <script src="{% static '/dashboard/js/maps.js' %}"></script>

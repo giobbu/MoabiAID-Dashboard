@@ -22,7 +22,7 @@ function insertDrawDiv(figure_name) {
         "alt": ""
     }).appendTo(divSelector);
 
-    return divSelector
+    return divSelector;
 
 }
 

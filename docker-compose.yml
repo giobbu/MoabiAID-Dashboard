@@ -23,6 +23,8 @@ services:
     restart: on-failure
     healthcheck:
       test: "exit 0"
+    networks: 
+      - mobi
 
   dbbackups:
     image: kartoza/pg-backup:11.0
@@ -41,11 +43,13 @@ services:
     restart: on-failure
     depends_on:
       - postgres
+    networks: 
+      - mobi
 
   mobiaid:
-    image: mobiaid
+    image: mobiaid:test
     build: .
-    command: python manage.py runserver 0.0.0.0:3000 # NOTE: This should be replaced with a more general startup script in production
+    command: wait-for-it postgres:5432 -- python manage.py runserver_plus 0.0.0.0:3000 # NOTE: This should be replaced with a more general startup script in production 
     volumes:
       - .:/app
       - /mnt/data/Shared_Documents/MLG/large_scale_mobility_analysis-master/streaming_docker/new_streaming:/streaming_files
@@ -53,6 +57,8 @@ services:
       - "3000:3000"
     depends_on:
       - postgres
+    networks: 
+      - mobi
 
   streaming:
     image: streaming
@@ -65,3 +71,8 @@ services:
       - 8888:8888 #Port for Jupyter 
     volumes:
       - /mnt/data/Shared_Documents/MLG/large_scale_mobility_analysis-master:/home/guest/host
+    networks: 
+      - mobi
+
+networks: 
+  mobi:

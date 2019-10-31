@@ -25,12 +25,14 @@ def about(request):
     return render(request, 'dashboard/about.html', context=context)
 
 def data(request):
+    print('Processing data request')
     table = request.GET.get('table')
     req_data = request.GET.get('data')
 
     usage = request.GET.get('data_usage')
 
     result_data = get_data(table, req_data, usage)
+    print('Request processed')
     if isinstance(result_data, str):
         response = HttpResponse(result_data, content_type='text/json') # Data already serialized
     else:

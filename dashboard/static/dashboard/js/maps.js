@@ -69,39 +69,43 @@ function splitStreetData(streetData) {
     return streets;
 }
 
-function colorStreet(street, measure) {
-    var propVal = street.properties[measure]; //TODO: Determine how to also us3e other properties (maybe a global variable set by user?)
+function colorStreet(street, measure, timeKey) {
+    var propVal = street.properties.list_table[measure][timeKey]; //TODO: Determine how to also us3e other properties (maybe a global variable set by user?)
     var highBound;
     var lowBound;
 
     // Colors are hard-coded to counts property, should be able to also handle velocities and other properties in final
 
-    if (measure == 'truck_count') {
+    if (measure == 'flow') {
         highBound = 10;
         lowBound = 5;
-    } else if (measure == 'truck_velocity') {
+    } else if (measure == 'vel') {
         // Velocity might need to also take street type or max speed into account
         highBound = 50;
         lowBound = 30;
     }
 
-    streetCol = '#b3b3b3';
+    streetCol = '#0ac20a';
 
     if (propVal >= highBound) {
-        streetCol = '#0ac20a';
+        streetCol = '#ff0000';
 
     } else if (propVal >= lowBound) {
         streetCol = '#f2800d';
 
-    } else if (propVal > 0) {
-        streetCol = '#ff0000';
     }
 
-    // propVal >= highBound ? '#00ff00' : // High values are green 
-    //     propVal >= lowBound ? '#ff531a' : // Medium values are orange
-    //     propVal > 0 ? '#ff0000' : // Low values are red
-    //     ;
+    // streetCol = '#b3b3b3';
 
+    // if (propVal >= highBound) {
+    //     streetCol = '#0ac20a';
+
+    // } else if (propVal >= lowBound) {
+    //     streetCol = '#f2800d';
+
+    // } else if (propVal > 0) {
+    //     streetCol = '#ff0000';
+    // }
 
     return {
         color: streetCol, // No value or 0 is grey
@@ -110,14 +114,20 @@ function colorStreet(street, measure) {
 
 /*
 Function to draw coloured streets on a map according to some value (counts, avg. velocity, ...)
-Whic streets are drawn depends on the zoom level
+Which streets are drawn depends on the zoom level
+Note: The timeFrame parameter is used to decide whether we should use the latest available time window or the one for a given time
 */
-function drawStreetColors(map, streetData, measure) {
+function drawStreetColors(map, streetData, measure, timeFrame) {
     console.log(streetData);
+
+    var times = streetData.features[0].properties.list_table.time; //Keys where value can be found are the same for each street, so only one is needed
+    console.log(times);
+    
+    var timeIndex = getTimeIndex(times, timeFrame);
 
     var layers = L.geoJSON(streetData, {
         style: function (feat) {
-            return colorStreet(feat, measure);
+            return colorStreet(feat, measure, timeIndex);
         },
     }).addTo(map);
 
@@ -127,7 +137,7 @@ function drawStreetColors(map, streetData, measure) {
         console.log(newMeasure);
 
         layers.setStyle(function (feat) {
-            return colorStreet(feat, newMeasure);
+            return colorStreet(feat, newMeasure, timeIndex);
         });
 
     });
@@ -173,7 +183,7 @@ function drawStreetColors(map, streetData, measure) {
     //         }
     //     }
     // });
-    return layers;
+    return {layers: layers, timeKey: timeIndex};
 }
 
 /***************************

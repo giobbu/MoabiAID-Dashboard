@@ -95,4 +95,7 @@ db.sqlite3
 dashboard/static/dashboard/exported
 
 # Visual studio code
-.vscode
+.vscode/
+
+# JSHint configuration
+.jshintrc

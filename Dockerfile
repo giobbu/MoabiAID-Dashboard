@@ -18,6 +18,7 @@ SHELL ["/bin/bash", "-c"]
 # Install gcc
 RUN apt update
 RUN apt -y install gcc
+RUN apt -y install wait-for-it
 
 # Using miniconda 
 RUN conda env create -f environment.yml
