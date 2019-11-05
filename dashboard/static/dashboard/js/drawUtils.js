@@ -39,10 +39,4 @@ function requestData(reqData, usage) {
     return data_request;
 }
 
-/*
-Uppercase only the first charachter of a string
-Copied from: https://dzone.com/articles/how-to-capitalize-the-first-letter-of-a-string-in
-*/
-function jsUcfirst(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-}
+

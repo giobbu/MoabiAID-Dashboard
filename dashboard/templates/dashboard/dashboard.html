@@ -94,6 +94,8 @@ Dashboard
                                 <a class="dropdown-item" href="#" data-measure="vel">Average Velocity</a>
                             </div>
                         </div>
+                        <button type="button" class="btn btn-primary" id="refreshMap">Refresh</button>
+                        <p id="current-timeframe"></p>
                         <div id="rt-map"></div>
                     </div>
                     <div class="col">
@@ -185,7 +187,6 @@ Dashboard
     crossorigin=""></script>
 <script src="https://cdn.jsdelivr.net/npm/leaflet-realtime@2/dist/leaflet-realtime.min.js"></script>
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
-<script src="{% static '/dashboard/js/utils.js' %}"></script>
 <script src="{% static '/dashboard/js/drawUtils.js' %}"></script>
 <script src="{% static '/dashboard/js/charts.js' %}"></script>
 <script src="{% static '/dashboard/js/maps.js' %}"></script>

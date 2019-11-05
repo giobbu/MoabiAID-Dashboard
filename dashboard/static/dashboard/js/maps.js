@@ -46,6 +46,8 @@ function addLegend(position, grades, colorFn) {
     return legend;
 }
 
+
+
 /***************************
  * Street related functions *
  ***************************/
@@ -95,18 +97,6 @@ function colorStreet(street, measure, timeKey) {
 
     }
 
-    // streetCol = '#b3b3b3';
-
-    // if (propVal >= highBound) {
-    //     streetCol = '#0ac20a';
-
-    // } else if (propVal >= lowBound) {
-    //     streetCol = '#f2800d';
-
-    // } else if (propVal > 0) {
-    //     streetCol = '#ff0000';
-    // }
-
     return {
         color: streetCol, // No value or 0 is grey
     };
@@ -117,7 +107,7 @@ Function to draw coloured streets on a map according to some value (counts, avg.
 Which streets are drawn depends on the zoom level
 Note: The timeFrame parameter is used to decide whether we should use the latest available time window or the one for a given time
 */
-function drawStreetColors(map, streetData, measure, timeFrame) {
+function drawStreetColors(map, streetData, measure, timeFrame, refresh=false) {
     console.log(streetData);
 
     var times = streetData.features[0].properties.list_table.time; //Keys where value can be found are the same for each street, so only one is needed
@@ -142,7 +132,7 @@ function drawStreetColors(map, streetData, measure, timeFrame) {
 
     });
 
-    console.log(map);
+    console.log(layers);
 
     // var splitData = splitStreetData(streetData);
     // var layers = {};
@@ -184,6 +174,60 @@ function drawStreetColors(map, streetData, measure, timeFrame) {
     //     }
     // });
     return {layers: layers, timeKey: timeIndex};
+}
+
+function setupLiveStreetMap(rtMap, rtMeasure, refresh=false) {
+    $.get("/data/", {
+        data_usage: "real-time",
+        table: "state_street" // IF this is relevant
+    })
+    .done(function (streetData) {
+        var streets = streetData.data;
+        var {layers, timeKey} = drawStreetColors(rtMap, streets, rtMeasure, 'now', refresh);
+
+        //Extract top 10 streets and draw table
+        top_streets = [];
+        street_properties = streets.features.map(function (s) {
+            var sID = s.properties.id_street;
+            var propList = s.properties.list_table;
+            return {
+                id_street: sID,
+                flow: propList.flow[timeKey],
+                //Etc if we want to use other properties
+            };
+        });
+        street_properties.sort(function (a, b) {
+            return a.flow - b.flow;
+        });
+        street_properties.reverse();
+        console.log(street_properties);
+        
+        var dataTable = $('#rt-table').DataTable( {
+            data: street_properties.slice(0,10),
+            columns : [
+                { data: 'id_street'},
+                { data: 'flow'}
+            ],
+            paging: false,
+            info: false,
+            searching: false,
+            retrieve: true,
+            order: [[1, "desc"]]
+        });
+
+        //Update data if data table was already initialised (see: https://datatables.net/manual/tech-notes/3)
+        if (refresh) {
+            dataTable.clear().rows.add(street_properties.slice(0,10)).draw();
+        }
+
+        // Store the data for later reuse
+        return {layers: layers, streets:streets};
+
+    })
+    .fail(function () {
+        alert("Could not retrieve real-time data");
+    });
+
 }
 
 /***************************
@@ -242,3 +286,4 @@ function communeHighlight(event) {
         layer.bringToFront();
     }
 }
+

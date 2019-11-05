@@ -47,7 +47,7 @@ services:
       - mobi
 
   mobiaid:
-    image: mobiaid:test
+    image: mobiaid:latest
     build: .
     command: wait-for-it postgres:5432 -- python manage.py runserver_plus 0.0.0.0:3000 # NOTE: This should be replaced with a more general startup script in production 
     volumes:

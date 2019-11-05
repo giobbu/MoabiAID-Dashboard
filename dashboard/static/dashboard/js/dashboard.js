@@ -6,52 +6,40 @@ $(document).ready(function () {
     // Real time tab
     var rtMap = drawBxlMap("rt-map");
     var rtMeasure = "flow"; // Default measure
+    var liveData = setupLiveStreetMap(rtMap, rtMeasure);
+    var retrievedData = {
+        now: {
+            streets: liveData.streets
+        }
+    }; // Variable that stores data retrieved by ajax to avoid making unnecessary new calls
 
-    $.get("/data/", {
-            data_usage: "real-time",
-            table: "state_street" // IF this is relevant
-        })
-        .done(function (streetData) {
-            var streets = streetData.data;
-            var {layers, timeKey} = drawStreetColors(rtMap, streets, rtMeasure, 'now');
-
-            //Extract top 10 streets and draw table
-            top_streets = [];
-            street_properties = streets.features.map(function (s) {
-                var sID = s.properties.id_street;
-                var propList = s.properties.list_table;
-                return {
-                    id_street: sID,
-                    flow: propList.flow[timeKey],
-                    //Etc if we want to use other properties
-                };
-            });
-            street_properties.sort(function (a, b) {
-                return a.flow - b.flow;
-            });
-
-            $('#rt-table').DataTable( {
-                data: street_properties.slice(0,10),
-                columns : [
-                    { data: 'id_street'},
-                    { data: 'flow'}
-                ],
-                paging: false,
-                info: false,
-                searching: false
-            });
-
-
-        })
-        .fail(function () {
-            alert("Could not retrieve real-time data");
-        });
+    $('#refreshMap').click(function (e) {
+        liveData.layers.remove();  
+        liveData = setupLiveStreetMap(rtMap, rtMeasure, true);
+        retrievedData.now.streets = liveData.streets;
+    });
 
     //Maps tab
     $('#v-pills-maps-tab').one("click", function () {
-        console.log("Map tab clicked");
+        // console.log("Map tab clicked");
 
         var histMap = drawBxlMap("hist-map");
+        $(this).on('shown.bs.tab', function (e) {  
+            console.log('Map tab loaded');
+            
+            histMap.invalidateSize();
+        });
+
+        getTypicalData()
+        
+        $('#v-pills-maps .sliderwidget').on('input', function (e) {  
+            var valueDisplay = $(this).data('valuedisplay');
+            $(valueDisplay).text(e.target.value);
+            // console.log('New slider value:');        
+            // console.log(e.target.value);
+            
+        });
+       
 
         //TODO add layers and hook up map controls
     });

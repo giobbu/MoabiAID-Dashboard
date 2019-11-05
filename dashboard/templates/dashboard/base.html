@@ -84,6 +84,7 @@
         </footer>
     </div>
 
+    {% block javascript %}
     <script src="http://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
         crossorigin="anonymous"></script>
 
@@ -101,8 +102,8 @@
     <script type='text/javascript'>
         var ajaxLoaderPath = '{% static 'dashboard/images/ajax-loader.gif' %}';
     </script>
-
-    {% block javascript %}{% endblock javascript %}
+    <script src="{% static '/dashboard/js/utils.js' %}"></script>
+    {% endblock javascript %}
 
 
 </body>
