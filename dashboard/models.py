@@ -9,10 +9,8 @@ import django.contrib.postgres.indexes as psql_indexes
 
 class Truck(models.Model):
     """
-    A truck
-    
-    :param models: [description]
-    :type models: [type]
+    Daily overview of a truck that was observed.
+    NOTE: This is dated and should probably be migrated to MobilityDB
     """
 
     # Truck identifiers
@@ -40,6 +38,9 @@ class Truck(models.Model):
 
 
 class Commune(models.Model):
+    """
+    Description of geometric features of a commune
+    """
 
     # Administrative data
     name = models.TextField()
@@ -71,7 +72,15 @@ class Commune(models.Model):
         required_db_features = ['gis_enabled']
         required_db_vendor = 'postgresql'
 
+#NOTE: models below are conceptual and where never depoloyed
+
 class Street(models.Model):
+    """
+    [summary]
+    
+    :param models: [description]
+    :type models: [type]
+    """
 
     name = models.TextField()
     speed_limit = models.PositiveSmallIntegerField()

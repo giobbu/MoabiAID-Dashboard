@@ -41,3 +41,5 @@ If you installed *django-extentions* we recommend using:
 .. code-block:: bash
 
     python manage.py runserver_plus
+
+_TODO:Document docker startup_ 

@@ -1,6 +1,6 @@
 function getTimeIndex(times, timeFrame) {
-    var curTime = new Date(2019, 11, 6, 0, 20, 23);
-    // NOTE: we currently hard-code the current time, as the simulation starts running from 1 am
+    var curTime = timeFrame; //For the simulation
+    // NOTE: we currently hard-code the current time
     // if (timeFrame == 'now') {
     //     curTime = new Date();
     // } else {
@@ -21,7 +21,7 @@ function getTimeIndex(times, timeFrame) {
         } else if(timeFrame == 'now'){ //Window that was chosen in the last loop is the last available one
             break;
         } else {
-            resIndex = timeIndex; //Update and break if we retrieve an historical time window, 
+            //resIndex = timeIndex; //Update and break if we retrieve an historical time window, 
             break;
         }     
     }

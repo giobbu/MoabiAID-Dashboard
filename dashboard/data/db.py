@@ -9,7 +9,12 @@ from .figures import *
 
 def get_commune_data(req_data):
     """
-    Handles retrieval of the data on the communes
+    Handles retrieval from the database of the data related to communes
+    
+    :param req_data: Specifies the type of data to retreive (e.g. just the commune borders or everythin that is stored in the database)
+    :type req_data: str
+    :return: The data on all communes in the database, either as a list of dictionaries or a geojson formatted string
+    :rtype: str or list(dict)
     """
     communes = Commune.objects.all()
     print(communes)
@@ -34,6 +39,14 @@ def get_commune_data(req_data):
 
 
 def get_truck_data(req_data):
+    """
+    Retrieves the requested data related to trucks from the database
+    
+    :param req_data: The type of data on trucks that is requested
+    :type req_data: str
+    :return: The requested data on trucks (e.g. A dict that is used to created a table describing the trucks in a commune)
+    :rtype: dict
+    """
     trucks = Truck.objects.all()
     data = []
     if req_data == 'in_commune':

@@ -6,22 +6,22 @@ $(document).ready(function () {
     // Real time tab
     var rtMap = drawBxlMap("rt-map");
     var rtMeasure = "flow"; // Default measure
-    var liveData = setupLiveStreetMap(rtMap, rtMeasure);
-    var retrievedData = {
-        now: {
-            streets: liveData.streets
-        }
-    }; // Variable that stores data retrieved by ajax to avoid making unnecessary new calls
+    setupLiveStreetMap(rtMap, rtMeasure);
+    // var retrievedData = {
+    //     now: {
+    //         streets: liveData.streets
+    //     }
+    // }; // Variable that stores data retrieved by ajax to avoid making unnecessary new calls
 
-    $('#refreshMap').click(function (e) {
-        liveData.layers.remove();  
-        liveData = setupLiveStreetMap(rtMap, rtMeasure, true);
-        retrievedData.now.streets = liveData.streets;
-    });
+    // $('#refreshMap').click(function (e) {
+    //     liveData.layers.remove();  
+    //     liveData = setupLiveStreetMap(rtMap, rtMeasure, true);
+    //     retrievedData.now.streets = liveData.streets;
+    // });
 
     //Maps tab
     $('#v-pills-maps-tab').one("click", function () {
-        // console.log("Map tab clicked");
+        console.log("Map tab clicked");
 
         var histMap = drawBxlMap("hist-map");
         $(this).on('shown.bs.tab', function (e) {  
@@ -30,7 +30,7 @@ $(document).ready(function () {
             histMap.invalidateSize();
         });
 
-        getTypicalData()
+        getTypicalData();
         
         $('#v-pills-maps .sliderwidget').on('input', function (e) {  
             var valueDisplay = $(this).data('valuedisplay');

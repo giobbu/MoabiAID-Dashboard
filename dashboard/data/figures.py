@@ -1,4 +1,15 @@
 def trucks_in_commune_table(trucks, communes):
+    """
+    Generates a dictionary that is formatted as to generate a DataTables table on the client.
+    This table contains the counts of trucks in each commune
+    
+    :param trucks: List of trucks that where retrieved from the database
+    :type trucks: ~django.db.models.query.QuerySet
+    :param communes: List of communes that are stored in the database
+    :type communes: ~django.db.models.query.QuerySet
+    :return: Formatted dictionary for DataTables
+    :rtype: dict
+    """
     result = {
         'total_trucks': trucks.count(),
         'cat_b': 0,

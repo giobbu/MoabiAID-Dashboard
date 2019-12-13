@@ -69,6 +69,7 @@ services:
     ports:
       - 9092:9092 #Port for the Kafka bootstrap server
       - 8888:8888 #Port for Jupyter 
+      - 4040:4050 # SparkUI
     volumes:
       - /mnt/data/Shared_Documents/MLG/large_scale_mobility_analysis-master:/home/guest/host
     networks: 
