@@ -9,7 +9,7 @@ from sortedcontainers import SortedList
 
 from django.contrib.gis.geos import fromstr, LineString, Point
 
-from dashboard.models import Truck
+from dashboard.models import Truck, Commune, Street
 
 def load_trucks_csv(csv_path, fieldnames, headers=True):
 
@@ -77,3 +77,22 @@ def load_trucks_csv(csv_path, fieldnames, headers=True):
         print(tr)
     
     print('Import done')
+
+def load_roads_shp(data):
+    print('Filtering out small roads')
+    roads = [r for r in data[0] if r.get('code') > 5110 and r.get('code') < 5135] # Filter out roads that are to small
+
+    print('Filtered out small roads')
+    communes = Commune.objects.all()
+
+    for com in communes:
+        print('Loading roads for commune ' + com.name)
+        com_geom = com.boundaries
+        for road in roads:
+            road_geom = road.geom.geos
+            if road_geom.intersects(com_geom):
+                bridge = True if road.get('bridge') == 'T' else False
+                tunnel = True if road.get('tunnel') == 'T' else False
+                Street.objects.create(name=road.get('name'), speed_limit=road.get('maxspeed'), one_way=road.get('oneway'), bridge=bridge, tunnel=tunnel, category=road.get('fclass'), commune=com, path=road_geom)
+        
+        print('Finished loading streets for ' + com.name)

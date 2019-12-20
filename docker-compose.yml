@@ -53,6 +53,7 @@ services:
     volumes:
       - .:/app
       - /mnt/data/Shared_Documents/MLG/large_scale_mobility_analysis-master/streaming_docker/new_streaming:/streaming_files
+      - /mnt/data/Shared_Documents/MLG/Belgium_map_data_20_12_19:/map_data
     ports:
       - "3000:3000"
     depends_on:

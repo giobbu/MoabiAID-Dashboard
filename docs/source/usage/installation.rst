@@ -56,6 +56,10 @@ Setup
 =====
 
 * Get the DockerFile and build the Image for the streaming pipeline (Ask the devs for this, Note: The image should be called *streaming*)
+* Update the folowwing volumes fields in *docker-compose* file:
+    * mobiaid container: Set the */streaming_files* volume to a directory on the host machine and the */map_data* volume to a directory with *shp* 
+    files for communes and streets. The */map_data* volume can also be removed if the database already contains all data on streets and communes.
+    * streaming container: Set the */home/guest/host* volume to a parent diredctory of the directory that was used for *streaming_files*.
 * Run :command:`docker-compose up` from the root of the directory 
 * Import the database (TODO)
 

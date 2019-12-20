@@ -240,12 +240,13 @@ function setupLiveStreetMap(rtMap, rtMeasure, refresh = false) {
 
             //Update data if data table was already initialised (see: https://datatables.net/manual/tech-notes/3)
             if (refresh) {
+                console.log('Map data refreshed');
                 dataTable.clear().rows.add(street_properties.slice(0, 10)).draw();
             }
 
             // Set up refresh button
             $('#refreshMap').click(function (e) {
-                liveData.layers.remove();
+                // liveData.layers.remove();
                 setupLiveStreetMap(rtMap, rtMeasure, true);
             });
 

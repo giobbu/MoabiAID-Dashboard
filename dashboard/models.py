@@ -84,10 +84,16 @@ class Street(models.Model):
 
     name = models.TextField()
     speed_limit = models.PositiveSmallIntegerField()
+    category = models.CharField(max_length=28)
 
-    commune = models.ForeignKey("dashboard.Commune", on_delete=models.CASCADE, related_name='streets') # Every street belongs to a commune
+    ONE_WAY_CHOICES = [('F', 'Line direction'), ('T', 'Oposite diretion'), ('B', 'Two Way')]
+    one_way = models.CharField(max_length=1, default='B', choices=ONE_WAY_CHOICES)
+    bridge = models.BooleanField(default=False)
+    tunnel = models.BooleanField(default=False)
 
-    path = models.MultiLineStringField() # Contains LineStrings in segments; TODO: determine wether we store this implicitly or construct from segment linestrings
+    commune = models.ForeignKey("dashboard.Commune", on_delete=models.DO_NOTHING, related_name='streets') # Every street belongs to a commune
+
+    path = models.LineStringField() # Contains LineStrings in segments; TODO: determine wether we store this implicitly or construct from segment linestrings
 
     def add_segment(self, segment):
         pass # TODO: this method should validate wether the segment can be added and update the MultiLineString field
