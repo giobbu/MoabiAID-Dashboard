@@ -61,7 +61,7 @@ body, button, input, select, textarea {
 
 /* Make this specific in case we have nav-item classes outside of navbar */
 nav .navbar-nav .nav-item.active{
-    color: darkgrey;
+    color: #96281b;
     font-weight: 450;
 }
 

@@ -98,6 +98,9 @@ class Street(models.Model):
     def add_segment(self, segment):
         pass # TODO: this method should validate wether the segment can be added and update the MultiLineString field
 
+    def __str__(self):
+        return self.name
+
     class Meta:
         required_db_features = ['gis_enabled']
         required_db_vendor = 'postgresql'

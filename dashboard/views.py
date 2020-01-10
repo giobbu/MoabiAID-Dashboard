@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
 
 from .data.request_handlers import *
-from .utils import MapControls
+from .utils import MapControls, get_analytic_controls
 
 # Create your views here.
 def home(request):
@@ -39,6 +39,19 @@ def data(request):
         response = JsonResponse({'data': result_data})
     # print(response.content)
     return response
+
+def load_dashboard_tab(request):
+    tab = request.GET.get('tab')
+    selected_content = request.GET.get('content')
+
+    if tab == 'analytics':
+        template = 'dashboard/dashboard_tabs/analytics.html'
+        ctx = {
+                'analytics_controls': get_analytic_controls(selected_content)
+            }
+    
+    return render(request, template, context=ctx)
+            
 
     
 

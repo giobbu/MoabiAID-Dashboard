@@ -165,6 +165,19 @@ Dashboard
             </div>
             <div class="tab-pane fade" id="v-pills-analytics" role="tabpanel" aria-labelledby="v-pills-analytics-tab">
                 <h1>Analytics</h1>
+                <div class="dropdown" id="entity-select-dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="entity-select" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false">
+                                Select level of aggregation of the analysis
+                            </button>
+                    <div class="dropdown-menu" aria-labelledby="entity-select">
+                        <a class="dropdown-item" href="#">Global</a>
+                        <a class="dropdown-item" href="#">Communes</a>
+                        <a class="dropdown-item " href="#">Streets</a>
+                        <a class="dropdown-item" href="#">Individual Trucks</a>
+                    </div>
+                </div>
+                <div id="analytics-body"></div>
             </div>
             <div class="tab-pane fade" id="v-pills-pred" role="tabpanel" aria-labelledby="v-pills-pred-tab">
                 <h1>Predictions</h1>

@@ -1,10 +1,16 @@
+import geopandas
+
 from django import forms
 from django.forms.widgets import ChoiceWidget
+from django.db import connection
+from django.apps import apps
 
 from bootstrap_datepicker_plus import DatePickerInput
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, HTML, Field
+
+from django_select2.forms import ModelSelect2Widget
 
 class BadRequestError(Exception):
     """
@@ -88,3 +94,30 @@ class MapControls(forms.Form):
             Field('time_of_day', data_valuedisplay='#time_of_day_val'),
             HTML('<p id="time_of_day_val"></p>')
         )
+
+class StreetAnalyticControls(forms.Form):
+    street = forms.ChoiceField(
+        widget=ModelSelect2Widget(
+            model=apps.get_model('dashboard', 'Street'), 
+            search_fields=['name', 'category']
+        )
+    )
+    # TODO: additional controls
+
+def get_analytic_controls(entity):
+    
+    if entity == 'streets':
+        return StreetAnalyticControls()
+
+def get_table_as_geopandas(table, geom_name):
+    """
+    Utility to retrieve a GeoPandas DataFrame directly from a table in the PostGIS database
+    
+    :param table: name of the table in PostGIs (typically: Lowercase name of the model with 'dashboard_' in front)
+    :type table: str
+    :param geom_name: Name of the Geometry column for the table
+    :type geom_name: str
+    :return: The database table as a Geopandas Dataframe
+    :rtype: ~geopandas.GeoDataFrame
+    """
+    return geopandas.read_postgis(f'select * from {table}', connection, geom_name) #TODO: verify that this is safe against SQL injection
