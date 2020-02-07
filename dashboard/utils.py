@@ -79,7 +79,7 @@ class MapControls(forms.Form):
     """
     Controls that are used to select a data and a time for the map
     """
-    date = forms.DateField(widget=DatePickerInput(format='%m/%d/%Y')) #TODO: make date picker and add hour of the day slider
+    date = forms.DateField(widget=DatePickerInput(format='%m/%d/%Y')) 
     day_of_week = SliderField(min_range=1, max_range=7)
     time_of_day = SliderField(max_range=24) #Hours start at 0, the default
 

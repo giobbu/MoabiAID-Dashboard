@@ -18,7 +18,7 @@ class Truck(models.Model):
     measurement_date = models.DateField()
 
     # Truck attributes
-    weight_category = models.PositiveSmallIntegerField(null=True) #TODO: verify this
+    weight_category = models.PositiveSmallIntegerField(null=True) 
     average_velocity = models.FloatField(null=True)
     country_code = models.CharField(max_length=3, null=True) #TODO: update according to maximal length of a country code
     euro_value = models.PositiveSmallIntegerField(null=True) # TODO: check if we need to handle possible 6d and RDE values
@@ -93,10 +93,7 @@ class Street(models.Model):
 
     commune = models.ForeignKey("dashboard.Commune", on_delete=models.DO_NOTHING, related_name='streets') # Every street belongs to a commune
 
-    path = models.LineStringField() # Contains LineStrings in segments; TODO: determine wether we store this implicitly or construct from segment linestrings
-
-    def add_segment(self, segment):
-        pass # TODO: this method should validate wether the segment can be added and update the MultiLineString field
+    path = models.LineStringField() # Contains LineStrings in segments;
 
     def __str__(self):
         return self.name
@@ -105,20 +102,19 @@ class Street(models.Model):
         required_db_features = ['gis_enabled']
         required_db_vendor = 'postgresql'
 
-class StreetSegment(models.Model):
+# class StreetSegment(models.Model):
 
-    # TODO: enforce that a segment should either belong to a street or another segment, but not both
-    street = models.ForeignKey('dashboard.Street', on_delete=models.CASCADE, related_name='segments', null=True) # A street consists of several segments
-    parent_segment = models.ForeignKey('self', on_delete=models.CASCADE, related_name='sub_segments', null=True)
+#     street = models.ForeignKey('dashboard.Street', on_delete=models.CASCADE, related_name='segments', null=True) # A street consists of several segments
+#     parent_segment = models.ForeignKey('self', on_delete=models.CASCADE, related_name='sub_segments', null=True)
 
-    ROAD_TYPES = [('DI', 'Dirt'), ('ASP', 'Asphalt'), ('CON', 'Concrete')]
-    road_type = models.CharField(max_length=3, choices=ROAD_TYPES)
+#     ROAD_TYPES = [('DI', 'Dirt'), ('ASP', 'Asphalt'), ('CON', 'Concrete')]
+#     road_type = models.CharField(max_length=3, choices=ROAD_TYPES)
 
-    segment_path = models.LineStringField() #TODO: find a way to enforce that the path of a segment should be a subset 
+#     segment_path = models.LineStringField() 
 
-    class Meta:
-        required_db_features = ['gis_enabled']
-        required_db_vendor = 'postgresql'
+#     class Meta:
+#         required_db_features = ['gis_enabled']
+#         required_db_vendor = 'postgresql'
 
 
 class TrafficEvent(PolymorphicModel):

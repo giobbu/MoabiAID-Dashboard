@@ -70,3 +70,6 @@ def get_chart(chart_name):
     # print(data)
 
     return data
+
+def get_typical_traffic(aggregation_lvl):
+    pass #TODO: retrieve typical traffic data given the level of aggrgation: Commune, Street, Truck (clusters where trucks are typically located)

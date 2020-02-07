@@ -22,8 +22,6 @@ def is_bxl_commune(name):
 
 def import_communes(apps, schema_editor):
 
-    #TODO: fix this!
-
     Commune = apps.get_model('dashboard', 'Commune')
 
     centers = DataSource('/mnt/data/Shared_Documents/MLG/Belgium_map_data/gis_osm_places_free_1.shp')[0]

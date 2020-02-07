@@ -20,7 +20,7 @@ django.setup()
 # -- Project information -----------------------------------------------------
 
 project = 'mobi-aid'
-copyright = '2019, Arnau Dillen, Giovanni Buroni'
+copyright = '2020, Machine Learning Group'
 author = 'Arnau Dillen, Giovanni Buroni'
 
 # The full version, including alpha/beta/rc tags

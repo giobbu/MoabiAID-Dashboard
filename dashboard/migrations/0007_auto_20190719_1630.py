@@ -72,7 +72,7 @@ def import_truck_data(apps, schema_editor):
     load_trucks_csv('/mnt/data/Shared_Documents/MLG/2018-09-26.csv', Truck)
 
 
-    #TODO: convert position column to Geometry object and insert data in DB
+    
 
     
 
