@@ -8,6 +8,9 @@ Creates a map with an openstreetmap background layer and returns it
 function drawBxlMap(mapId) {
     var mymap = L.map(mapId, {
         zoomSnap: 0.1,
+        fullscreenControl: {
+            pseudoFullscreen: true // if true, fullscreen to page width and height
+        },
         // crs: L.CRS.EPSG4326
     }).setView([50.83507914731851, 4.36468005885868], 12.25);
 
