@@ -11,8 +11,13 @@ function drawBxlMap(mapId) {
         fullscreenControl: {
             pseudoFullscreen: true // if true, fullscreen to page width and height
         },
+        zoomControl: false
         // crs: L.CRS.EPSG4326
     }).setView([50.83507914731851, 4.36468005885868], 12.25);
+
+    // Add custom zoomcontrol to enable reset view to default with button
+    var zoomHome = L.Control.zoomHome({zoomHomeTitle: 'Reset zoom'});
+    zoomHome.addTo(mymap);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
