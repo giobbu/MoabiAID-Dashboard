@@ -26,6 +26,7 @@ $(document).ready(function () {
                         commune_trucks[com_name] = com;    
                     }); 
 
+                    var selectedCommune;
                     var commune_layer = L.geoJSON(borders, {
                         style: function (feat) { return communeStyle(feat, commune_trucks); },
                         onEachFeature: function (feat, layer) {
@@ -34,7 +35,10 @@ $(document).ready(function () {
                             layer.bindTooltip(`There are ${com_trucks.total} trucks in ${com_name}`);
                             layer.on({
                                 mouseover: communeHighlight,
-                                mouseout: function (ev) { return resetHighlight(ev, commune_layer); }
+                                mouseout: function (ev) { if (ev.target != selectedCommune) {
+                                    return resetHighlight(ev, commune_layer);
+                                }},
+                                click: function (ev) {selectedCommune = communeClick(ev, mymap, commune_layer, selectedCommune); }
                             });
                           }
                     }).addTo(mymap);

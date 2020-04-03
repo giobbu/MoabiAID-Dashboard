@@ -130,14 +130,14 @@ class TrafficEvent(PolymorphicModel):
         required_db_features = ['gis_enabled']
         required_db_vendor = 'postgresql'
 
-class RoadWorks(TrafficEvent): # This is an example, maybe this should better be a super class for all events concerning a full road segment
+# class RoadWorks(TrafficEvent): # This is an example, maybe this should better be a super class for all events concerning a full road segment
 
-    description = models.TextField(default='N.A.')
-    start_date = models.DateField()
-    end_date = models.DateField()
+#     description = models.TextField(default='N.A.')
+#     start_date = models.DateField()
+#     end_date = models.DateField()
 
-    street_segments = models.ManyToManyField(StreetSegment)
+#     street_segments = models.ManyToManyField(StreetSegment)
 
-    class Meta:
-        required_db_features = ['gis_enabled']
-        required_db_vendor = 'postgresql'
+#     class Meta:
+#         required_db_features = ['gis_enabled']
+#         required_db_vendor = 'postgresql'

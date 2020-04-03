@@ -7,7 +7,7 @@ Creates a map with an openstreetmap background layer and returns it
 */
 function drawBxlMap(mapId) {
     var mymap = L.map(mapId, {
-        zoomSnap: 0.25,
+        zoomSnap: 0.1,
         // crs: L.CRS.EPSG4326
     }).setView([50.83507914731851, 4.36468005885868], 12.25);
 
@@ -318,4 +318,26 @@ function communeHighlight(event) {
     if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
         layer.bringToFront();
     }
+}
+
+function communeClick(event, map, communeLayer, curSelected=undefined) {
+    // Reset default style for all layers
+    if (typeof curSelected != 'undefined') {
+        communeLayer.resetStyle(curSelected);
+    }
+    
+
+    var communeFeature = event.target;
+    var communeBounds = communeFeature.getBounds();
+
+    console.log(communeBounds);
+
+    // Zoom to commune bounds
+    map.fitBounds(communeBounds);
+
+    // Activate highlight
+    communeHighlight(event);
+
+    return communeFeature;
+
 }
