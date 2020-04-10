@@ -11,13 +11,25 @@ function drawBxlMap(mapId) {
         fullscreenControl: {
             pseudoFullscreen: true // if true, fullscreen to page width and height
         },
-        zoomControl: false
+        zoomControl: false,
+        scrollWheelZoom: false
         // crs: L.CRS.EPSG4326
     }).setView([50.83507914731851, 4.36468005885868], 12.25);
 
     // Add custom zoomcontrol to enable reset view to default with button
     var zoomHome = L.Control.zoomHome({zoomHomeTitle: 'Reset zoom'});
     zoomHome.addTo(mymap);
+
+    // Enable scrollwheel zoom on focus or full screen only and disable when user clicks outside of map or exits full screen
+    mymap.on('focus', function() { mymap.scrollWheelZoom.enable(); });
+    mymap.on('fullscreenchange', function () {  
+        if (mymap.isFullscreen()) {
+            mymap.scrollWheelZoom.enable();
+        } else {
+            mymap.scrollWheelZoom.disable();
+        }
+    });
+    mymap.on('blur', function() { mymap.scrollWheelZoom.disable(); });
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
@@ -333,7 +345,6 @@ function communeClick(event, map, communeLayer, curSelected=undefined) {
     if (typeof curSelected != 'undefined') {
         communeLayer.resetStyle(curSelected);
     }
-    
 
     var communeFeature = event.target;
     var communeBounds = communeFeature.getBounds();
@@ -345,6 +356,8 @@ function communeClick(event, map, communeLayer, curSelected=undefined) {
 
     // Activate highlight
     communeHighlight(event);
+
+    //TODO: higlight table row (if present on page) and/or show info in popup/marker
 
     return communeFeature;
 

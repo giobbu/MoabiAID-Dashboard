@@ -70,11 +70,31 @@ If you installed *django-extentions* we recommend using:
 Docker install
 ^^^^^^^^^^^^^^
 
+""""""""""""""""""""""""""""
+Launch the Docker containers
+""""""""""""""""""""""""""""
+
+After following the installation instructions at :ref:`docker-install`, assuming that you now have a docker container called *streaming*.
+
 From the project root, start containers with 
 
 .. code-block:: bash
 
     docker-compose up
+
+This will build the containers for the Django web server, the PostGIS database server and the backup database server.
+
+"""""""""""""""""""
+Import the database
+"""""""""""""""""""
+
+.. todo::
+
+    Either automate database setup or document how to load the database in the Docker image
+
+""""""""""""""""""""""""""""""""
+Launch the streaming application
+""""""""""""""""""""""""""""""""
 
 Find the id of the container for the *streaming* image. The ID is the first field when running
 

@@ -39,7 +39,20 @@ class Truck(models.Model):
 
 class Commune(models.Model):
     """
-    Description of geometric features of a commune
+    Description of geometric features of a commune.
+
+    :var name: Official name of the commune.
+    :vartype name: str
+    :var population: Number of inhabitants of this commune at the time of the last database update.
+    :vartype population: int
+    :var postal_code: Four digit postal code of the commune.
+    :vartype postal_code: int
+    :var area: Total area of the commune in square kilometers.
+    :vartype area: int
+    :var center: Geographic center of the commune as indicated by the imported data.
+    :vartype center: ~django.contrib.gis.geos.Point
+    :var boundaries: Geographic boundaries of the commune district.
+    :vartype boundaries: ~django.contrib.gis.geos.MultiPolygon
     """
 
     # Administrative data
@@ -57,11 +70,18 @@ class Commune(models.Model):
 
     def get_boundaries(self):
         """
-        Retrieves the commune boundaries and name
+        Retrieves the commune boundaries and name in dictonary format.
+        
+        :return: A dictonary consisting of the commune name and the geographic object representing the commune boundaries.
+        :rtype: dict
         """
         return {'name': self.name, 'borders': self.boundaries}
 
     def save(self, *args, **kwargs):
+        """
+        Override of the save method that is used by Django to store an updated/created model instance in the database. 
+        This converts a Polygon to a MultiPolygon if communed boundaries were stored in such a format.
+        """
         # if boundaries ends up as a Polgon, make it into a MultiPolygon
         if self.boundaries and isinstance(self.boundaries, geos.Polygon):
             self.boundaries = geos.MultiPolygon(self.boundaries)
@@ -76,10 +96,24 @@ class Commune(models.Model):
 
 class Street(models.Model):
     """
-    [summary]
+    A street of the Brussels Capital Region.
     
-    :param models: [description]
-    :type models: [type]
+    :var name: Official name of the street
+    :vartype name: str
+    :var speed_limit: The maximal allowed driving speed on this street. NOTE: how to handle variation in speed limit?
+    :vartype speed_limit: int
+    :var category: The category in which this street falls. Possible values: ['secondary', 'motorway', 'trunk_link', 'tertiary', 'unclassified','secondary_link', 'trunk', 'living_street', 'pedestrian', 'primary', 'residential', 'primary_link', 'motorway_link']
+    :vartype category: str
+    :var one_way: Wether the street is one way, and if so if it follows the direction of the line (in path field), or the oposite direction.
+    :vartype one_way: str
+    :var bridge: Indicates wether this is a bridge.
+    :vartype bridge: bool
+    :var tunnel: Indicates wether this is a tunnel.
+    :vartype tunnel: bool
+    :var commune: The commune in which this street is located. NOTE: Determine if we keep this approach (faster?) Or use a geographic index to determine this
+    :vartype commune: ~dashboard.models.Commune
+    :var path: The geographic path that the street follows.
+    :vartype path: ~django.contrib.gis.geos.LineString
     """
 
     name = models.TextField()

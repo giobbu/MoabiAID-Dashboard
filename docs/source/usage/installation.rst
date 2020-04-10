@@ -61,6 +61,8 @@ Load the database in PostGIS.
  
     Test this and verify user and database names (might be different for installer)
 
+.. _docker-install:
+
 --------------
 Docker Install
 --------------
@@ -81,11 +83,5 @@ Build Docker container
       files for communes and streets. The */map_data* volume can also be removed if the database already contains all data on streets and communes.
     * streaming container: Set the */home/guest/host* volume to a parent diredctory of the directory that was used for *streaming_files*.
 
-Import the database
-===================
-
-.. todo::
-
-    Either automate database setup or document how to load the database in the Docker image
 
 
