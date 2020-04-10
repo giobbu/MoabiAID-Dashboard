@@ -73,7 +73,8 @@ html_static_path = ['_static']
 intersphinx_mapping = {
     'python': ('https://docs.python.org/3', None),
     'django': ('https://docs.djangoproject.com/en/2.2/', 'https://docs.djangoproject.com/en/2.2/_objects/'),
-    'psycopg2': ('http://initd.org/psycopg/docs/', None)
+    'psycopg2': ('http://initd.org/psycopg/docs/', None),
+    'geopandas': ('https://geopandas.org/', None)
     }
 
 # -- Options for todo extension ----------------------------------------------

@@ -5,5 +5,7 @@ Module Reference
 .. toctree::
    :caption: Reference:
 
-   data
+   views
    models
+   data
+   utils

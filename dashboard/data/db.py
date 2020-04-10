@@ -40,7 +40,7 @@ def get_commune_data(req_data):
 
 def get_truck_data(req_data):
     """
-    Retrieves the requested data related to trucks from the database
+    Retrieves the requested data related to trucks from the database for display in a `Datatables <https://datatables.net/>`_ table.
     
     :param req_data: The type of data on trucks that is requested
     :type req_data: str
@@ -57,6 +57,14 @@ def get_truck_data(req_data):
 
 
 def get_chart(chart_name):
+    """
+    Retrieves data for the given chart and formats it for use with the `AmCharts <https://www.amcharts.com/>`_ library.
+    
+    :param chart_name: The name of the chart to retrieve.
+    :type chart_name: str
+    :return: Formatted dictionary for instantiating an AmCharts chart on the client. Already contains necessary data.
+    :rtype: dict or list
+    """
     communes = Commune.objects.all()
     trucks = Truck.objects.all()
 

@@ -218,6 +218,18 @@ def clustered_bar_chart(data, category, values):
     return chart_dict
 
 def category_distribution(trucks, communes, sort_key='cat_c'):
+    """
+    Generates a configuration for a chart that shows the distribution of trucks over communes and over categories in a clustered bar chart.
+    
+    :param trucks: Previously retrieved queryset of trucks.
+    :type trucks: ~django.db.models.query.QuerySet
+    :param communes: Queryset of Brussels communes.
+    :type communes: ~django.db.models.query.QuerySet
+    :param sort_key: key to use for ordering the bars in a commune (i.e. which to show first), defaults to 'cat_c'
+    :type sort_key: str, optional
+    :return: Configuration for instantiating the chart on the client.
+    :rtype: dict
+    """
 
     data = []
 

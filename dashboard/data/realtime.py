@@ -25,6 +25,17 @@ from kafka import KafkaConsumer
 
 STREAMING_FILES = Path('/streaming_files')
 def get_rt(data):
+    """
+    Retrieves the real-time state of the given view (roads, communes, trucks).
+    Currently only streets are supported.
+
+    NOTE: This currently reads a file, would probably be more efficient to store the state in the cache.
+    
+    :param data: The real-time data to be displayed on the client.
+    :type data: str
+    :return: A dict to be serialized to JSON for display on the client (on the map for now)
+    :rtype: dict
+    """
     data_file = STREAMING_FILES / (data + '.json')
     with data_file.open('rb') as json_file:
         rt_data = json.load(json_file)

@@ -77,7 +77,7 @@ class SliderField(forms.ChoiceField):
 
 class MapControls(forms.Form):
     """
-    Controls that are used to select a data and a time for the map
+    Controls that are used to select a date and a time for the map
     """
     date = forms.DateField(widget=DatePickerInput(format='%m/%d/%Y')) 
     day_of_week = SliderField(min_range=1, max_range=7)
@@ -96,6 +96,9 @@ class MapControls(forms.Form):
         )
 
 class StreetAnalyticControls(forms.Form):
+    """
+    Controls that are used for analysing street related data when a user choses to analyse by street.
+    """
     street = forms.ChoiceField(
         widget=ModelSelect2Widget(
             model=apps.get_model('dashboard', 'Street'), 
@@ -105,6 +108,14 @@ class StreetAnalyticControls(forms.Form):
     # TODO: additional controls
 
 def get_analytic_controls(entity):
+    """
+    Retreives the appropriate controls when a user selects an entity to analyse (street, commune, trucks).
+    
+    :param entity: The chosen entity.
+    :type entity: str
+    :return: Appropriate control form for rendereing in the template page.
+    :rtype: ~django.forms.Form
+    """
     
     if entity == 'streets':
         return StreetAnalyticControls()
