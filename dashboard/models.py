@@ -87,6 +87,10 @@ class Commune(models.Model):
             self.boundaries = geos.MultiPolygon(self.boundaries)
 
         super(Commune).save(*args, **kwargs)
+    
+    def __str__(self):
+        return self.name
+    
 
     class Meta:
         required_db_features = ['gis_enabled']
