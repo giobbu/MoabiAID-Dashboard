@@ -8,6 +8,8 @@ from shapely import geometry
 
 from kafka import KafkaConsumer
 
+from dashboard.data import db # For common queries that can be used in real-time computations
+
 # from pyspark.sql import SparkSession
 
 # spark = SparkSession \

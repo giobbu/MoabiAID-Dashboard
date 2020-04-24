@@ -2,6 +2,7 @@
 Module that manages database acces, all requests for data should come through here
 """
 from django.core.serializers import serialize
+from django.db.models import Q
 
 from dashboard.models import *
 from .figures import *
@@ -32,6 +33,7 @@ def get_commune_data(req_data):
         #     'features': [c.json for c in communes]
         # }
         data = serialize('geojson', communes, geometry_field='boundaries')
+
 
     # TODO: Implement retrieval of other data attributes here
     print(data)
@@ -81,3 +83,35 @@ def get_chart(chart_name):
 
 def get_typical_traffic(aggregation_lvl):
     pass #TODO: retrieve typical traffic data given the level of aggrgation: Commune, Street, Truck (clusters where trucks are typically located)
+
+# Functions that require more context for the request
+
+def get_commune_counts(street_counts):
+    """
+    Computes the number of trucks in each commune based on the number of trucks on each street.
+
+    :param street_counts: A dictionary containing every processed street with the number of trucks for each
+    :type street_counts: dict   
+    :return: The number of trucks in each commune
+    :rtype: dict
+    """
+
+    communes = Commune.objects.all()
+
+    com_counts = {}
+
+    # Get counts for each street in every commune
+    for com in communes:
+        streets = com.streets
+
+        n_trucks_commune = 0
+
+        for street, n_trucks in street_counts.items():
+            # street can be a name or a database id
+            if streets.filter(Q(name__icontains=street) | Q(pk=street)).exists():
+                n_trucks_commune += street_counts.pop(street) # pop from dict to have less items on next commune iteration
+        
+        com_counts[com.name] = n_trucks_commune
+    
+    return com_counts
+

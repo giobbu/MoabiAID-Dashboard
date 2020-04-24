@@ -139,6 +139,7 @@ class Street(models.Model):
     class Meta:
         required_db_features = ['gis_enabled']
         required_db_vendor = 'postgresql'
+        unique_together = ['name', 'commune']
 
 # class StreetSegment(models.Model):
 
