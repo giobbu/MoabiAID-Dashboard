@@ -1,5 +1,15 @@
 """
 Module that calls functions for real time data
+
+Current approach to real-time:
+
+# The streaming pipeline writes street states to a GeoJSON file in the *streaming_files* folder
+# On calls to RT street state, the cache is first checked if the state is there, we use the cached json. Otherwise, we read the file and cacghe it for later
+# For communes the street state (as previously retrieved) is used to count the trucks in communes, based on the summed counts for streets in that commune
+# Note yet implemented: There could also be an operation for trucks in commune in the streaming pipeline, then we can compare the two counts (tucks on streets vs total in commune)
+
+NOTE: One pitfall is cahce invalidation. The cache needs to be invalidated on every new streaming update.
+        Best solution: have the streaming pipeline write directly to the cache (Redis directly?) 
 """
 import json
 from pathlib import Path
@@ -7,6 +17,8 @@ from pathlib import Path
 from shapely import geometry
 
 from kafka import KafkaConsumer
+
+from django.core.cache import cache
 
 from dashboard.data import db # For common queries that can be used in real-time computations
 
@@ -24,7 +36,6 @@ from dashboard.data import db # For common queries that can be used in real-time
 #     pass
 
 
-
 STREAMING_FILES = Path('/streaming_files')
 def get_rt(data):
     """
@@ -38,9 +49,14 @@ def get_rt(data):
     :return: A dict to be serialized to JSON for display on the client (on the map for now)
     :rtype: dict
     """
-    data_file = STREAMING_FILES / (data + '.json')
-    with data_file.open('rb') as json_file:
-        rt_data = json.load(json_file)
+
+    rt_data = cache.get(data)
+
+    if rt_data is None:
+        data_file = STREAMING_FILES / (data + '.json')
+        with data_file.open('rb') as json_file:
+            rt_data = json.load(json_file)
+            cache.set(data, rt_data, 30) # 30 sec timeout for now
 
     # rt_data = get_latest_kafka(data)
 
@@ -50,6 +66,16 @@ def get_rt(data):
            poly_street = geometry.asShape(feature['geometry'])
            coord_list = [list(tup) for tup in list(poly_street.exterior.coords)]
            rt_data['features'][i]['geometry'] =  geometry.mapping(geometry.LineString(coord_list[:-1]))
+    
+    if 'commune' in data:
+        # TODO: review approach: either change or need to format street data to work with this function (or work in geojson)
+        com_data = cache.get('commune_status')
+
+        if com_data is None:
+            rt_data = db.get_commune_counts(rt_data)
+            cache.set('commune_status', rt_data)
+        else:
+            rt_data = com_data 
 
     # print(rt_data['features'][0]['geometry'])
     return rt_data

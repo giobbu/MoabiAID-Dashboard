@@ -96,13 +96,14 @@ def get_commune_counts(street_counts):
     :rtype: dict
     """
 
-    communes = Commune.objects.all()
+    communes = Commune.objects.all().prefetch_related('streets')
 
-    com_counts = {}
+    # Serialize communes
+    com_features = serialize('geojson', communes, fields=('name',))
 
     # Get counts for each street in every commune
-    for com in communes:
-        streets = com.streets
+    for idx, com in enumerate(communes):
+        streets = com.streets.all()
 
         n_trucks_commune = 0
 
@@ -111,7 +112,9 @@ def get_commune_counts(street_counts):
             if streets.filter(Q(name__icontains=street) | Q(pk=street)).exists():
                 n_trucks_commune += street_counts.pop(street) # pop from dict to have less items on next commune iteration
         
-        com_counts[com.name] = n_trucks_commune
+        # This works because the ordering in the feauture list should be preserved from the queryset
+        com_features['features'][idx]['properties']['truck_count'] = n_trucks_commune
+
     
-    return com_counts
+    return com_features
 
