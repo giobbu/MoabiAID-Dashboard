@@ -63,6 +63,7 @@ services:
 
   streaming:
     image: streaming
+    build: /mnt/data/Shared_Documents/MLG/large_scale_mobility_analysis/streaming_docker/ # Set this to build path on your machine
     # command: startup_script.sh #TODO: This script starts kafka, There should be a cleaner more docker-style way
     privileged: true
     stdin_open: true
@@ -72,7 +73,7 @@ services:
       - 8888:8888 #Port for Jupyter 
       - 4040:4050 # SparkUI
     volumes:
-      - /mnt/data/Shared_Documents/MLG/large_scale_mobility_analysis-master:/home/guest/host
+      - /mnt/data/Shared_Documents/MLG/large_scale_mobility_analysis:/home/guest/host
     networks: 
       - mobi
 

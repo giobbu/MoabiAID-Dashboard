@@ -101,6 +101,8 @@ def get_commune_counts(street_counts):
     # Serialize communes
     com_features = serialize('geojson', communes, fields=('name',))
 
+    print(street_counts['features'][0])
+
     # Get counts for each street in every commune
     for idx, com in enumerate(communes):
         streets = com.streets.all()
@@ -113,7 +115,7 @@ def get_commune_counts(street_counts):
                 n_trucks_commune += street_counts.pop(street) # pop from dict to have less items on next commune iteration
         
         # This works because the ordering in the feauture list should be preserved from the queryset
-        com_features['features'][idx]['properties']['truck_count'] = n_trucks_commune
+        com_features['features'][idx]['properties']['total'] = n_trucks_commune
 
     
     return com_features

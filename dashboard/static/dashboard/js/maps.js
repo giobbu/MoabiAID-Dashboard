@@ -17,19 +17,25 @@ function drawBxlMap(mapId) {
     }).setView([50.83507914731851, 4.36468005885868], 12.25);
 
     // Add custom zoomcontrol to enable reset view to default with button
-    var zoomHome = L.Control.zoomHome({zoomHomeTitle: 'Reset zoom'});
+    var zoomHome = L.Control.zoomHome({
+        zoomHomeTitle: 'Reset zoom'
+    });
     zoomHome.addTo(mymap);
 
     // Enable scrollwheel zoom on focus or full screen only and disable when user clicks outside of map or exits full screen
-    mymap.on('focus', function() { mymap.scrollWheelZoom.enable(); });
-    mymap.on('fullscreenchange', function () {  
+    mymap.on('focus', function () {
+        mymap.scrollWheelZoom.enable();
+    });
+    mymap.on('fullscreenchange', function () {
         if (mymap.isFullscreen()) {
             mymap.scrollWheelZoom.enable();
         } else {
             mymap.scrollWheelZoom.disable();
         }
     });
-    mymap.on('blur', function() { mymap.scrollWheelZoom.disable(); });
+    mymap.on('blur', function () {
+        mymap.scrollWheelZoom.disable();
+    });
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
@@ -211,77 +217,6 @@ function drawStreetColors(map, streetData, measure, timeFrame, refresh = false) 
     };
 }
 
-function setupLiveStreetMap(rtMap, rtMeasure, refresh = false) {
-    $.get("/data/", {
-            data_usage: "real-time",
-            table: "state_street" // IF this is relevant
-        })
-        .done(function (streetData) {
-            var streets = streetData.data;
-            var {
-                layers,
-                timeKey
-            } = drawStreetColors(rtMap, streets, rtMeasure, 'now', refresh);
-
-            //Extract top 10 streets and draw table
-            top_streets = [];
-            street_properties = streets.features.map(function (s) {
-                var sID = s.properties.id_street;
-                var propList = s.properties.list_table;
-                return {
-                    id_street: sID,
-                    flow: propList.flow[timeKey],
-                    //Etc if we want to use other properties
-                };
-            });
-            street_properties.sort(function (a, b) {
-                return a.flow - b.flow;
-            });
-            street_properties.reverse();
-            console.log(street_properties);
-
-            var dataTable = $('#rt-table').DataTable({
-                data: street_properties.slice(0, 10),
-                columns: [{
-                        data: 'id_street'
-                    },
-                    {
-                        data: 'flow'
-                    }
-                ],
-                paging: false,
-                info: false,
-                searching: false,
-                retrieve: true,
-                order: [
-                    [1, "desc"]
-                ]
-            });
-
-            //Update data if data table was already initialised (see: https://datatables.net/manual/tech-notes/3)
-            if (refresh) {
-                console.log('Map data refreshed');
-                dataTable.clear().rows.add(street_properties.slice(0, 10)).draw();
-            }
-
-            // Set up refresh button
-            $('#refreshMap').click(function (e) {
-                // liveData.layers.remove();
-                setupLiveStreetMap(rtMap, rtMeasure, true);
-            });
-
-            // Store the data for later reuse
-            return {
-                layers: layers,
-                streets: streets
-            };
-
-        })
-        .fail(function () {
-            alert("Could not retrieve real-time data");
-        });
-
-}
 
 /***************************
  * Commune related functions *
@@ -340,7 +275,7 @@ function communeHighlight(event) {
     }
 }
 
-function communeClick(event, map, communeLayer, curSelected=undefined) {
+function communeClick(event, map, communeLayer, curSelected = undefined) {
     // Reset default style for all layers
     if (typeof curSelected != 'undefined') {
         communeLayer.resetStyle(curSelected);
@@ -360,5 +295,37 @@ function communeClick(event, map, communeLayer, curSelected=undefined) {
     //TODO: higlight table row (if present on page) and/or show info in popup/marker
 
     return communeFeature;
+
+}
+
+function drawCommuneMap(borders, map, truck_counts) {
+    var selectedCommune;
+    var commune_layer = L.geoJSON(borders, {
+        style: function (feat) {
+            return communeStyle(feat, truck_counts);
+        },
+        onEachFeature: function (feat, layer) {
+            com_name = feat.properties.name;
+            com_trucks = truck_counts[com_name];
+            layer.bindTooltip(`There are ${com_trucks.total} trucks in ${com_name}`);
+            layer.on({
+                mouseover: communeHighlight,
+                mouseout: function (ev) {
+                    if (ev.target != selectedCommune) {
+                        return resetHighlight(ev, commune_layer);
+                    }
+                },
+                click: function (ev) {
+                    selectedCommune = communeClick(ev, map, commune_layer, selectedCommune);
+                }
+            });
+        }
+    }).addTo(map);
+
+    var legend = addLegend('topright', [0, 100, 500, 1000, 2000, 10000], communeColor);
+
+    legend.addTo(map);
+
+    return commune_layer;
 
 }

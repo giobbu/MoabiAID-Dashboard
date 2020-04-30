@@ -1,3 +1,167 @@
+function setupLiveStreetMap(rtMap, rtMeasure, selectPanel, refresh = false) {
+    $.get("/data/", {
+            data_usage: "real-time",
+            table: "state_street" // IF this is relevant
+        })
+        .done(function (streetData) {
+            var streets = streetData.data;
+            var {
+                layers,
+                timeKey
+            } = drawStreetColors(rtMap, streets, rtMeasure, 'now', refresh);
+
+            selectPanel.addOverlay({
+                name: 'Streets',
+                layer: layers
+            });
+
+            //Extract top 10 streets and draw table
+            top_streets = [];
+            street_properties = streets.features.map(function (s) {
+                var sID = s.properties.id_street;
+                var propList = s.properties.list_table;
+                return {
+                    id_street: sID,
+                    flow: propList.flow[timeKey],
+                    //Etc if we want to use other properties
+                };
+            });
+            street_properties.sort(function (a, b) {
+                return a.flow - b.flow;
+            });
+            street_properties.reverse();
+            console.log(street_properties);
+
+            var dataTable = $('#rt-table').DataTable({
+                data: street_properties.slice(0, 10),
+                columns: [{
+                        data: 'id_street'
+                    },
+                    {
+                        data: 'flow'
+                    }
+                ],
+                paging: false,
+                info: false,
+                searching: false,
+                retrieve: true,
+                order: [
+                    [1, "desc"]
+                ]
+            });
+
+            //Update data if data table was already initialised (see: https://datatables.net/manual/tech-notes/3)
+            if (refresh) {
+                console.log('Map data refreshed');
+                dataTable.clear().rows.add(street_properties.slice(0, 10)).draw();
+            }
+
+            // Set up refresh button
+            $('#refreshMap').click(function (e) {
+                // liveData.layers.remove();
+                setupLiveStreetMap(rtMap, rtMeasure, true);
+            });
+
+            // Store the data for later reuse
+            return {
+                layers: layers,
+                streets: streets
+            };
+
+        })
+        .fail(function () {
+            alert("Could not retrieve real-time data");
+        });
+
+}
+
+function setupLiveCommuneMap(rtMap, rtMeasure, selectPanel, refresh = false) {
+    $.get("/data/", {
+            data_usage: "real-time",
+            table: "state_commune" // IF this is relevant
+        })
+        .done(function (communeData) {
+            var communes = communeData.data;
+            var truck_counts = {};
+            communes.forEach(com => {
+                var com_name = com.properties.name;
+                delete com.properties.name;
+                truck_counts[com_name] = com.properties; // Only remaining properties should be counts
+            });
+            var layer = drawCommuneMap(communes, rtMap, truck_counts); // TODO: this will need a refactor to use geojson 
+
+            selectPanel.addOverlay({
+                name: 'Communes',
+                layer: layer
+            });
+
+            //Extract top 5 communes and draw table (TODO)
+            // top_communes = [];
+            // street_properties = communes.features.map(function (s) {
+            //     var sID = s.properties.id_street;
+            //     var propList = s.properties.list_table;
+            //     return {
+            //         id_street: sID,
+            //         flow: propList.flow[timeKey],
+            //         //Etc if we want to use other properties
+            //     };
+            // });
+            // street_properties.sort(function (a, b) {
+            //     return a.flow - b.flow;
+            // });
+            // street_properties.reverse();
+            // console.log(street_properties);
+
+            // var dataTable = $('#rt-table').DataTable({
+            //     data: street_properties.slice(0, 10),
+            //     columns: [{
+            //             data: 'id_street'
+            //         },
+            //         {
+            //             data: 'flow'
+            //         }
+            //     ],
+            //     paging: false,
+            //     info: false,
+            //     searching: false,
+            //     retrieve: true,
+            //     order: [
+            //         [1, "desc"]
+            //     ]
+            // });
+
+            // //Update data if data table was already initialised (see: https://datatables.net/manual/tech-notes/3)
+            // if (refresh) {
+            //     console.log('Map data refreshed');
+            //     dataTable.clear().rows.add(street_properties.slice(0, 10)).draw();
+            // }
+
+            // // Set up refresh button
+            // $('#refreshMap').click(function (e) {
+            //     // liveData.layers.remove();
+            //     setupLiveStreetMap(rtMap, rtMeasure, true);
+            // });
+
+            // Store the data for later reuse
+            return {
+                layers: layers,
+                communes: communes
+            };
+
+        })
+        .fail(function () {
+            alert("Could not retrieve real-time data");
+        });
+}
+
+function initRtTab() {
+    var panel = L.control.panelLayers(); // Layer selection control
+    var rtMap = drawBxlMap("rt-map");
+    var rtMeasure = "flow"; // Default measure
+    setupLiveStreetMap(rtMap, rtMeasure, panel);
+    setupLiveCommuneMap(rtMap, rtMeasure, panel);
+}
+
 function initMapsTab() {
     console.log("Map tab clicked");
 
@@ -63,7 +227,7 @@ function initAnalyticsTab() {
             case 'Streets':
                 //TODO: load individual street analytics
                 break;
-        
+
             default:
                 break;
         }
@@ -75,9 +239,8 @@ function initAnalyticsTab() {
 $(document).ready(function () {
 
     // Real time tab
-    var rtMap = drawBxlMap("rt-map");
-    var rtMeasure = "flow"; // Default measure
-    setupLiveStreetMap(rtMap, rtMeasure);
+    initRtTab();
+
     // var retrievedData = {
     //     now: {
     //         streets: liveData.streets

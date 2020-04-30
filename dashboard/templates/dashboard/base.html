@@ -17,12 +17,16 @@
         <link rel="stylesheet" id="generate-fonts-css"
             href="//fonts.googleapis.com/css?family=Raleway:100,200,300,regular,500,600,700,800,900|Open+Sans:300,300italic,regular,italic,600,600italic,700,700italic,800,800italic"
             type="text/css" media="all">
-        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"/>
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" />
         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
-        integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
-        crossorigin="" />
-        <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/leaflet.fullscreen.css' rel='stylesheet' />
+            integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+            crossorigin="" />
+        <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/leaflet.fullscreen.css'
+            rel='stylesheet' />
         <link rel="stylesheet" href="{% static '/dashboard/css/lib/leaflet.zoomhome.css' %}">
+        <link rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/leaflet-panel-layers@1.2.6/src/leaflet-panel-layers.css"
+            integrity="sha256-9IebOwkmzXybwmPCJ2MNDh9N6n5vOVy9DranvgQvJq4=" crossorigin="anonymous">
 
         {# Stylesheet for elements in base template #}
         <link rel="stylesheet" type="text/css" href="{% static "dashboard/css/style.css" %}">
@@ -108,15 +112,19 @@
         {% comment %} <script type="text/javascript" src="{% static "dashboard/js/base.js" %}"></script>
         {% endcomment %}
 
-        {% comment %} Define paths as global JS variables to access them from external script files {% endcomment %}
+        <!-- Leaflet and plugins-->
         <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
             integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
             crossorigin=""></script>
-        <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/Leaflet.fullscreen.min.js'></script>
+        <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/Leaflet.fullscreen.min.js'>
+        </script>
         <script src="{% static 'dashboard/js/lib/leaflet.zoomhome.min.js' %}"></script>
+        <script src="https://cdn.jsdelivr.net/npm/leaflet-panel-layers@1.2.6/src/leaflet-panel-layers.js"
+            integrity="sha256-6WKha8nrP3oVS/AqChddBHLSRrDw0tJdFjs/ShqtrvE=" crossorigin="anonymous"></script>
         {% comment %} <script
             src="https://cdn.jsdelivr.net/combine/npm/leaflet-realtime@2/dist/leaflet-realtime.min.js,npm/wicket@1,npm/wicket@1/wicket-leaflet.min.js">
         </script> {% endcomment %}
+        {% comment %} Define paths as global JS variables to access them from external script files {% endcomment %}
         <script type='text/javascript'>
             var ajaxLoaderPath = "{% static 'dashboard/images/ajax-loader.gif' %}";
         </script>

@@ -53,7 +53,8 @@ def get_rt(data):
     rt_data = cache.get(data)
 
     if rt_data is None:
-        data_file = STREAMING_FILES / (data + '.json')
+        data_file = STREAMING_FILES / 'state_street.json'
+        print(data_file)
         with data_file.open('rb') as json_file:
             rt_data = json.load(json_file)
             cache.set(data, rt_data, 30) # 30 sec timeout for now
@@ -72,10 +73,11 @@ def get_rt(data):
         com_data = cache.get('commune_status')
 
         if com_data is None:
+            street_counts = [{}]
             rt_data = db.get_commune_counts(rt_data)
             cache.set('commune_status', rt_data)
         else:
-            rt_data = com_data 
+            rt_data = com_data
 
-    # print(rt_data['features'][0]['geometry'])
+    # print(rt_data)
     return rt_data

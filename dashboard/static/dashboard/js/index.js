@@ -26,28 +26,7 @@ $(document).ready(function () {
                         commune_trucks[com_name] = com;    
                     }); 
 
-                    var selectedCommune;
-                    var commune_layer = L.geoJSON(borders, {
-                        style: function (feat) { return communeStyle(feat, commune_trucks); },
-                        onEachFeature: function (feat, layer) {
-                            com_name = feat.properties.name;
-                            com_trucks = commune_trucks[com_name];
-                            layer.bindTooltip(`There are ${com_trucks.total} trucks in ${com_name}`);
-                            layer.on({
-                                mouseover: communeHighlight,
-                                mouseout: function (ev) { if (ev.target != selectedCommune) {
-                                    return resetHighlight(ev, commune_layer);
-                                }},
-                                click: function (ev) {selectedCommune = communeClick(ev, mymap, commune_layer, selectedCommune); }
-                            });
-                          }
-                    }).addTo(mymap);
-
-                    var legend = addLegend('topright', [0, 100, 500, 1000, 2000, 10000], communeColor);
-
-                    legend.addTo(mymap);
-
-                    // console.log(commune_layer);
+                    var communeLayer = drawCommuneMap(borders, mymap, commune_trucks);
                     
                 }
             );
