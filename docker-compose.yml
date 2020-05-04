@@ -45,6 +45,25 @@ services:
       - postgres
     networks: 
       - mobi
+  
+  streaming:
+    image: streaming
+    build: 
+      # Important: two options: clone the bolow repo and put path to dockerfile as context. or replace the token (after oauth2:) with your own gitlab token
+      context: https://oauth2:YdMukyhbGUZYCdoYUn9R@gitlab.com/giobbu/large_scale_mobility_analysis.git#master:streaming_docker 
+      #dockerfile: streaming_docer/Dockerfile
+    # command: startup_script.sh #TODO: This script starts kafka, There should be a cleaner more docker-style way
+    privileged: true
+    stdin_open: true
+    tty: true
+    ports:
+      - 9092:9092 #Port for the Kafka bootstrap server
+      - 8888:8888 #Port for Jupyter 
+      - 4040:4050 # SparkUI
+    volumes:
+      - /mnt/data/Shared_Documents/MLG/large_scale_mobility_analysis:/home/guest/host
+    networks: 
+      - mobi
 
   mobiaid:
     image: mobiaid:latest
@@ -58,24 +77,11 @@ services:
       - "3000:3000"
     depends_on:
       - postgres
+      - streaming
     networks: 
       - mobi
 
-  streaming:
-    image: streaming
-    build: /mnt/data/Shared_Documents/MLG/large_scale_mobility_analysis/streaming_docker/ # Set this to build path on your machine
-    # command: startup_script.sh #TODO: This script starts kafka, There should be a cleaner more docker-style way
-    privileged: true
-    stdin_open: true
-    tty: true
-    ports:
-      - 9092:9092 #Port for the Kafka bootstrap server
-      - 8888:8888 #Port for Jupyter 
-      - 4040:4050 # SparkUI
-    volumes:
-      - /mnt/data/Shared_Documents/MLG/large_scale_mobility_analysis:/home/guest/host
-    networks: 
-      - mobi
+  
 
 networks: 
   mobi:
