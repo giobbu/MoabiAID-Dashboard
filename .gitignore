@@ -99,3 +99,4 @@ dashboard/static/dashboard/exported
 
 # JSHint configuration
 .jshintrc
+docs/build.zip

@@ -109,10 +109,12 @@ def get_commune_counts(street_counts):
 
         n_trucks_commune = 0
 
-        for street, n_trucks in street_counts.items():
-            # street can be a name or a database id
-            if streets.filter(Q(name__icontains=street) | Q(pk=street)).exists():
-                n_trucks_commune += street_counts.pop(street) # pop from dict to have less items on next commune iteration
+        # TODO: rewrite under assumption that streets in DB do not match those in the RT file
+
+        # for street, n_trucks in street_counts.items():
+        #     # street can be a name or a database id
+        #     if streets.filter(Q(name__icontains=street) | Q(pk=street)).exists():
+        #         n_trucks_commune += street_counts.pop(street) # pop from dict to have less items on next commune iteration
         
         # This works because the ordering in the feauture list should be preserved from the queryset
         com_features['features'][idx]['properties']['total'] = n_trucks_commune

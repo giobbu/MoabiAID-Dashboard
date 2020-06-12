@@ -131,7 +131,7 @@ class Street(models.Model):
 
     commune = models.ForeignKey("dashboard.Commune", on_delete=models.DO_NOTHING, related_name='streets') # Every street belongs to a commune
 
-    path = models.LineStringField() # Contains LineStrings in segments;
+    path = models.LineStringField() # TODO: review, either change pipeline code or store streets as ploygons
 
     def __str__(self):
         return self.name

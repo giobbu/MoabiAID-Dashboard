@@ -35,8 +35,8 @@ from dashboard.data import db # For common queries that can be used in real-time
 # def get_state():
 #     pass
 
-
-STREAMING_FILES = Path('/streaming_files')
+#NOTE: assumes this maps to a docker volume, for local install this should point to a dir where files from the streaming pipeline are stored
+STREAMING_FILES = Path('/streaming_files') 
 def get_rt(data):
     """
     Retrieves the real-time state of the given view (roads, communes, trucks).
