@@ -79,6 +79,7 @@ services:
       - /mnt/data/Shared_Documents/MLG/Belgium_map_data_20_12_19:/map_data
     ports:
       - "3000:3000"
+      - 5678:5678 # Debugger
     depends_on:
       - postgres
       - streaming

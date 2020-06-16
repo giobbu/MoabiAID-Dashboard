@@ -1,11 +1,14 @@
 """
 Module that manages database acces, all requests for data should come through here
 """
+import json
+
 from django.core.serializers import serialize
 from django.db.models import Q
 
 from dashboard.models import *
 from .figures import *
+from dashboard.utils import load_feature_collection, get_current_values
 
 
 def get_commune_data(req_data):
@@ -98,27 +101,34 @@ def get_commune_counts(street_counts):
 
     communes = Commune.objects.all().prefetch_related('streets')
 
-    # Serialize communes
-    com_features = serialize('geojson', communes, fields=('name',))
+    # Serialize communes and deserialize back to dict
+    com_features = json.loads(serialize('geojson', communes, geometry_field='boundaries', fields=('name',)))
+    print(type(com_features))
+    streets = load_feature_collection(street_counts)
 
-    print(street_counts['features'][0])
+    # print(street_counts['features'][0])
 
     # Get counts for each street in every commune
     for idx, com in enumerate(communes):
-        streets = com.streets.all()
+        # streets = com.streets.all()
+        print(com)
 
         n_trucks_commune = 0
 
         # TODO: rewrite under assumption that streets in DB do not match those in the RT file
 
-        # for street, n_trucks in street_counts.items():
-        #     # street can be a name or a database id
-        #     if streets.filter(Q(name__icontains=street) | Q(pk=street)).exists():
-        #         n_trucks_commune += street_counts.pop(street) # pop from dict to have less items on next commune iteration
+        for i, (street, props) in enumerate(streets):
+            # street can be a name or a database id
+            # if streets.filter(Q(name__icontains=street) | Q(pk=street)).exists():
+            if com.boundaries.contains(street):
+                cur_vals = get_current_values(props)
+                n_trucks_commune += cur_vals['flow']
+                # pop from list to have less items on next commune iteration
+                streets.pop(i)
         
         # This works because the ordering in the feauture list should be preserved from the queryset
         com_features['features'][idx]['properties']['total'] = n_trucks_commune
-
     
+    print(com_features)
     return com_features
 

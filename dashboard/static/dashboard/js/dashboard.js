@@ -70,7 +70,7 @@ function setupLiveStreetMap(rtMap, rtMeasure, selectPanel, refresh = false) {
 
         })
         .fail(function () {
-            alert("Could not retrieve real-time data");
+            alert("Could not retrieve real-time data for streets");
         });
 
 }
@@ -81,11 +81,14 @@ function setupLiveCommuneMap(rtMap, rtMeasure, selectPanel, refresh = false) {
             table: "state_commune" // IF this is relevant
         })
         .done(function (communeData) {
-            var communes = communeData.data;
+            
+            var communes = communeData.data.features;
             var truck_counts = {};
+            console.log(communes);
+            
             communes.forEach(com => {
                 var com_name = com.properties.name;
-                delete com.properties.name;
+                // delete com.properties.name;
                 truck_counts[com_name] = com.properties; // Only remaining properties should be counts
             });
             var layer = drawCommuneMap(communes, rtMap, truck_counts); // TODO: this will need a refactor to use geojson 
@@ -150,7 +153,7 @@ function setupLiveCommuneMap(rtMap, rtMeasure, selectPanel, refresh = false) {
 
         })
         .fail(function () {
-            alert("Could not retrieve real-time data");
+            alert("Could not retrieve real-time data for communes");
         });
 }
 

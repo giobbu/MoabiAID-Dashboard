@@ -173,6 +173,7 @@ dependencies:
     - urllib3==1.24.2
     - wcwidth==0.1.7
     - werkzeug==0.15.2
+    - ptvsd==4.3.2
   - gdal=2.4
   - libgdal=2.4
 

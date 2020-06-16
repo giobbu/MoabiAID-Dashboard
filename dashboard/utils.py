@@ -1,9 +1,13 @@
+import json
+
 import geopandas
 
 from django import forms
 from django.forms.widgets import ChoiceWidget
 from django.db import connection
 from django.apps import apps
+
+from django.contrib.gis.geos import GEOSGeometry
 
 from bootstrap_datepicker_plus import DatePickerInput
 
@@ -132,3 +136,42 @@ def get_table_as_geopandas(table, geom_name):
     :rtype: ~geopandas.GeoDataFrame
     """
     return geopandas.read_postgis(f'select * from {table}', connection, geom_name) #TODO: verify that this is safe against SQL injection
+
+def load_feature_collection(feature_dict):
+    """
+    Given a dict that was loaded from a geojson FeatureCollection file,
+    creat geometries into GeosGeometry instances.
+
+    :param feature_dict: feature collection loaded into a dict
+    :type feature_dict: dict
+    :return: lsit of tuples with the geometry turned into a GeosGeometry instance in first element and properties in the second
+    :rtype: tuple(~django.contrib.gis.geos.GEOSGeometry, dict)
+    """
+
+    feature_list = []
+    
+    for feat in feature_dict['features']:
+        geos = GEOSGeometry(json.dumps(feat['geometry']))
+        feature_list.append((geos, feat['properties']))
+    
+    return feature_list
+
+def get_current_values(prop_dict):
+    cur_time = prop_dict['current_time']
+    flow = prop_dict['list_table']['flow'] 
+
+    first_nonzero = False
+
+    for key, val in flow.items(): 
+        if first_nonzero and val == 0.0: 
+            print(key)
+            cur_key = str(int(key)-1) 
+            break 
+        elif not first_nonzero and val != 0.0: 
+            first_nonzero = True 
+    
+    return {
+        'flow': flow[cur_key],
+        'vel': prop_dict['list_table']['vel'][cur_key]
+    }
+    
