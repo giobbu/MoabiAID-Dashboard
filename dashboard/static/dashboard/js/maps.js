@@ -87,7 +87,7 @@ function splitStreetData(streetData) {
         medium: [],
         minor: []
     };
-    console.log(streetData);
+    // console.log(streetData);
 
     streetData.features.forEach(street => {
         var strTypre = street.type; // All streets (GeoJSON?) should have a type property
@@ -134,10 +134,10 @@ Which streets are drawn depends on the zoom level
 Note: The timeFrame parameter is used to decide whether we should use the latest available time window or the one for a given time
 */
 function drawStreetColors(map, streetData, measure, timeFrame, refresh = false) {
-    console.log(streetData);
+    // console.log(streetData);
 
     var times = streetData.features[0].properties.list_table.time; //Keys where value can be found are the same for each street, so only one is needed
-    console.log(times);
+    // console.log(times);
     var latestTimeList = streetData.features.map(function (x) {
         var [hours, mins, secs] = x.properties.current_time.split(':');
         return new Date(2019, 11, 6, hours, mins, secs);
@@ -148,7 +148,7 @@ function drawStreetColors(map, streetData, measure, timeFrame, refresh = false) 
         return Math.max(a.valueOf(), b.valueOf());
     });
 
-    console.log(new Date(latestTime));
+    // console.log(new Date(latestTime));
 
 
     var timeIndex = getTimeIndex(times, new Date(latestTime));
@@ -159,16 +159,16 @@ function drawStreetColors(map, streetData, measure, timeFrame, refresh = false) 
         },
     }).addTo(map);
 
-    $('#measure-select-drop .dropdown-item').click(function () {
-        var newMeasure = $(this).data('measure');
+    // $('#measure-select-drop .dropdown-item').click(function () {
+    //     var newMeasure = $(this).data('measure');
 
-        console.log(newMeasure);
+    //     // console.log(newMeasure);
 
-        layers.setStyle(function (feat) {
-            return colorStreet(feat, newMeasure, timeIndex);
-        });
+    //     layers.setStyle(function (feat) {
+    //         return colorStreet(feat, newMeasure, timeIndex);
+    //     });
 
-    });
+    // });
 
     console.log(layers);
 
@@ -211,10 +211,9 @@ function drawStreetColors(map, streetData, measure, timeFrame, refresh = false) 
     //         }
     //     }
     // });
-    return {
-        layers: layers,
-        timeKey: timeIndex
-    };
+    return [layers,
+        timeIndex
+    ];
 }
 
 
@@ -284,7 +283,7 @@ function communeClick(event, map, communeLayer, curSelected = undefined) {
     var communeFeature = event.target;
     var communeBounds = communeFeature.getBounds();
 
-    console.log(communeBounds);
+    // console.log(communeBounds);
 
     // Zoom to commune bounds
     map.fitBounds(communeBounds);
@@ -326,6 +325,6 @@ function drawCommuneMap(borders, map, truck_counts) {
 
     legend.addTo(map);
 
-    return commune_layer;
+    return [commune_layer, legend];
 
 }

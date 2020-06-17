@@ -80,7 +80,7 @@ Dashboard
                 <div class="row">
                     <div class="col-8">
                         <h2>Live map</h2>
-                        <div class="dropdown" id="measure-select-drop">
+                        {% comment %} <div class="dropdown" id="measure-select-drop">
                             <button class="btn btn-secondary dropdown-toggle" type="button" id="select-measure"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Select a measure
@@ -90,21 +90,35 @@ Dashboard
                                     segment</a>
                                 <a class="dropdown-item" href="#" data-measure="vel">Average Velocity</a>
                             </div>
-                        </div>
+                        </div> {% endcomment %}
                         <button type="button" class="btn btn-primary" id="refreshMap">Refresh</button>
                         <p id="current-timeframe"></p>
                         <div id="rt-map"></div>
                     </div>
                     <div class="col">
-                        <h2>Top 10 most busy streets</h2>
-                        <table id="rt-table" class="display" width="100%">
-                            <thead>
-                                <tr>
-                                    <th>Street ID</th>
-                                    <th>Truck count</th>
-                                </tr>
-                            </thead>
-                        </table>
+                        <h2>Tables</h2>
+                        <div id="street-table-div">
+                            <h3>Top 10 most busy streets</h3>
+                            <table id="rt-table-street" class="display" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>Street ID</th>
+                                        <th>Truck count</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                        <div id="com-table-div">
+                            <h3>Top 5 most busy communes</h3>
+                            <table id="rt-table-com" class="display" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>Commune</th>
+                                        <th>Truck count</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
                     </div>
                 </div>
 
@@ -163,10 +177,10 @@ Dashboard
             <div class="tab-pane fade" id="v-pills-analytics" role="tabpanel" aria-labelledby="v-pills-analytics-tab">
                 <h1>Analytics</h1>
                 <div class="dropdown" id="entity-select-dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="entity-select" data-toggle="dropdown" aria-haspopup="true"
-                            aria-expanded="false">
-                                Select level of aggregation of the analysis
-                            </button>
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="entity-select"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Select level of aggregation of the analysis
+                    </button>
                     <div class="dropdown-menu" aria-labelledby="entity-select">
                         <a class="dropdown-item" href="#">Global</a>
                         <a class="dropdown-item" href="#">Communes</a>

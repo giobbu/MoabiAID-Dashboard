@@ -26,7 +26,7 @@ $(document).ready(function () {
                         commune_trucks[com_name] = com;    
                     }); 
 
-                    var communeLayer = drawCommuneMap(borders, mymap, commune_trucks);
+                    var [communeLayer, ] = drawCommuneMap(borders, mymap, commune_trucks);
                     
                 }
             );

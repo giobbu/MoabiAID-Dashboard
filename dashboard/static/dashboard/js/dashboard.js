@@ -1,19 +1,32 @@
 function setupLiveStreetMap(rtMap, rtMeasure, selectPanel, refresh = false) {
-    $.get("/data/", {
+    return $.get("/data/", {
             data_usage: "real-time",
             table: "state_street" // IF this is relevant
         })
         .done(function (streetData) {
             var streets = streetData.data;
-            var {
-                layers,
-                timeKey
-            } = drawStreetColors(rtMap, streets, rtMeasure, 'now', refresh);
+            var [
+                flow_layers,
+                flow_timeKey
+            ] = drawStreetColors(rtMap, streets, 'flow', 'now', refresh);
+            console.log(flow_layers);
 
             selectPanel.addOverlay({
-                name: 'Streets',
-                layer: layers
-            });
+                layer: flow_layers,
+                active: true
+            }, 'Street flow', 'Streets');
+            var [
+                vel_layers,
+                vel_timeKey
+            ] = drawStreetColors(rtMap, streets, 'vel', 'now', refresh);
+            vel_layers.remove(); 
+
+            selectPanel.addOverlay({
+                layer: vel_layers,
+                active: false
+            }, 'Average Truck Velocity', 'Streets');
+            
+
 
             //Extract top 10 streets and draw table
             top_streets = [];
@@ -22,7 +35,7 @@ function setupLiveStreetMap(rtMap, rtMeasure, selectPanel, refresh = false) {
                 var propList = s.properties.list_table;
                 return {
                     id_street: sID,
-                    flow: propList.flow[timeKey],
+                    flow: propList.flow[flow_timeKey],
                     //Etc if we want to use other properties
                 };
             });
@@ -30,9 +43,9 @@ function setupLiveStreetMap(rtMap, rtMeasure, selectPanel, refresh = false) {
                 return a.flow - b.flow;
             });
             street_properties.reverse();
-            console.log(street_properties);
+            // console.log(street_properties);
 
-            var dataTable = $('#rt-table').DataTable({
+            var dataTable = $('#rt-table-street').DataTable({
                 data: street_properties.slice(0, 10),
                 columns: [{
                         data: 'id_street'
@@ -52,19 +65,28 @@ function setupLiveStreetMap(rtMap, rtMeasure, selectPanel, refresh = false) {
 
             //Update data if data table was already initialised (see: https://datatables.net/manual/tech-notes/3)
             if (refresh) {
-                console.log('Map data refreshed');
+                // console.log('Map data refreshed');
                 dataTable.clear().rows.add(street_properties.slice(0, 10)).draw();
             }
 
             // Set up refresh button
             $('#refreshMap').click(function (e) {
                 // liveData.layers.remove();
-                setupLiveStreetMap(rtMap, rtMeasure, true);
+                setupLiveStreetMap(rtMap, rtMeasure, selectPanel, true);
+            });
+
+            flow_layers.on({
+                add: function (e) {
+                    $('#street-table-div').show();
+                },
+                remove: function (e) {
+                    $('#street-table-div').hide();
+                }
             });
 
             // Store the data for later reuse
             return {
-                layers: layers,
+                layers: [vel_layers, flow_layers],
                 streets: streets
             };
 
@@ -76,78 +98,85 @@ function setupLiveStreetMap(rtMap, rtMeasure, selectPanel, refresh = false) {
 }
 
 function setupLiveCommuneMap(rtMap, rtMeasure, selectPanel, refresh = false) {
-    $.get("/data/", {
+    return $.get("/data/", {
             data_usage: "real-time",
             table: "state_commune" // IF this is relevant
         })
         .done(function (communeData) {
-            
+
             var communes = communeData.data.features;
             var truck_counts = {};
-            console.log(communes);
-            
+            var com_list = [];
+
             communes.forEach(com => {
                 var com_name = com.properties.name;
                 // delete com.properties.name;
-                truck_counts[com_name] = com.properties; // Only remaining properties should be counts
+                truck_counts[com_name] = com.properties;
+                com_list.push(com.properties);
             });
-            var layer = drawCommuneMap(communes, rtMap, truck_counts); // TODO: this will need a refactor to use geojson 
+            var [layer, legend] = drawCommuneMap(communes, rtMap, truck_counts);
+
+            // console.log(truck_counts);
+
+            com_list.sort(function (a, b) {
+                return a.total - b.total;
+            });
+            com_list.reverse();
+
+            var dataTable = $('#rt-table-com').DataTable({
+                data: com_list.slice(0, 5),
+                columns: [{
+                        data: 'name'
+                    },
+                    {
+                        data: 'total'
+                    }
+                ],
+                paging: false,
+                info: false,
+                searching: false,
+                retrieve: true,
+                order: [
+                    [1, "desc"]
+                ]
+            });
+
+            //Update data if data table was already initialised (see: https://datatables.net/manual/tech-notes/3)
+            if (refresh) {
+                // console.log('Map data refreshed');
+                dataTable.clear().rows.add(com_list.slice(0, 5)).draw();
+            }
+
+            // Set up refresh button
+            $('#refreshMap').click(function (e) {
+                // liveData.layers.remove();
+                setupLiveCommuneMap(rtMap, rtMeasure, selectPanel, true);
+            });
+
+            layer.on({
+                add: function (e) {
+                    legend.addTo(rtMap);
+                    $('#com-table-div').show();
+
+                },
+                remove: function (e) {
+                    legend.remove();
+                    $('#com-table-div').hide();
+                }
+            });
+            layer.remove();
 
             selectPanel.addOverlay({
                 name: 'Communes',
-                layer: layer
+                layer: layer,
+                active: false
             });
 
-            //Extract top 5 communes and draw table (TODO)
-            // top_communes = [];
-            // street_properties = communes.features.map(function (s) {
-            //     var sID = s.properties.id_street;
-            //     var propList = s.properties.list_table;
-            //     return {
-            //         id_street: sID,
-            //         flow: propList.flow[timeKey],
-            //         //Etc if we want to use other properties
-            //     };
-            // });
-            // street_properties.sort(function (a, b) {
-            //     return a.flow - b.flow;
-            // });
-            // street_properties.reverse();
-            // console.log(street_properties);
 
-            // var dataTable = $('#rt-table').DataTable({
-            //     data: street_properties.slice(0, 10),
-            //     columns: [{
-            //             data: 'id_street'
-            //         },
-            //         {
-            //             data: 'flow'
-            //         }
-            //     ],
-            //     paging: false,
-            //     info: false,
-            //     searching: false,
-            //     retrieve: true,
-            //     order: [
-            //         [1, "desc"]
-            //     ]
-            // });
-
-            // //Update data if data table was already initialised (see: https://datatables.net/manual/tech-notes/3)
-            // if (refresh) {
-            //     console.log('Map data refreshed');
-            //     dataTable.clear().rows.add(street_properties.slice(0, 10)).draw();
-            // }
-
-            // // Set up refresh button
-            // $('#refreshMap').click(function (e) {
-            //     // liveData.layers.remove();
-            //     setupLiveStreetMap(rtMap, rtMeasure, true);
-            // });
 
             // Store the data for later reuse
             return {
-                layers: layers,
+                layers: layer,
                 communes: communes
             };
 
@@ -158,19 +187,46 @@ function setupLiveCommuneMap(rtMap, rtMeasure, selectPanel, refresh = false) {
 }
 
 function initRtTab() {
-    var panel = L.control.panelLayers(); // Layer selection control
+
+    // TODO: cleanup (add layers after panel add?), only allow 1 layer at atime? 
+
+    // Set up map
     var rtMap = drawBxlMap("rt-map");
+
+    // Set up map controls
+    var panel = L.control.panelLayers(null, [{
+        group: 'Streets',
+        layers: []
+    }], {
+        title: 'Active Layers',
+        position: 'topleft',
+        compact: true,
+        sortLayers: true,
+        sortFunction: function (layerA, layerB, nameA, nameB) {
+            console.log(nameA);
+
+            // Define ordering of layers in the panel
+            if (nameA == 'Streets') {
+                return -1;
+            }
+            if (nameB == 'Streets') {
+                return 1;
+            }
+        }
+    }).addTo(rtMap); // Layer selection control
     var rtMeasure = "flow"; // Default measure
+
+    // Add street and commune layers for RT
     setupLiveStreetMap(rtMap, rtMeasure, panel);
     setupLiveCommuneMap(rtMap, rtMeasure, panel);
 }
 
 function initMapsTab() {
-    console.log("Map tab clicked");
+    // console.log("Map tab clicked");
 
     var histMap = drawBxlMap("hist-map");
     $(this).on('shown.bs.tab', function (e) {
-        console.log('Map tab loaded');
+        // console.log('Map tab loaded');
 
         histMap.invalidateSize();
     });
@@ -190,7 +246,7 @@ function initMapsTab() {
 }
 
 function initChartsTab() {
-    am4core.useTheme(am4themes_animated);
+    // am4core.useTheme(am4themes_animated);
     am4core.useTheme(am4themes_material);
     $(".chart-row").each(function (index) {
         // First chart is shown by default
