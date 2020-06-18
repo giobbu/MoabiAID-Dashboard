@@ -5,6 +5,8 @@ function setupLiveStreetMap(rtMap, rtMeasure, selectPanel, refresh = false) {
         })
         .done(function (streetData) {
             var streets = streetData.data;
+
+            // Add layer for the flow (truck counts) measure to the map
             var [
                 flow_layers,
                 flow_timeKey
@@ -15,6 +17,8 @@ function setupLiveStreetMap(rtMap, rtMeasure, selectPanel, refresh = false) {
                 layer: flow_layers,
                 active: true
             }, 'Street flow', 'Streets');
+
+            // Add layer for the velocity measure to the map (disabled by default)
             var [
                 vel_layers,
                 vel_timeKey

@@ -52,7 +52,7 @@ def get_truck_data(req_data):
     :return: The requested data on trucks (e.g. A dict that is used to created a table describing the trucks in a commune)
     :rtype: dict
     """
-    trucks = Truck.objects.all()
+    trucks = Truck.objects.all() # TODO: This approaach should change, trucks should be a GeoJSON file with a Point for the last position of each truck in Bxl
     data = []
     if req_data == 'in_commune':
         data = trucks_in_commune_table(trucks, Commune.objects.all())

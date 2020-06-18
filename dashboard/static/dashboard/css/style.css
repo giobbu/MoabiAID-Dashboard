@@ -9,12 +9,14 @@ body{
     color: #555;
     background-color: white;
     opacity: 0.9;
+    font-size: 14px;
 }
 .legend i {
 	width: 18px;
 	height: 18px;
 	float: left;
-	margin-right: 8px;
+    margin-right: 1em;
+    margin-left: 1px;
 	opacity: 0.8;
 }
 

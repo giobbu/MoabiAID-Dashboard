@@ -50,7 +50,7 @@ function resetHighlight(e, geojson) {
     geojson.resetStyle(e.target);
 }
 
-function addLegend(position, grades, colorFn) {
+function addLegend(position, grades, colorFn, title='Legend') {
     var legend = L.control({
         position: position
     });
@@ -58,6 +58,8 @@ function addLegend(position, grades, colorFn) {
     legend.onAdd = function (map) {
 
         var div = L.DomUtil.create('div', 'info legend');
+
+        div.innerHTML += `<h5 class="mx-1">${title}</h5>`;
 
         // loop through our density intervals and generate a label with a colored square for each interval
         for (var i = 0; i < grades.length; i++) {
@@ -226,11 +228,11 @@ function communeColor(val) {
     var color = '#fef0d9'; //Default color
 
     var thresholdColors = [
-        [10000, '#b30000'],
-        [2000, '#e34a33'],
-        [1000, '#fc8d59'],
-        [500, '#fdbb84'],
-        [100, '#fdd49e']
+        [1000, '#b30000'],
+        [200, '#e34a33'],
+        [100, '#fc8d59'],
+        [50, '#fdbb84'],
+        [10, '#fdd49e']
     ];
 
     thresholdColors.some(tr => {
@@ -321,7 +323,7 @@ function drawCommuneMap(borders, map, truck_counts) {
         }
     }).addTo(map);
 
-    var legend = addLegend('topright', [0, 100, 500, 1000, 2000, 10000], communeColor);
+    var legend = addLegend('topright', [0, 10, 50, 100, 200, 1000], communeColor, 'Trucks in Commune');
 
     legend.addTo(map);
 
