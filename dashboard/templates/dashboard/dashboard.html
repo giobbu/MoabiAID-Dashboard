@@ -5,7 +5,13 @@ Dashboard
 {% block stylesheet %}
 {{ block.super }}
 {% load static %}
+{% comment %}
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+{% endcomment %}
+{% comment %}
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.21/datatables.min.css">
+{% endcomment %}
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css" />
 <link rel="stylesheet" href="{% static '/dashboard/css/dashboard.css' %}">
 {% endblock %}
 {% block canonical_url %}
@@ -20,12 +26,17 @@ Dashboard
     <nav class="col-md-1 d-none d-md-block sidebar">
         <div class="sidebar-sticky h-100" id="dashboard-sidebar">
             <ul class="nav flex-column nav-pills" role="tablist" aria-orientation="vertical">
+                <li class="pt-2 pl-3">
+                    <h5>Tabs</h5>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link active" id="v-pills-rt-tab" data-toggle="pill" href="#v-pills-rt" role="tab"
                         aria-controls="v-pills-rt" aria-selected="true">
-                        <div class="row align-items-center text-center">
-                            <img class="img-fluid nav-icon pr-2" src="{% static '/dashboard/images/Real-time.svg' %}"
-                                alt="">
+                        <div class="nav-row text-center">
+                            {% comment %} <img class="img-fluid nav-icon pr-2"
+                                src="{% static '/dashboard/images/Real-time.svg' %}" alt=""> {% endcomment %}
+                            <i class="material-icons nav-icon align-middle">history</i>
+                            &nbsp;
                             <span class="sidebar-text">Real-time</span>
                         </div>
                     </a>
@@ -33,9 +44,11 @@ Dashboard
                 <li class="nav-item">
                     <a class="nav-link" id="v-pills-maps-tab" data-toggle="pill" href="#v-pills-maps" role="tab"
                         aria-controls="v-pills-rt" aria-selected="false">
-                        <div class="row align-items-center text-center">
-                            <img class="img-fluid nav-icon pr-2" src="{% static '/dashboard/images/MapIcon.svg' %}"
-                                alt="">
+                        <div class="nav-row text-center">
+                            {% comment %} <img class="img-fluid nav-icon pr-2"
+                                src="{% static '/dashboard/images/MapIcon.svg' %}" alt=""> {% endcomment %}
+                            <i class="material-icons nav-icon align-middle">map</i>
+                            &nbsp;
                             <span class="sidebar-text">Maps</span>
                         </div>
                     </a>
@@ -43,9 +56,11 @@ Dashboard
                 <li class="nav-item">
                     <a class="nav-link" id="v-pills-charts-tab" data-toggle="pill" href="#v-pills-charts" role="tab"
                         aria-controls="v-pills-charts" aria-selected="false">
-                        <div class="row align-items-center text-center">
-                            <img class="img-fluid nav-icon pr-2" src="{% static '/dashboard/images/Chart_icon.svg' %}"
-                                alt="">
+                        <div class="nav-row text-center">
+                            {% comment %} <img class="img-fluid nav-icon pr-2"
+                                src="{% static '/dashboard/images/Chart_icon.svg' %}" alt=""> {% endcomment %}
+                            <i class="material-icons nav-icon align-middle">multiline_chart</i>
+                            &nbsp;
                             <span class="sidebar-text">Charts</span>
                         </div>
                     </a>
@@ -53,9 +68,11 @@ Dashboard
                 <li class="nav-item">
                     <a class="nav-link" id="v-pills-analytics-tab" data-toggle="pill" href="#v-pills-analytics"
                         role="tab" aria-controls="v-pills-analytics" aria-selected="false">
-                        <div class="row align-items-center text-center">
-                            <img class="img-fluid nav-icon pr-2"
-                                src="{% static '/dashboard/images/analytic-icon.svg' %}" alt="">
+                        <div class="nav-row text-center">
+                            {% comment %} <img class="img-fluid nav-icon pr-2"
+                                src="{% static '/dashboard/images/analytic-icon.svg' %}" alt=""> {% endcomment %}
+                            <i class="material-icons nav-icon align-middle">analytics</i>
+                            &nbsp;
                             <span class="sidebar-text">Analytics</span>
                         </div>
                     </a>
@@ -63,9 +80,11 @@ Dashboard
                 <li class="nav-item">
                     <a class="nav-link" id="v-pills-pred-tab" data-toggle="pill" href="#v-pills-pred" role="tab"
                         aria-controls="v-pills-pred" aria-selected="false">
-                        <div class="row align-items-center text-center">
-                            <img class="img-fluid nav-icon pr-2"
-                                src="{% static '/dashboard/images/predictions-icon.svg' %}" alt="">
+                        <div class="nav-row text-center">
+                            {% comment %} <img class="img-fluid nav-icon pr-2"
+                                src="{% static '/dashboard/images/predictions-icon.svg' %}" alt=""> {% endcomment %}
+                            <i class="material-icons nav-icon align-middle">online_prediction</i>
+                            &nbsp;
                             <span class="sidebar-text">Predictions</span>
                         </div>
                     </a>
@@ -99,7 +118,7 @@ Dashboard
                         <h2>Tables</h2>
                         <div id="street-table-div">
                             <h3>Top 10 most busy streets</h3>
-                            <table id="rt-table-street" class="display" width="100%">
+                            <table id="rt-table-street" class="display table table-striped table-hover" width="100%">
                                 <thead>
                                     <tr>
                                         <th>Street ID</th>
@@ -108,9 +127,9 @@ Dashboard
                                 </thead>
                             </table>
                         </div>
-                        <div id="com-table-div">
+                        <div id="com-table-div" style="display: none;">
                             <h3>Top 5 most busy communes</h3>
-                            <table id="rt-table-com" class="display" width="100%">
+                            <table id="rt-table-com" class="display table table-striped table-hover" width="100%">
                                 <thead>
                                     <tr>
                                         <th>Commune</th>
@@ -138,7 +157,7 @@ Dashboard
                             </button>
                             <div class="dropdown-menu" aria-labelledby="select-chart">
                                 <a class="dropdown-item" href="#" data-chart="cat_dist">Trucks per street</a>
-                                <a class="dropdown-item" href="#" data-chart="hourly_counts">Trucks per commune</a>
+                                <a class="dropdown-item" href="#" data-chart="time_counts">Trucks per commune</a>
                                 <a class="dropdown-item" href="#" data-chart="commune_dist">Truck positions</a>
                             </div>
                         </div>
@@ -165,11 +184,13 @@ Dashboard
                     </button>
                     <div class="dropdown-menu" aria-labelledby="select-chart">
                         <a class="dropdown-item" href="#" data-chart="cat_dist">Truck Category Distribution</a>
-                        <a class="dropdown-item" href="#" data-chart="hourly_counts">Daily Truck counts per hour</a>
+                        <a class="dropdown-item" href="#" data-chart="time_counts">Daily Truck counts per hour</a>
                         <a class="dropdown-item" href="#" data-chart="commune_dist">Truck counts per commune</a>
                     </div>
                 </div>
                 <div class="row chart-row active-chart" id="cat_dist">
+                </div>
+                <div class="row chart-row active-chart" id="time_counts">
                 </div>
                 {% comment %} Approach: add a div for every chart (with id as chart name) and display/hide divs with
                 some controls (dropdown?) {% endcomment %}
@@ -206,7 +227,12 @@ Dashboard
 <script src="https://www.amcharts.com/lib/4/charts.js"></script>
 <script src="//www.amcharts.com/lib/4/themes/animated.js"></script>
 <script src="https://www.amcharts.com/lib/4/themes/material.js"></script>
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+{% comment %} <script type="text/javascript" charset="utf8"
+    src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script> {% endcomment %}
+{% comment %} <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.21/datatables.min.js">
+</script> {% endcomment %}
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
 <script src="{% static '/dashboard/js/drawUtils.js' %}"></script>
 <script src="{% static '/dashboard/js/charts.js' %}"></script>
 <script src="{% static '/dashboard/js/maps.js' %}"></script>

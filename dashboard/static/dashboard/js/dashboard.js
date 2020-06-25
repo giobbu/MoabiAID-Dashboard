@@ -1,3 +1,18 @@
+function drawRtTable(tableId, data, columns) {
+    return $(tableId).DataTable({
+        data: data,
+        columns: columns,
+        paging: false,
+        info: false,
+        searching: false,
+        retrieve: true,
+        order: [
+            [1, "desc"]
+        ],
+        ordering: false
+    });
+}
+
 function setupLiveStreetMap(rtMap, rtMeasure, selectPanel, refresh = false) {
     return $.get("/data/", {
             data_usage: "real-time",
@@ -6,15 +21,21 @@ function setupLiveStreetMap(rtMap, rtMeasure, selectPanel, refresh = false) {
         .done(function (streetData) {
             var streets = streetData.data;
 
+            if (refresh) {
+                // Remove old layers from select panel on refresh to avoid deduplication
+                selectPanel.removeLayer('Street flow');
+                selectPanel.removeLayer('Average Truck Velocity');
+            }
+
             // Add layer for the flow (truck counts) measure to the map
             var [
                 flow_layers,
                 flow_timeKey
             ] = drawStreetColors(rtMap, streets, 'flow', 'now', refresh);
             console.log(flow_layers);
-
             selectPanel.addOverlay({
                 layer: flow_layers,
+                icon: '<i class="material-icons">local_shipping</i>',
                 active: true
             }, 'Street flow', 'Streets');
 
@@ -23,13 +44,14 @@ function setupLiveStreetMap(rtMap, rtMeasure, selectPanel, refresh = false) {
                 vel_layers,
                 vel_timeKey
             ] = drawStreetColors(rtMap, streets, 'vel', 'now', refresh);
-            vel_layers.remove(); 
+            vel_layers.remove();
 
             selectPanel.addOverlay({
                 layer: vel_layers,
+                icon: '<i class="material-icons">speed</i>',
                 active: false
             }, 'Average Truck Velocity', 'Streets');
-            
+
 
 
             //Extract top 10 streets and draw table
@@ -49,23 +71,13 @@ function setupLiveStreetMap(rtMap, rtMeasure, selectPanel, refresh = false) {
             street_properties.reverse();
             // console.log(street_properties);
 
-            var dataTable = $('#rt-table-street').DataTable({
-                data: street_properties.slice(0, 10),
-                columns: [{
-                        data: 'id_street'
-                    },
-                    {
-                        data: 'flow'
-                    }
-                ],
-                paging: false,
-                info: false,
-                searching: false,
-                retrieve: true,
-                order: [
-                    [1, "desc"]
-                ]
-            });
+            var dataTable = drawRtTable('#rt-table-street', street_properties.slice(0, 10), [{
+                    data: 'id_street'
+                },
+                {
+                    data: 'flow'
+                }
+            ]);
 
             //Update data if data table was already initialised (see: https://datatables.net/manual/tech-notes/3)
             if (refresh) {
@@ -108,6 +120,10 @@ function setupLiveCommuneMap(rtMap, rtMeasure, selectPanel, refresh = false) {
         })
         .done(function (communeData) {
 
+            if (refresh) {
+                selectPanel.removeLayer('Communes');
+            }
+
             var communes = communeData.data.features;
             var truck_counts = {};
             var com_list = [];
@@ -127,23 +143,13 @@ function setupLiveCommuneMap(rtMap, rtMeasure, selectPanel, refresh = false) {
             });
             com_list.reverse();
 
-            var dataTable = $('#rt-table-com').DataTable({
-                data: com_list.slice(0, 5),
-                columns: [{
-                        data: 'name'
-                    },
-                    {
-                        data: 'total'
-                    }
-                ],
-                paging: false,
-                info: false,
-                searching: false,
-                retrieve: true,
-                order: [
-                    [1, "desc"]
-                ]
-            });
+            var dataTable = drawRtTable('#rt-table-com', com_list.slice(0, 5), [{
+                    data: 'name'
+                },
+                {
+                    data: 'total'
+                }
+            ]);
 
             //Update data if data table was already initialised (see: https://datatables.net/manual/tech-notes/3)
             if (refresh) {
@@ -172,6 +178,7 @@ function setupLiveCommuneMap(rtMap, rtMeasure, selectPanel, refresh = false) {
 
             selectPanel.addOverlay({
                 name: 'Communes',
+                icon: '<i class="material-icons">location_city</i>',
                 layer: layer,
                 active: false
             });
@@ -202,7 +209,7 @@ function initRtTab() {
         group: 'Streets',
         layers: []
     }], {
-        title: 'Active Layers',
+        title: '<i class="material-icons align-middle">layers</i> Layers',
         position: 'topleft',
         compact: true,
         sortLayers: true,
@@ -262,6 +269,8 @@ function initChartsTab() {
 
         $(`<h3> ${chart_name} </h3>`).appendTo(this);
         var chart = drawChart(chart_name);
+        console.log(chart);
+        
     });
 
     // Bind event handlers to dropdown

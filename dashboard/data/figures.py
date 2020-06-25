@@ -254,3 +254,20 @@ def category_distribution(trucks, communes, sort_key='cat_c'):
 
     data.sort(key=lambda com: com[sort_key]) # Sort the list on the given key 
     return clustered_bar_chart(data, 'commune', ['cat_b', 'cat_c'])
+
+def time_of_day_distribution(truck_counts:list):
+    #TODO: test with real data, might need formatter
+
+    cat = 'time_of_day'
+    val = 'truck_total'
+
+    data_list = []
+
+    # 24 hours in a day
+    for i in range(24):
+        data_list.append({
+            cat: i,
+            val: truck_counts[i]
+        })
+    
+    return bar_chart(data_list, 'Truck activity', cat, val)

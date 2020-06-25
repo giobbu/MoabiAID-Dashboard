@@ -79,6 +79,10 @@ def get_chart(chart_name):
 
     if chart_name == 'cat_dist':
         data = category_distribution(trucks, communes)
+    elif chart_name == 'time_counts':
+        #TODO: for testing where to retrieve this?
+        tod_counts = [25, 58, 79, 145, 489, 569, 896, 999, 1569, 1469, 1369, 1269, 956, 684, 598, 689, 569, 423, 852, 123, 256, 65, 48, 23] 
+        data = time_of_day_distribution(tod_counts)
 
     # print(data)
 
