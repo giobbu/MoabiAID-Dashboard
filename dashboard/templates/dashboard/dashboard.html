@@ -110,7 +110,11 @@ Dashboard
                                 <a class="dropdown-item" href="#" data-measure="vel">Average Velocity</a>
                             </div>
                         </div> {% endcomment %}
-                        <button type="button" class="btn btn-primary" id="refreshMap">Refresh</button>
+                        <button type="button" class="btn btn-primary btn-raised" id="refreshMap">
+                            <i class="material-icons nav-icon align-bottom">refresh</i>
+                            &nbsp;
+                            Refresh
+                        </button>
                         <p id="current-timeframe"></p>
                         <div id="rt-map"></div>
                     </div>
@@ -138,6 +142,16 @@ Dashboard
                                 </thead>
                             </table>
                         </div>
+                    </div>
+                </div>
+                <hr>
+                <h2>Charts</h2>
+                <div class="row">
+                    <div class="col">
+                        <div id="rt-figdiv-street" class="rt-chart"></div>
+                    </div>
+                    <div class="col">
+                        <div id="rt-figdiv-com" class="rt-chart"></div>
                     </div>
                 </div>
 

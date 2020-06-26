@@ -13,6 +13,54 @@ function drawRtTable(tableId, data, columns) {
     });
 }
 
+function drawRtChart(chartDiv, data, cat_key, val_key, textConfig) {
+
+    // For now we assume only XY charts 
+    var chart = am4core.create(chartDiv, am4charts.XYChart);
+
+    chart.data = data;
+
+    // Create axes
+    var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+    categoryAxis.dataFields.category = cat_key;
+    categoryAxis.renderer.grid.template.location = 0;
+    //categoryAxis.renderer.minGridDistance = 30;
+
+    categoryAxis.renderer.labels.template.events.on("over", function (ev) {
+        var point = categoryAxis.categoryToPoint(ev.target.dataItem.category);
+        chart.cursor.triggerMove(point, "soft");
+    });
+
+    categoryAxis.renderer.labels.template.events.on("out", function (ev) {
+        var point = categoryAxis.categoryToPoint(ev.target.dataItem.category);
+        chart.cursor.triggerMove(point, "none");
+    });
+
+    var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+    valueAxis.tooltip.disabled = true;
+
+    // Create series
+    var series = chart.series.push(new am4charts.ColumnSeries());
+    series.dataFields.valueY = val_key;
+    series.dataFields.categoryX = cat_key;
+    series.tooltipText = "{categoryX}: {valueY}";
+
+    chart.cursor = new am4charts.XYCursor();
+    chart.cursor.lineY.disabled = true;
+    chart.cursor.lineX.disabled = true;
+
+    // Create title and axis lables
+    let title = chart.titles.create();
+    title.text = textConfig.title;
+
+    categoryAxis.title.text = textConfig.catLabel;
+    valueAxis.title.text = textConfig.valLable;
+
+
+    return chart;
+
+}
+
 function setupLiveStreetMap(rtMap, rtMeasure, selectPanel, refresh = false) {
     return $.get("/data/", {
             data_usage: "real-time",
@@ -71,7 +119,9 @@ function setupLiveStreetMap(rtMap, rtMeasure, selectPanel, refresh = false) {
             street_properties.reverse();
             // console.log(street_properties);
 
-            var dataTable = drawRtTable('#rt-table-street', street_properties.slice(0, 10), [{
+            top10Streets = street_properties.slice(0, 10);
+
+            var dataTable = drawRtTable('#rt-table-street', top10Streets, [{
                     data: 'id_street'
                 },
                 {
@@ -79,10 +129,17 @@ function setupLiveStreetMap(rtMap, rtMeasure, selectPanel, refresh = false) {
                 }
             ]);
 
+            var rtChart = drawRtChart('rt-figdiv-street', top10Streets, 'id_street', 'flow', {
+                title: 'Top 10 most busy streets',
+                catLabel: 'Street',
+                valLable: 'Number of Trucks'
+            });
+
             //Update data if data table was already initialised (see: https://datatables.net/manual/tech-notes/3)
             if (refresh) {
                 // console.log('Map data refreshed');
-                dataTable.clear().rows.add(street_properties.slice(0, 10)).draw();
+                dataTable.clear().rows.add(top10Streets).draw();
+                rtChart.data = top10Streets;
             }
 
             // Set up refresh button
@@ -94,9 +151,11 @@ function setupLiveStreetMap(rtMap, rtMeasure, selectPanel, refresh = false) {
             flow_layers.on({
                 add: function (e) {
                     $('#street-table-div').show();
+                    $('#rt-figdiv-street').show();
                 },
                 remove: function (e) {
                     $('#street-table-div').hide();
+                    $('#rt-figdiv-street').hide();
                 }
             });
 
@@ -143,7 +202,9 @@ function setupLiveCommuneMap(rtMap, rtMeasure, selectPanel, refresh = false) {
             });
             com_list.reverse();
 
-            var dataTable = drawRtTable('#rt-table-com', com_list.slice(0, 5), [{
+            top5Coms = com_list.slice(0, 5)
+
+            var dataTable = drawRtTable('#rt-table-com', top5Coms, [{
                     data: 'name'
                 },
                 {
@@ -151,10 +212,17 @@ function setupLiveCommuneMap(rtMap, rtMeasure, selectPanel, refresh = false) {
                 }
             ]);
 
+            var chart = drawRtChart('rt-figdiv-com', top5Coms, 'name', 'total', {
+                title: 'Top 5 most busy communes',
+                catLabel: 'Commune',
+                valLable: 'Number of trucks'
+            });
+
             //Update data if data table was already initialised (see: https://datatables.net/manual/tech-notes/3)
             if (refresh) {
                 // console.log('Map data refreshed');
-                dataTable.clear().rows.add(com_list.slice(0, 5)).draw();
+                dataTable.clear().rows.add(top5Coms).draw();
+                chart.data = top5Coms;
             }
 
             // Set up refresh button
@@ -167,13 +235,17 @@ function setupLiveCommuneMap(rtMap, rtMeasure, selectPanel, refresh = false) {
                 add: function (e) {
                     legend.addTo(rtMap);
                     $('#com-table-div').show();
+                    $('#rt-figdiv-com').show();
 
                 },
                 remove: function (e) {
                     legend.remove();
                     $('#com-table-div').hide();
+                    $('#rt-figdiv-com').hide();
                 }
             });
+
+            // Remove layer as it is not shown by default
             layer.remove();
 
             selectPanel.addOverlay({
@@ -182,8 +254,6 @@ function setupLiveCommuneMap(rtMap, rtMeasure, selectPanel, refresh = false) {
                 layer: layer,
                 active: false
             });
-
-
 
             // Store the data for later reuse
             return {
@@ -230,6 +300,9 @@ function initRtTab() {
     // Add street and commune layers for RT
     setupLiveStreetMap(rtMap, rtMeasure, panel);
     setupLiveCommuneMap(rtMap, rtMeasure, panel);
+
+    // Set up figures
+    $("#rt-figdiv")
 }
 
 function initMapsTab() {
@@ -270,7 +343,7 @@ function initChartsTab() {
         $(`<h3> ${chart_name} </h3>`).appendTo(this);
         var chart = drawChart(chart_name);
         console.log(chart);
-        
+
     });
 
     // Bind event handlers to dropdown

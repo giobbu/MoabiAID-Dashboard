@@ -3,13 +3,13 @@ Collapsing sidebar
 */
 
 .nav-icon{
-    height: 2.5em;
-    color: black;
+    color: inherit;
     font-size: 1.8em;
 }
 
 .nav-row {
     display: inline-flex;
+    align-items: center;
 }
 
 .nav-item{
@@ -25,12 +25,12 @@ Collapsing sidebar
     overflow: hidden;
     display: flex;
     justify-content: center;
+    padding: 0em;
 }
 
 .nav-pills .nav-link:hover{
     background-color: var(--mobi-blue);
     opacity: 0.6;
-    font-size: larger;
     font-weight: bolder;
 }
 
@@ -50,6 +50,7 @@ Collapsing sidebar
     min-width: 50%;
     max-width: 50%;
     transition: min-width 0.5s ease-in, max-width 0.5s ease-in;
+    color: #1f2d41 !important;
 }
 
 #dashboard-sidebar:hover{
@@ -58,8 +59,8 @@ Collapsing sidebar
 }
 
 #dashboard-sidebar .sidebar-text{
-    color: black;
-    font-size: 16px;
+    /* color: black; */
+    font-size: inherit;
     visibility: hidden;
     display: flex;
     width: 0;
@@ -79,10 +80,11 @@ Collapsing sidebar
 
 #dashboard-sidebar:hover .nav-link{
     justify-content: left;
+    padding-left: 0.5em;
 }
 
 #dashboard-sidebar:hover .nav-link:hover .sidebar-text {
-    padding-top: 0.5em;
+    /* padding-top: 0.5em; */
 }
 
 /*
@@ -97,12 +99,26 @@ Chart related styling
 
 #hist-map { height: 100em; }
 
+.leaflet-panel-layers-icon {
+    width: auto;
+    justify-content: bottom;
+}
+
 .leaflet-panel-layers-icon i{
     font-size: 1.5em;
     align-items: center;
-    padding-right: 1em;
+    padding-right: 0.5em;
 }
 
 .leaflet-panel-layers-title span {
     padding-right: 1em;
+}
+
+label.leaflet-panel-layers-title {
+    line-height: inherit;
+    font-size: .8rem;
+}
+
+.rt-chart{
+    height: 30em;
 }

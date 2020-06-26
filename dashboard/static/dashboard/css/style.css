@@ -1,69 +1,77 @@
-body{
-    background-color: rgba(237, 245, 247, 0.116)/*#edf5f7;*/
+body {
+    background-color: rgba(237, 245, 247, 0.116)
+        /*#edf5f7;*/
 }
 
-#mapid { height: 100em; }
+#mapid {
+    height: 100em;
+}
 
 .legend {
-	line-height: 18px;
+    line-height: 18px;
     color: #555;
     background-color: white;
     opacity: 0.9;
     font-size: 14px;
 }
+
 .legend i {
-	width: 18px;
-	height: 18px;
-	float: left;
+    width: 18px;
+    height: 18px;
+    float: left;
     margin-right: 1em;
     margin-left: 1px;
-	opacity: 0.8;
+    opacity: 0.8;
 }
 
 /* Set variables with site color scheme */
-:root{
+:root {
     --mobi-blue: #8cbddb;
 }
 
 /* Manage font */
-body, button, input, select, textarea {
-	font-family: "Raleway", sans-serif;
-	font-weight: 300;
-	text-transform: none;
-	font-size: 18px;
+body,
+button,
+input,
+select,
+textarea {
+    font-family: "Raleway", sans-serif;
+    font-weight: 300;
+    text-transform: none;
+    font-size: 18px;
 }
 
 /* Customize header */
-.site-header{
+.site-header {
     background-color: var(--mobi-blue);
 }
 
 .site-header a {
-    color: white;
+    color: white !important;
 }
 
-.navbar-brand{
+.navbar-brand {
     font-size: 1.7em;
     font-weight: 550;
 }
 
-.header-image{
+.header-image {
     height: 1.1em;
 }
 
-.navbar-nav .nav-link{
+.navbar-nav .nav-link {
     margin: auto;
     font-size: 0.9em;
     font-weight: 500;
-    color: whitesmoke;
+    color: whitesmoke !important;
     /* font-size: 1.2rem; */
     padding-left: 0.5em;
     padding-right: 0.5em;
 }
 
 /* Make this specific in case we have nav-item classes outside of navbar */
-nav .navbar-nav .nav-item.active{
-    color: #96281b;
+nav .navbar-nav .nav-item.active {
+    color: #96281b !important;
     font-weight: 450;
 }
 
@@ -74,15 +82,128 @@ nav .navbar-nav .nav-item.active{
 }
 
 #page {
-    padding-bottom: 5.3rem /* height of the footer + spacing between footer and page content */
+    padding-bottom: 5.3rem
+        /* height of the footer + spacing between footer and page content */
 }
+
 .footer {
     position: absolute;
     bottom: 0;
     width: 100%;
-    height:3.3rem;
+    height: 3.3rem;
     line-height: 3.3rem;
     background-color: var(--mobi-blue);
     color: white;
 }
 
+/*
+Overrides for bootstrap material design
+*/
+
+.btn-primary.custom-file-control::before,
+.btn.btn-primary {
+    color: #3f51b5;
+    background-color: transparent;
+    border-color: #ccc;
+}
+
+.bmd-btn-fab.btn-primary.active.custom-file-control::before,
+.bmd-btn-fab.btn-primary.custom-file-control:active::before,
+.bmd-btn-fab.btn-primary.custom-file-control:focus::before,
+.bmd-btn-fab.btn-primary.custom-file-control:hover::before,
+.bmd-btn-fab.btn-primary.focus.custom-file-control::before,
+.btn-group-raised .btn-primary.active.custom-file-control::before,
+.btn-group-raised .btn-primary.custom-file-control:active::before,
+.btn-group-raised .btn-primary.custom-file-control:focus::before,
+.btn-group-raised .btn-primary.custom-file-control:hover::before,
+.btn-group-raised .btn-primary.focus.custom-file-control::before,
+.btn-group-raised .btn.btn-primary.active,
+.btn-group-raised .btn.btn-primary.focus,
+.btn-group-raised .btn.btn-primary:active,
+.btn-group-raised .btn.btn-primary:focus,
+.btn-group-raised .btn.btn-primary:hover,
+.btn-raised.btn-primary.active.custom-file-control::before,
+.btn-raised.btn-primary.custom-file-control:active::before,
+.btn-raised.btn-primary.custom-file-control:focus::before,
+.btn-raised.btn-primary.custom-file-control:hover::before,
+.btn-raised.btn-primary.focus.custom-file-control::before,
+.btn.bmd-btn-fab.btn-primary.active,
+.btn.bmd-btn-fab.btn-primary.focus,
+.btn.bmd-btn-fab.btn-primary:active,
+.btn.bmd-btn-fab.btn-primary:focus,
+.btn.bmd-btn-fab.btn-primary:hover,
+.btn.btn-raised.btn-primary.active,
+.btn.btn-raised.btn-primary.focus,
+.btn.btn-raised.btn-primary:active,
+.btn.btn-raised.btn-primary:focus,
+.btn.btn-raised.btn-primary:hover,
+.open>.bmd-btn-fab.btn-primary.dropdown-toggle.custom-file-control::before,
+.open>.btn-group-raised .btn-primary.dropdown-toggle.custom-file-control::before,
+.open>.btn-group-raised .btn.btn-primary.dropdown-toggle,
+.open>.btn-raised.btn-primary.dropdown-toggle.custom-file-control::before,
+.open>.btn.bmd-btn-fab.btn-primary.dropdown-toggle,
+.open>.btn.btn-raised.btn-primary.dropdown-toggle {
+    color: #fff;
+    background-color: #495bc0;
+    border-color: #2f3d88;
+}
+
+.bmd-btn-fab.btn-primary.custom-file-control::before,
+.btn-group-raised .btn-primary.custom-file-control::before,
+.btn-group-raised .btn.btn-primary,
+.btn-raised.btn-primary.custom-file-control::before,
+.btn.bmd-btn-fab.btn-primary,
+.btn.btn-raised.btn-primary {
+    color: #fff;
+    background-color: #3f51b5;
+    border-color: #3f51b5;
+}
+
+a {
+    color: #3f51b5;
+    text-decoration: none;
+    background-color: transparent;
+}
+
+a:hover {
+    color: #3f51b5;
+    text-decoration: underline;
+}
+
+a:visited {
+    color: #551A8B;
+}
+
+.custom-file-control,
+.form-control,
+.is-focused .custom-file-control,
+.is-focused .form-control {
+    background-image: linear-gradient(0deg, #3f51b5 2px, rgba(63, 81, 181, 0) 0), linear-gradient(0deg, rgba(0, 0, 0, .26) 1px, transparent 0);
+}
+
+.is-focused [class*=" bmd-label"],
+.is-focused [class^=bmd-label] {
+    color: #3f51b5
+}
+
+.custom-file-control.is-focused [class*=" bmd-label"],
+.custom-file-control .is-focused [class*=" bmd-label"],
+.custom-file-control.is-focused [class^=bmd-label],
+.custom-file-control .is-focused [class^=bmd-label] {
+    color: #3f51b5
+}
+
+.page-link {
+    color: #3f51b5;
+}
+
+.page-item.active .page-link {
+    z-index: 1;
+    color: #fff;
+    background-color: #3f51b5;
+    border-color: #3f51b5;
+}
+
+.btn:not(.bmd-btn-icon) i {
+    font-size: 1.3em;
+}

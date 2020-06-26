@@ -74,7 +74,7 @@ function drawChart(chart_name) {
             
         });
     // TODO: add fail and always callbacks as necessary
-    return chart
+    return chart;
 }
 
 /*
