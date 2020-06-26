@@ -49,11 +49,23 @@ function drawRtChart(chartDiv, data, cat_key, val_key, textConfig) {
     chart.cursor.lineY.disabled = true;
     chart.cursor.lineX.disabled = true;
 
-    // Create title and axis lables
+    // Create title and configure title
     let title = chart.titles.create();
     title.text = textConfig.title;
+    title.fontWeight = 'bold';
+    title.align = 'center';
+    title.paddingBottom = 10;
+    title.paddingLeft = 20;
 
+    // Configure category axis
     categoryAxis.title.text = textConfig.catLabel;
+    categoryAxis.renderer.minGridDistance = 50;
+    categoryAxis.renderer.labels.template.fontSize = 14;
+    categoryAxis.renderer.labels.template.horizontalCenter ='middle';
+    categoryAxis.renderer.labels.template.wrap = true;
+    categoryAxis.renderer.labels.template.maxWidth = 165;
+
+    // Configure value axis
     valueAxis.title.text = textConfig.valLable;
 
 
@@ -240,13 +252,19 @@ function setupLiveCommuneMap(rtMap, rtMeasure, selectPanel, refresh = false) {
                 },
                 remove: function (e) {
                     legend.remove();
-                    $('#com-table-div').hide();
                     $('#rt-figdiv-com').hide();
+                    $('#com-table-div').hide();
+                    
                 }
             });
 
             // Remove layer as it is not shown by default
-            layer.remove();
+            chart.events.on('inited', function (e) {  
+                // Need to wait for chart to be initialized, otherwise it will break the layout
+                console.log('Chart ready, removing layer');
+                layer.remove();
+            });
+            
 
             selectPanel.addOverlay({
                 name: 'Communes',
