@@ -41,11 +41,11 @@ function formatLabels(chart) {
             ticksTemplate.disabled = false;
             ticksTemplate.strokeOpacity = 1;
             ticksTemplate.length = 10;
-        })
+        });
 
         chart.series.each(function (ser) {
             // columnTemplate = ser.columns.template.width = am4core.percent(20);
-        })
+        });
     }
 
 }

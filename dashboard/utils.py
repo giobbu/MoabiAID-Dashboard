@@ -164,7 +164,7 @@ def get_current_values(prop_dict):
 
     for key, val in flow.items(): 
         if first_nonzero and val == 0.0: 
-            print(key)
+            # print(key)
             cur_key = str(int(key)-1) 
             break 
         elif not first_nonzero and val != 0.0: 
@@ -174,4 +174,29 @@ def get_current_values(prop_dict):
         'flow': flow[cur_key],
         'vel': prop_dict['list_table']['vel'][cur_key]
     }
+
+def get_time_intervals(resolution):
+    """
+    Returns a list of values for a given interval of time at the resquested resolution
+    e.g. time_of_day means 1 hour intervals, and 24h for a full day. So a list from 0 to 24
+
+    :param resolution: The string for a supported resolution of the time interval
+    :type resolution: str
+    :raises ValueError: When an invalid resolution string is provided
+    :return: list of  values for the requested resolution
+    :rtype: list(int)
+    """
+    
+    # Compute batch intervals based on resolution
+    if resolution == 'time_of_day':
+        time_intervals = range(24)
+    elif resolution == '10min_hour':
+        time_intervals = range(6)
+    elif resolution == 'day_of_week':
+        time_intervals = range(1,8) # days start at 1
+    # TODO: add any resolutions we want to support
+    else:
+        raise ValueError(f'{resolution} is not a valid resolution parameter')
+
+    return time_intervals
     

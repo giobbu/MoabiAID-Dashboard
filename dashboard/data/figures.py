@@ -1,3 +1,8 @@
+import numpy as np
+from scipy.stats import norm
+
+from dashboard.utils import get_time_intervals
+
 def trucks_in_commune_table(trucks, communes):
     """
     Generates a dictionary that is formatted as to generate a DataTables table on the client.
@@ -271,3 +276,43 @@ def time_of_day_distribution(truck_counts:list):
         })
     
     return bar_chart(data_list, 'Truck activity', cat, val)
+
+def delay_distribution(delays, resolution='time_of_day'):
+
+    time_intervals = get_time_intervals(resolution)
+
+    columndata_list = []
+
+    # Compute normal distribution of delays if no batch intervals to fit
+    # NOTE: we assume delays are normally distibuted, we might want to investigate this. This figure can give an indication if it fits
+    # TODO: review how to do a histogram with amcharts 
+    # if batch_intervals is None:
+    #     # Fit a normal distribution to the data:
+    #     mu, std = norm.fit(delays)
+
+    #     xmin = min(delays)
+    #     xmax = max(delays)
+
+    #     x = np.linspace(xmin, xmax, 25)
+    #     p = norm.pdf(x, mu, std)
+
+    #     delay_hist, bin_edges = np.histogram(delays, bins=25, density=True)
+
+    #     linedata_list = []
+
+    #     for i, delay_freq in enumerate(delay_hist):
+    #         bin_center = (bin_edges[i] + bin_edges[i+1]) / 2
+    #         columndata_list.append({
+    #             'bin': bin_center,
+    #             'freq': delay_freq
+    #         })
+
+    for i, delay in enumerate(delays):
+        columndata_list.append(
+            {
+                'delay': delay,
+                'batch_interval': time_intervals[i]
+            }
+        )
+    
+    return bar_chart(columndata_list, 'Typical Delay', 'batch_interval', 'delay')

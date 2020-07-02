@@ -3,6 +3,9 @@ Module that manages database acces, all requests for data should come through he
 """
 import json
 
+# Used to generate testing data, can be removed in production
+import random
+
 from django.core.serializers import serialize
 from django.db.models import Q
 
@@ -83,6 +86,9 @@ def get_chart(chart_name):
         #TODO: for testing where to retrieve this?
         tod_counts = [25, 58, 79, 145, 489, 569, 896, 999, 1569, 1469, 1369, 1269, 956, 684, 598, 689, 569, 423, 852, 123, 256, 65, 48, 23] 
         data = time_of_day_distribution(tod_counts)
+    elif chart_name == 'delay_distribution':
+        test_delays = [random.randint(0,30) for i in range(24)]
+        data = delay_distribution(test_delays)
 
     # print(data)
 
@@ -107,7 +113,7 @@ def get_commune_counts(street_counts):
 
     # Serialize communes and deserialize back to dict
     com_features = json.loads(serialize('geojson', communes, geometry_field='boundaries', fields=('name',)))
-    print(type(com_features))
+    # print(type(com_features))
     streets = load_feature_collection(street_counts)
 
     # print(street_counts['features'][0])
@@ -115,7 +121,7 @@ def get_commune_counts(street_counts):
     # Get counts for each street in every commune
     for idx, com in enumerate(communes):
         # streets = com.streets.all()
-        print(com)
+        # print(com)
 
         n_trucks_commune = 0
 
@@ -133,6 +139,6 @@ def get_commune_counts(street_counts):
         # This works because the ordering in the feauture list should be preserved from the queryset
         com_features['features'][idx]['properties']['total'] = n_trucks_commune
     
-    print(com_features)
+    # print(com_features)
     return com_features
 
