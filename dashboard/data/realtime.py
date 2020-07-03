@@ -37,7 +37,7 @@ from dashboard.data import db # For common queries that can be used in real-time
 
 #NOTE: assumes this maps to a docker volume, for local install this should point to a dir where files from the streaming pipeline are stored
 STREAMING_FILES = Path('/streaming_files') 
-def get_rt(data):
+def get_rt(data, processing=None):
     """
     Retrieves the real-time state of the given view (roads, communes, trucks).
     Currently only streets are supported.
@@ -53,7 +53,7 @@ def get_rt(data):
     rt_data = cache.get(data)
 
     if rt_data is None:
-        data_file = STREAMING_FILES / 'state_street.json'
+        data_file = STREAMING_FILES / f'state_{data if "commune" not in data else "street"}.json' # get the right file
         print(data_file)
         with data_file.open('rb') as json_file:
             rt_data = json.load(json_file)
@@ -78,6 +78,10 @@ def get_rt(data):
             cache.set('commune_status', rt_data)
         else:
             rt_data = com_data
+        
+    if 'truck' in data and processing is not None:
+
+        return db.get_truck_data(rt_data, processing)
 
     # print(rt_data)
     return rt_data

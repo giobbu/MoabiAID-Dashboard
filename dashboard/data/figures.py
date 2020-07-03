@@ -4,6 +4,7 @@ from scipy.stats import norm
 from dashboard.utils import get_time_intervals
 
 def trucks_in_commune_table(trucks, communes):
+    #TODO: rewrite for new approach to truck positions
     """
     Generates a dictionary that is formatted as to generate a DataTables table on the client.
     This table contains the counts of trucks in each commune
@@ -16,7 +17,7 @@ def trucks_in_commune_table(trucks, communes):
     :rtype: dict
     """
     result = {
-        'total_trucks': trucks.count(),
+        'total_trucks': len(trucks),
         'cat_b': 0,
         'cat_c': 0,
         'table': {
@@ -36,16 +37,18 @@ def trucks_in_commune_table(trucks, communes):
     for com in communes:
         boundaries = com.boundaries
         #NOTE: IMPORTANT! As a placeholder we use the truck's last position. For the real deal this should use RT data or the position at a certain time
-        trucks_here = trucks.filter(last_position__within=boundaries) 
+        # trucks_here = trucks.filter(last_position__within=boundaries) 
+        # TODO: verify that the provided commune is correct with regards to the position
+        trucks_here = [tr for _, tr in trucks if tr['commune'] in com.name]
         commune_data = {
             'commune': com.name,
-            'total': trucks_here.count(),
+            'total': len(trucks_here),
             'cat_b': 0,
             'cat_c': 0
         }
 
         for th in trucks_here:
-            truck_mam = th.weight_category
+            truck_mam = int(th['mtm'])
             if truck_mam > 3500:
                 commune_data['cat_c'] += 1
             else:
@@ -54,7 +57,6 @@ def trucks_in_commune_table(trucks, communes):
         result['cat_b'] += commune_data['cat_b']
         result['cat_c'] += commune_data['cat_c']
         result['table']['data'].append(commune_data)
-    
     return result
 
 def make_category_series(s_type, category, value, name=None, columns=None):

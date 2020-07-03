@@ -8,8 +8,9 @@ $(document).ready(function () {
         },
         function (borders) {
             $.getJSON("/data/", {
-                    table: 'Truck',
-                    data: 'in_commune'
+                    table: 'truck',
+                    data: 'in_commune',
+                    data_usage: 'real-time'
                 },
                 function (response) {
                     res_data = response.data;

@@ -20,19 +20,24 @@ def get_data(table, req_data, usage):
     :rtype: str or dict or list(dict)
     """
 
+    print('Data request:')
+    print(table, req_data, usage)
     data = []
 
     if usage is None:
         if table == 'Commune':
             data = get_commune_data(req_data)
-        elif table == 'Truck':
-            data = get_truck_data(req_data)
+        # elif table == 'Truck':
+        #     data = get_truck_data(req_data)
 
     elif usage == 'chart':
+        # The data is a formatted chart
         data = get_chart(req_data) #TODO finish chart data requests
     elif usage == 'real-time':
-        data = get_rt(table)
+        # Real time state of requested entity
+        data = get_rt(table, req_data)
     elif usage == 'typical':
+        # Typical state(s) for requested entity
         data = get_typical_traffic(table)
     else:
         raise BadRequestError(f'At least one of the provided request parameters (data_usage: {usage}, table: {table}, data: {req_data}) is invalid')

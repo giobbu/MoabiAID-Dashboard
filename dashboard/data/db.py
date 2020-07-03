@@ -24,12 +24,12 @@ def get_commune_data(req_data):
     :rtype: str or list(dict)
     """
     communes = Commune.objects.all()
-    print(communes)
+    # print(communes)
     data = []
     if req_data == 'all':
         data = list(communes.values())
     elif req_data == 'borders':
-        print('Serializing border data')
+        # print('Serializing border data')
         # data = {
         #     'type': 'FeatureCollection',
         #     'crs': {
@@ -42,11 +42,11 @@ def get_commune_data(req_data):
 
 
     # TODO: Implement retrieval of other data attributes here
-    print(data)
+    # print(data)
     return data
 
 
-def get_truck_data(req_data):
+def get_truck_data(trucks, req_data):
     """
     Retrieves the requested data related to trucks from the database for display in a `Datatables <https://datatables.net/>`_ table.
     
@@ -55,12 +55,14 @@ def get_truck_data(req_data):
     :return: The requested data on trucks (e.g. A dict that is used to created a table describing the trucks in a commune)
     :rtype: dict
     """
-    trucks = Truck.objects.all() # TODO: This approaach should change, trucks should be a GeoJSON file with a Point for the last position of each truck in Bxl
+    # trucks = Truck.objects.all() # TODO: This approaach should change, trucks should be a GeoJSON file with a Point for the last position of each truck in Bxl
+    truck_list = load_feature_collection(trucks)
+    print(truck_list[0])
     data = []
     if req_data == 'in_commune':
-        data = trucks_in_commune_table(trucks, Commune.objects.all())
+        data = trucks_in_commune_table(truck_list, Commune.objects.all())
 
-    # print(data)
+    print(data)
     return data
 
 
