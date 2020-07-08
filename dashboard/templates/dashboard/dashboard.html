@@ -12,6 +12,8 @@ Dashboard
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.21/datatables.min.css">
 {% endcomment %}
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css">
 <link rel="stylesheet" href="{% static '/dashboard/css/dashboard.css' %}">
 {% endblock %}
 {% block canonical_url %}
@@ -250,6 +252,8 @@ Dashboard
 </script> {% endcomment %}
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
+<script type="text/javascript" src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+<script src="https://unpkg.com/leaflet.featuregroup.subgroup@1.0.2/dist/leaflet.featuregroup.subgroup.js"></script>
 <script src="{% static '/dashboard/js/drawUtils.js' %}"></script>
 <script src="{% static '/dashboard/js/charts.js' %}"></script>
 <script src="{% static '/dashboard/js/maps.js' %}"></script>

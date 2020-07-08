@@ -50,7 +50,7 @@ function resetHighlight(e, geojson) {
     geojson.resetStyle(e.target);
 }
 
-function addLegend(position, grades, colorFn, title='Legend') {
+function addLegend(position, grades, colorFn, title = 'Legend') {
     var legend = L.control({
         position: position
     });
@@ -74,7 +74,38 @@ function addLegend(position, grades, colorFn, title='Legend') {
     return legend;
 }
 
+function addAreaLayers(map, panel) {
+    // Simple list of distinctive colors
+    // const borderColors = ['#e41a1c','#4daf4a','#377eb8','#984ea3','#ff7f00','#ffff33'];
+    const borderColors = ['#a6d854', '#66c2a5','#fb8072','#8da0cb','#e78ac3','#ffd92f'];
+    $.get("/data/", {
+        data_usage: 'layers',
+        data: 'areas_of_interest'
+    }).done(function (layers) {
+        console.log('Areas of interest:');
+        console.log(layers);
 
+
+        layers.data.forEach(layer => {
+            var color = borderColors.pop(),
+                map_layer = L.geoJSON(layer, {
+                    style: function (feat) {
+                        return {
+                            color: color
+                        };
+                    }
+                }),//.addTo(map),
+                layerName = layer.layer_name.split('_')[0];
+
+            panel.addOverlay({
+                active: false,
+                layer: map_layer,
+                icon: `<i class="material-icons" style="color:${color};">${layer.icon}</i>`,
+                collapsed: true
+            }, layerName.charAt(0).toUpperCase() + layerName.slice(1), 'Areas of Interest');
+        });
+    });
+}
 
 /***************************
  * Street related functions *

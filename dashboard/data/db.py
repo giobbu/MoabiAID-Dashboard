@@ -2,9 +2,13 @@
 Module that manages database acces, all requests for data should come through here
 """
 import json
+import glob
+import os
 
 # Used to generate testing data, can be removed in production
 import random
+
+from pathlib import Path
 
 from django.core.serializers import serialize
 from django.db.models import Q
@@ -12,6 +16,7 @@ from django.db.models import Q
 from dashboard.models import *
 from .figures import *
 from dashboard.utils import load_feature_collection, get_current_values
+from mobiaid.settings import BASE_DIR
 
 
 def get_commune_data(req_data):
@@ -57,12 +62,14 @@ def get_truck_data(trucks, req_data):
     """
     # trucks = Truck.objects.all() # TODO: This approaach should change, trucks should be a GeoJSON file with a Point for the last position of each truck in Bxl
     truck_list = load_feature_collection(trucks)
-    print(truck_list[0])
+    # print(truck_list[0])
     data = []
     if req_data == 'in_commune':
         data = trucks_in_commune_table(truck_list, Commune.objects.all())
+    elif req_data == 'positions':
+        data = trucks
 
-    print(data)
+    # print(data)
     return data
 
 
@@ -143,4 +150,21 @@ def get_commune_counts(street_counts):
     
     # print(com_features)
     return com_features
+
+def get_layers(req_layers):
+    
+    layers = []
+
+    if req_layers == 'areas_of_interest':
+        layers_dir = os.path.join(BASE_DIR, 'dashboard/static/dashboard/json/Layers/')
+        area_files = glob.glob(layers_dir + '*.geojson')
+        print(area_files)
+        for layer_fname in area_files:
+            with open(layer_fname, 'r') as layer_file:
+                features = json.load(layer_file)
+                features['layer_name'] = Path(layer_fname).stem
+                layers.append(features)
+    
+    print(layers)
+    return layers
 

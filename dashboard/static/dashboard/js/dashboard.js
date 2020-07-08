@@ -61,7 +61,7 @@ function drawRtChart(chartDiv, data, cat_key, val_key, textConfig) {
     categoryAxis.title.text = textConfig.catLabel;
     categoryAxis.renderer.minGridDistance = 50;
     categoryAxis.renderer.labels.template.fontSize = 14;
-    categoryAxis.renderer.labels.template.horizontalCenter ='middle';
+    categoryAxis.renderer.labels.template.horizontalCenter = 'middle';
     categoryAxis.renderer.labels.template.wrap = true;
     categoryAxis.renderer.labels.template.maxWidth = 165;
 
@@ -73,10 +73,74 @@ function drawRtChart(chartDiv, data, cat_key, val_key, textConfig) {
 
 }
 
+function setupLiveTruckMap(rtMap, rtMeasure, selectPanel, refresh = false) {
+    return $.get("/data/", {
+            data_usage: "real-time",
+            table: "truck",
+            data: "positions"
+        })
+        .done(function (truckData) {
+
+            var markerIcon = new L.Icon({
+
+                iconUrl: 'https://github.com/google/material-design-icons/raw/master/maps/1x_web/ic_local_shipping_black_24dp.png',
+                iconSize: [24, 24]
+
+            });
+
+            console.log(truckData);
+
+
+            if (refresh) {
+                selectPanel.removeLayer('Trucks');
+            }
+
+            // var trucks = truckData.data.features;
+            // Use marker clustering with layer support as in https://github.com/ghybs/Leaflet.MarkerCluster.LayerSupport
+            var markers = L.markerClusterGroup(),
+                layer_group = L.featureGroup.subGroup(markers),
+                truck_layers = L.geoJSON(truckData.data, {
+                    onEachFeature: function (feature, layer) {
+                        text = `Truck ${feature.properties.truck_id} (At: ${feature.properties.datetime})`;
+                        layer.bindPopup(text);
+                    },
+                    pointToLayer: function (feature, latlng) {
+                        return L.marker(latlng, {
+                            icon: markerIcon
+                        });
+                    }
+                });
+
+            markers.addTo(rtMap);
+            truck_layers.addTo(layer_group);
+
+            // truck_layers.addTo(rtMap);
+
+            selectPanel.addOverlay({
+                name: 'Trucks',
+                icon: '<i class="material-icons">local_shipping</i>',
+                layer: layer_group,
+                active: false
+            });
+
+            layer_group.addTo(rtMap);
+
+            // Store the data for later reuse
+            return {
+                layers: truck_layers,
+                communes: truckData.data
+            };
+
+        })
+        .fail(function () {
+            alert("Could not retrieve real-time data for trucks");
+        });
+}
+
 function setupLiveStreetMap(rtMap, rtMeasure, selectPanel, refresh = false) {
     return $.get("/data/", {
             data_usage: "real-time",
-            table: "state_street" // IF this is relevant
+            table: "street"
         })
         .done(function (streetData) {
             var streets = streetData.data;
@@ -254,17 +318,17 @@ function setupLiveCommuneMap(rtMap, rtMeasure, selectPanel, refresh = false) {
                     legend.remove();
                     $('#rt-figdiv-com').hide();
                     $('#com-table-div').hide();
-                    
+
                 }
             });
 
             // Remove layer as it is not shown by default
-            chart.events.on('inited', function (e) {  
+            chart.events.on('inited', function (e) {
                 // Need to wait for chart to be initialized, otherwise it will break the layout
                 console.log('Chart ready, removing layer');
                 layer.remove();
             });
-            
+
 
             selectPanel.addOverlay({
                 name: 'Communes',
@@ -296,6 +360,11 @@ function initRtTab() {
     var panel = L.control.panelLayers(null, [{
         group: 'Streets',
         layers: []
+    }, {
+        group: 'Areas of Interest',
+        collapsed: true,
+        layers: [],
+        
     }], {
         title: '<i class="material-icons align-middle">layers</i> Layers',
         position: 'topleft',
@@ -311,16 +380,21 @@ function initRtTab() {
             if (nameB == 'Streets') {
                 return 1;
             }
-        }
-    }).addTo(rtMap); // Layer selection control
+        },
+        collapsibleGroups: true
+    }); // Layer selection control
     var rtMeasure = "flow"; // Default measure
+
+    console.log(panel);
+    
 
     // Add street and commune layers for RT
     setupLiveStreetMap(rtMap, rtMeasure, panel);
     setupLiveCommuneMap(rtMap, rtMeasure, panel);
+    setupLiveTruckMap(rtMap, rtMeasure, panel);
+    addAreaLayers(rtMap, panel);
 
-    // Set up figures
-    $("#rt-figdiv")
+    panel.addTo(rtMap);
 }
 
 function initMapsTab() {

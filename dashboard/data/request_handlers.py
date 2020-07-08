@@ -32,13 +32,15 @@ def get_data(table, req_data, usage):
 
     elif usage == 'chart':
         # The data is a formatted chart
-        data = get_chart(req_data) #TODO finish chart data requests
+        data = get_chart(req_data)
     elif usage == 'real-time':
         # Real time state of requested entity
         data = get_rt(table, req_data)
     elif usage == 'typical':
         # Typical state(s) for requested entity
         data = get_typical_traffic(table)
+    elif usage == 'layers':
+        data = get_layers(req_data)
     else:
         raise BadRequestError(f'At least one of the provided request parameters (data_usage: {usage}, table: {table}, data: {req_data}) is invalid')
 

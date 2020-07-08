@@ -54,7 +54,6 @@ def get_rt(data, processing=None):
 
     if rt_data is None:
         data_file = STREAMING_FILES / f'state_{data if "commune" not in data else "street"}.json' # get the right file
-        print(data_file)
         with data_file.open('rb') as json_file:
             rt_data = json.load(json_file)
             cache.set(data, rt_data, 30) # 30 sec timeout for now

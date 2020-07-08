@@ -105,13 +105,14 @@ Chart related styling
 }
 
 .leaflet-panel-layers-icon i{
-    font-size: 1.5em;
+    font-size: 1.5em !important;
     align-items: center;
     padding-right: 0.5em;
 }
 
 .leaflet-panel-layers-title span {
     padding-right: 1em;
+    margin-top: 2em;
 }
 
 label.leaflet-panel-layers-title {
@@ -122,6 +123,8 @@ label.leaflet-panel-layers-title {
 .leaflet-container a {
 	color: black;
 }
+
+.leaflet-panel-layers-item
 
 .rt-chart{
     height: 30em;
