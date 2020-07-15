@@ -18,6 +18,8 @@ function drawRtChart(chartDiv, data, cat_key, val_key, textConfig) {
     // For now we assume only XY charts 
     var chart = am4core.create(chartDiv, am4charts.XYChart);
 
+    chart.numberFormatter.numberFormat = '#.';
+
     chart.data = data;
 
     // Create axes

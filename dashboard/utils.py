@@ -194,7 +194,7 @@ def get_time_intervals(resolution):
         time_intervals = range(6)
     elif resolution == 'day_of_week':
         time_intervals = range(1,8) # days start at 1
-    # TODO: add any resolutions we want to support
+    # NOTE: add any new resolutions we want to support here
     else:
         raise ValueError(f'{resolution} is not a valid resolution parameter')
 

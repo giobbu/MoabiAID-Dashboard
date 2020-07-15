@@ -46,7 +46,7 @@ def get_commune_data(req_data):
         data = serialize('geojson', communes, geometry_field='boundaries')
 
 
-    # TODO: Implement retrieval of other data attributes here
+    # NOTE: Implement retrieval of other data attributes here
     # print(data)
     return data
 
@@ -60,7 +60,6 @@ def get_truck_data(trucks, req_data):
     :return: The requested data on trucks (e.g. A dict that is used to created a table describing the trucks in a commune)
     :rtype: dict
     """
-    # trucks = Truck.objects.all() # TODO: This approaach should change, trucks should be a GeoJSON file with a Point for the last position of each truck in Bxl
     truck_list = load_feature_collection(trucks)
     # print(truck_list[0])
     data = []
@@ -103,8 +102,26 @@ def get_chart(chart_name):
 
     return data
 
-def get_typical_traffic(aggregation_lvl):
-    pass #TODO: retrieve typical traffic data given the level of aggrgation: Commune, Street, Truck (clusters where trucks are typically located)
+def get_typical_traffic(aggregation_lvl, value='mean_flow'):
+
+    # Extract aggregate function and requested measure
+    aggregate_fun, measure = value.split('_')
+
+    typical_values = {}
+    if aggregation_lvl == 'Commune':
+        instances = Commune.objects.all()
+    elif aggregation_lvl == 'Street':
+        instances = Street.objects.all()
+    elif aggregation_lvl == 'Trucks':
+        pass # TODO: this might require a different approach
+    else:
+        raise ValueError(f'{aggregation_lvl} is not a valid aggregation level for typical traffic.')
+
+    for inst in instances:
+        # TODO: depending on the final format, this might need to be modified
+        typical_values[inst.name] = inst.typical_values[aggregate_fun][measure]
+
+    return typical_values
 
 # Functions that require more context for the request
 
@@ -133,8 +150,6 @@ def get_commune_counts(street_counts):
         # print(com)
 
         n_trucks_commune = 0
-
-        # TODO: rewrite under assumption that streets in DB do not match those in the RT file
 
         for i, (street, props) in enumerate(streets):
             # street can be a name or a database id

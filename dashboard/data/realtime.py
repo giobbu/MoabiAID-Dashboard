@@ -68,7 +68,6 @@ def get_rt(data, processing=None):
            rt_data['features'][i]['geometry'] =  geometry.mapping(geometry.LineString(coord_list[:-1]))
     
     if 'commune' in data:
-        # TODO: review approach: either change or need to format street data to work with this function (or work in geojson)
         com_data = cache.get('commune_status')
 
         if com_data is None:

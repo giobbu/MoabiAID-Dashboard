@@ -4,7 +4,6 @@ from scipy.stats import norm
 from dashboard.utils import get_time_intervals
 
 def trucks_in_commune_table(trucks, communes):
-    #TODO: rewrite for new approach to truck positions
     """
     Generates a dictionary that is formatted as to generate a DataTables table on the client.
     This table contains the counts of trucks in each commune
@@ -36,9 +35,8 @@ def trucks_in_commune_table(trucks, communes):
     }
     for com in communes:
         boundaries = com.boundaries
-        #NOTE: IMPORTANT! As a placeholder we use the truck's last position. For the real deal this should use RT data or the position at a certain time
         # trucks_here = trucks.filter(last_position__within=boundaries) 
-        # TODO: verify that the provided commune is correct with regards to the position
+        # NOTE: we might want to verify that the provided commune is correct with regards to the position
         trucks_here = [tr for _, tr in trucks if tr['commune'] in com.name]
         commune_data = {
             'commune': com.name,
