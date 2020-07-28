@@ -219,16 +219,27 @@ Dashboard
                 <div class="dropdown" id="entity-select-dropdown">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="entity-select"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Select level of aggregation of the analysis
+                        Select a type of the analysis
                     </button>
                     <div class="dropdown-menu" aria-labelledby="entity-select">
-                        <a class="dropdown-item" href="#">Global</a>
-                        <a class="dropdown-item" href="#">Communes</a>
-                        <a class="dropdown-item " href="#">Streets</a>
-                        <a class="dropdown-item" href="#">Individual Trucks</a>
+                        <a class="dropdown-item" href="#">Street Flow</a>
+                        <a class="dropdown-item" href="#">Commune Traffic</a>
+                        <a class="dropdown-item " href="#">Data Delay</a>
                     </div>
                 </div>
-                <div id="analytics-body"></div>
+                <div id="analytics-body">
+                    <div class="row">
+                        <div id="analysis-maps" class="col-8">
+                            
+                        </div>
+                         <div id="analysis-tables" class="col">
+                            
+                        </div>
+                    </div>
+                    <div id="analysis-charts" class="row">
+                        
+                    </div>
+                </div>
             </div>
             <div class="tab-pane fade" id="v-pills-pred" role="tabpanel" aria-labelledby="v-pills-pred-tab">
                 <h1>Predictions</h1>

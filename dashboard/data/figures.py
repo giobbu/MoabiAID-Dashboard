@@ -123,14 +123,16 @@ def bar_chart(data, name, category, value, xlabel=None, ylabel=None):
     }
 
     if xlabel is not None:
-        x_axis['dataFields']['title'] = {'text': xlabel} 
+        x_axis['title'] = {'text': xlabel} 
 
     y_axis = {
         'type': 'ValueAxis'
     }
 
     if ylabel is not None:
-        y_axis['title']['text'] = ylabel
+        y_axis['title'] = {
+            'text': ylabel
+        }
 
     columns = {
         'tooltipText': '{categoryX}: {valueY}'
@@ -241,7 +243,8 @@ def category_distribution(trucks, communes, sort_key='cat_c'):
     for com in communes:
         boundaries = com.boundaries
         #NOTE: IMPORTANT! As a placeholder we use the truck's last position. For the real deal this should use RT data or the position at a certain time
-        trucks_here = trucks.filter(last_position__within=boundaries) 
+        # trucks_here = trucks.filter(last_position__within=boundaries) #TODO: modify this to use the RT data 
+        trucks_here = []
         commune_data = {
             'commune': com.name,
             'cat_b': 0,
@@ -261,6 +264,16 @@ def category_distribution(trucks, communes, sort_key='cat_c'):
     return clustered_bar_chart(data, 'commune', ['cat_b', 'cat_c'])
 
 def time_of_day_distribution(truck_counts:list):
+    """
+    Constructs a configuration for a barchart that displays the number of trucks 
+    for each time-foday. Can be used for streets or communes interachangeably, as only 
+    a list of 24 truck counts is required.
+
+    :param truck_counts: List of number of trucks (average, max, min, etc.) for every time-of-day [0-24)
+    :type truck_counts: list
+    :return: Barchart configuration for Amcharts
+    :rtype: dict
+    """
     #TODO: test with real data, might need formatter
 
     cat = 'time_of_day'
@@ -315,4 +328,4 @@ def delay_distribution(delays, resolution='time_of_day'):
             }
         )
     
-    return bar_chart(columndata_list, 'Typical Delay', 'batch_interval', 'delay')
+    return bar_chart(columndata_list, 'Typical Delay', 'batch_interval', 'delay', 'Hour-of-the-Day', 'Delay')

@@ -14,7 +14,7 @@ from django.core.serializers import serialize
 from django.db.models import Q
 
 from dashboard.models import *
-from .figures import *
+from dashboard.data.figures import *
 from dashboard.utils import load_feature_collection, get_current_values
 from mobiaid.settings import BASE_DIR
 
@@ -108,11 +108,11 @@ def get_typical_traffic(aggregation_lvl, value='mean_flow'):
     aggregate_fun, measure = value.split('_')
 
     typical_values = {}
-    if aggregation_lvl == 'Commune':
+    if aggregation_lvl == 'commune':
         instances = Commune.objects.all()
-    elif aggregation_lvl == 'Street':
+    elif aggregation_lvl == 'street':
         instances = Street.objects.all()
-    elif aggregation_lvl == 'Trucks':
+    elif aggregation_lvl == 'trucks':
         pass # TODO: this might require a different approach
     else:
         raise ValueError(f'{aggregation_lvl} is not a valid aggregation level for typical traffic.')

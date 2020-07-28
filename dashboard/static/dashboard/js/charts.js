@@ -21,6 +21,8 @@ function addDetails(chart) {
 
 function formatLabels(chart) {
 
+    // NOTE: we might want to add formatting options (through paramneters) depending on the figure
+
     chart.fontSize = 13;
     chart.fontWeight = "bolder";
     chart.numberFormatter.numberFormat = "#";
@@ -28,7 +30,8 @@ function formatLabels(chart) {
     chartType = chart.className;
 
     if (chartType == "XYChart") {
-        // console.log(chart)
+
+        // Y axis fromatting
         chart.yAxes.each(function (axis) {
 
             // Wrap labels that are too long
@@ -43,8 +46,13 @@ function formatLabels(chart) {
             ticksTemplate.length = 10;
         });
 
-        chart.series.each(function (ser) {
-            // columnTemplate = ser.columns.template.width = am4core.percent(20);
+        // X axis formatting
+        chart.xAxes.each(function (categoryAxis) {
+            categoryAxis.renderer.minGridDistance = 50;
+            categoryAxis.renderer.labels.template.fontSize = 14;
+            categoryAxis.renderer.labels.template.horizontalCenter = 'middle';
+            categoryAxis.renderer.labels.template.wrap = true;
+            categoryAxis.renderer.labels.template.maxWidth = 165;
         });
     }
 
@@ -70,8 +78,8 @@ function drawChart(chart_name) {
 
             // // Format labels
             formatLabels(chart);
-            // console.log(chart);
-            
+            console.log(chart);
+
         });
     // TODO: add fail and always callbacks as necessary
     return chart;
@@ -162,7 +170,7 @@ function drawTable(table_name) {
             //     // Make sub-tables
             //     drawVariantsTable(table_data, divSelector);
             // } else {
-                table = generateTable(table_name, table_data, divSelector);
+            table = generateTable(table_name, table_data, divSelector);
             // };
             // var tableId = table_name + "_table";
             // $(divSelector).replaceWith(`<table id=${tableId} class='display'></table>`);
@@ -191,7 +199,7 @@ function drawTable(table_name) {
 //         chart_name = $(this).prop("id"); //id of a chart div should correspond to the chart name as accepted by server side handlers
 
 //         // console.log("Drawing chart");
-        
+
 //         $(`<h3> ${chart_name} </h3>`).appendTo(this);
 //         chart = drawChart(chart_name);
 //         // TODO: Eventual additional client-side processing/customization for specific charts

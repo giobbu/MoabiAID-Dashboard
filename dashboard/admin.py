@@ -14,7 +14,6 @@ class TruckAdmin(admin.OSMGeoAdmin):
         'average_velocity',
         'country_code',
         'euro_value',
-        'last_position',
         'route',
     )
     list_filter = ('measurement_date',)

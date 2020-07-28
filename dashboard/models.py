@@ -31,6 +31,10 @@ class Truck(models.Model):
     route = models.LineStringField()
     directions = None  # How to store?
 
+    @property
+    def last_position(self):
+        return self.route[-1]
+
     class Meta:
         unique_together = ['obu_id', 'measurement_date']
         required_db_features = ['gis_enabled']

@@ -464,9 +464,10 @@ function initAnalyticsTab() {
 
         switch (selected) {
             case 'Streets':
-                //TODO: load individual street analytics
+                loadStreetAnalytics('params'); // NOTE: This still has to be implemented 
                 break;
-
+            
+            case 'Delay':
             default:
                 break;
         }

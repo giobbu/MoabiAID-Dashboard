@@ -38,7 +38,7 @@ def get_data(table, req_data, usage):
         data = get_rt(table, req_data)
     elif usage == 'typical':
         # Typical state(s) for requested entity
-        data = get_typical_traffic(, req_data)
+        data = get_typical_traffic(table, req_data)
     elif usage == 'layers':
         data = get_layers(req_data)
     else:
