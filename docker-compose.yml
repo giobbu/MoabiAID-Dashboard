@@ -77,6 +77,7 @@ services:
       - .:/app
       - /mnt/data/Shared_Documents/MLG/large_scale_mobility_analysis/streaming_docker/streaming:/streaming_files
       - /mnt/data/Shared_Documents/MLG/Belgium_map_data_20_12_19:/map_data
+      - /mnt/data/Shared_Documents/MLG/mobi_media:/media
     ports:
       - "3000:3000"
       - 5678:5678 # Debugger

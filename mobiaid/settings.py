@@ -131,6 +131,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+MEDIA_ROOT = '/media/' # NOTE: change this to a different folder if deploying locally
+MEDIA_URL = '/media/'
+
 # Extensions
 GRAPH_MODELS = {
   'all_applications': False,

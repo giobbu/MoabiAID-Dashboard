@@ -468,6 +468,8 @@ function initAnalyticsTab() {
                 break;
             
             case 'Delay':
+                loadDelayAnalysis();
+                break;
             default:
                 break;
         }

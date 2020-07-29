@@ -3,11 +3,16 @@ from scipy.stats import norm
 
 from dashboard.utils import get_time_intervals
 
+##########
+# Tables #
+##########
+
+
 def trucks_in_commune_table(trucks, communes):
     """
     Generates a dictionary that is formatted as to generate a DataTables table on the client.
     This table contains the counts of trucks in each commune
-    
+
     :param trucks: List of trucks that where retrieved from the database
     :type trucks: ~django.db.models.query.QuerySet
     :param communes: List of communes that are stored in the database
@@ -35,7 +40,7 @@ def trucks_in_commune_table(trucks, communes):
     }
     for com in communes:
         boundaries = com.boundaries
-        # trucks_here = trucks.filter(last_position__within=boundaries) 
+        # trucks_here = trucks.filter(last_position__within=boundaries)
         # NOTE: we might want to verify that the provided commune is correct with regards to the position
         trucks_here = [tr for _, tr in trucks if tr['commune'] in com.name]
         commune_data = {
@@ -51,11 +56,61 @@ def trucks_in_commune_table(trucks, communes):
                 commune_data['cat_c'] += 1
             else:
                 commune_data['cat_b'] += 1
-        
+
         result['cat_b'] += commune_data['cat_b']
         result['cat_c'] += commune_data['cat_c']
         result['table']['data'].append(commune_data)
     return result
+
+####################
+# AmCharts helpers #
+####################
+
+
+def build_chart_config(data, chart_type, xaxes, yaxes, series, legend=False):
+    chart_dict = {
+        'data': data,
+        'xAxes': xaxes,
+        'yAxes': yaxes,
+        'series': series,
+        'type': chart_type
+    }
+
+    if legend:
+        # If legend is True, the default legend is enabled.
+        if isinstance(legend, bool):
+            chart_dict['legend'] = {
+                'type': "Legend"
+            }
+        # Alternatively, one can provide a custom dict config for their legend
+        else:
+            chart_dict['legend'] = legend
+
+    return chart_dict
+
+
+def make_category_value_axes(category, xlabel=None, ylabel=None):
+    x_axis = {
+        'type': 'CategoryAxis',
+        'dataFields': {
+            'category': category
+        }
+    }
+
+    if xlabel is not None:
+        x_axis['title'] = {'text': xlabel}
+
+    y_axis = {
+        'type': 'ValueAxis'
+    }
+
+    if ylabel is not None:
+        y_axis['title'] = {
+            'text': ylabel
+        }
+
+    return x_axis, y_axis
+
 
 def make_category_series(s_type, category, value, name=None, columns=None):
     """
@@ -63,7 +118,7 @@ def make_category_series(s_type, category, value, name=None, columns=None):
     an amCharts series that supports categories (i.e. the chart has a CategoryAxis for its x-axis).
     In this case it means that the dataFields property has valueY and categoryX properties.
     Currently only tested with column series.
-    
+
     :param s_type: The concrete type of series that supports a categorical x-axis
     :type s_type: str
     :param category: Name of the category propertye in the data
@@ -85,7 +140,7 @@ def make_category_series(s_type, category, value, name=None, columns=None):
             'categoryX': category
         }
     }
-    
+
     if name is not None:
         series['name'] = name
 
@@ -98,7 +153,7 @@ def make_category_series(s_type, category, value, name=None, columns=None):
 def bar_chart(data, name, category, value, xlabel=None, ylabel=None):
     """
     Constructs a dictionary to be passed as the configuration for a bar charts in amCharts
-    
+
     :param data: A list of dictionaries representing the data we want to display
     :type data: list(dict)
     :param name: Name to be passed to the series
@@ -115,46 +170,26 @@ def bar_chart(data, name, category, value, xlabel=None, ylabel=None):
     :rtype: dict
     """
 
-    x_axis = {
-        'type': 'CategoryAxis',
-        'dataFields': {
-            'category': category
-            }
-    }
-
-    if xlabel is not None:
-        x_axis['title'] = {'text': xlabel} 
-
-    y_axis = {
-        'type': 'ValueAxis'
-    }
-
-    if ylabel is not None:
-        y_axis['title'] = {
-            'text': ylabel
-        }
+    x_axis, y_axis = make_category_value_axes(category, xlabel, ylabel)
 
     columns = {
         'tooltipText': '{categoryX}: {valueY}'
-        #Note: further customization of table should happen client-side
-        }
-        
-    series = make_category_series('ColumnSeries', category, value, name, columns)
-
-    chart_dict = {
-        'data': data,
-        'xAxes': [x_axis], # We assume only one x and y axis for this type of chart
-        'yAxes': [y_axis],
-        'series': [series],
-        'type': 'XYChart'
+        # Note: further customization of table should happen client-side
     }
 
+    series = make_category_series(
+        'ColumnSeries', category, value, name, columns)
+
+    chart_dict = build_chart_config(
+        data, 'XYChart', [x_axis], [y_axis], [series])
+
     return chart_dict
+
 
 def clustered_bar_chart(data, category, values):
     """
     Cosntructs a dictionary that describes the configuration of a clustered barchart in amCharts
-    
+
     :param data: A list of dictionaries representing the data we want to display
     :type data: list(dict)
     :param category: Name of the category key in the data dictionary
@@ -168,7 +203,7 @@ def clustered_bar_chart(data, category, values):
     x_axis = {
         'type': 'ValueAxis',
         'renderer': {
-            'opposite' : True # To display values on top of the chart instead of bottom
+            'opposite': True  # To display values on top of the chart instead of bottom
         }
     }
 
@@ -209,25 +244,78 @@ def clustered_bar_chart(data, category, values):
 
         series.append(ser)
 
-    chart_dict = {
-        'data': data,
-        # Note: Add this property containing the following function to client-side JS for ordered bars: 
-        # events: {beforedatavalidated: function(ev) {ev.target.data.sort(function(a, b) {return a.n_variants - b.n_variants;});}},
-        'xAxes': [x_axis], # We assume only one x and y axis for this type of chart
-        'yAxes': [y_axis],
-        'series': series,
-        'legend': {
-            'type': "Legend"
-        },
-        'type': 'XYChart'
-    }
+    chart_dict = build_chart_config(data, 'XYChart', [x_axis], [
+                                    y_axis], series, legend=True)
 
     return chart_dict
+
+
+def boxplot_line(category, value, start, end):
+    return {
+        'type': 'StepLineSeries',
+        'dataFields': {
+                'categoryX': category,
+                'valueY': value
+        },
+        'noRisers': True,
+        'startLocation': start,
+        'endLocation': end,
+        'strokeWidth': 2
+        # Color will have to be customized on client side
+    }
+
+
+def box_plot(data, category, xlabel=None, ylabel=None):
+
+    # Based on this demo: https://www.amcharts.com/demos/box-plot-chart/
+    # This is actually a candlestick chart, but the box limits are those of a boxplot
+
+    x_axis, y_axis = make_category_value_axes(category, xlabel, ylabel)
+
+    series = [
+        {
+            # Candlestick series to draw the box
+            'type': 'CandlestickSeries',
+            'dataFields': {
+                'categoryX': category,
+                'lowValueY': 'min',
+                'valueY': 'Q1',
+                'openValueY': 'Q3',
+                'highValueY': 'max'
+            },
+            'columns': {
+                'column': {
+                    'tooltipText': 'Min:{min}\nQ1:{Q1}\nMedian:{median}\nQ3:{Q3}\nMax:{max}'
+                }
+            },
+            # Customization for boxplot (drop some candlestick functionality)
+            'simplifiedProcessing': True,
+            'riseFromOpenState': None,
+            'dropFromOpenState': None
+        },
+        # Median line
+        boxplot_line(category, 'median', 0.1, 0.9),
+        # Top line
+        boxplot_line(category, 'max', 0.2, 0.8),
+        # Top line
+        boxplot_line(category, 'min', 0.2, 0.8)
+    ]
+
+    chart_dict = build_chart_config(
+        data, 'XYChart', [x_axis], [y_axis], series)
+
+    return chart_dict
+
+
+###################
+# Concrete charts #
+###################
+
 
 def category_distribution(trucks, communes, sort_key='cat_c'):
     """
     Generates a configuration for a chart that shows the distribution of trucks over communes and over categories in a clustered bar chart.
-    
+
     :param trucks: Previously retrieved queryset of trucks.
     :type trucks: ~django.db.models.query.QuerySet
     :param communes: Queryset of Brussels communes.
@@ -242,8 +330,8 @@ def category_distribution(trucks, communes, sort_key='cat_c'):
 
     for com in communes:
         boundaries = com.boundaries
-        #NOTE: IMPORTANT! As a placeholder we use the truck's last position. For the real deal this should use RT data or the position at a certain time
-        # trucks_here = trucks.filter(last_position__within=boundaries) #TODO: modify this to use the RT data 
+        # NOTE: IMPORTANT! As a placeholder we use the truck's last position. For the real deal this should use RT data or the position at a certain time
+        # trucks_here = trucks.filter(last_position__within=boundaries) #TODO: modify this to use the RT data
         trucks_here = []
         commune_data = {
             'commune': com.name,
@@ -257,13 +345,14 @@ def category_distribution(trucks, communes, sort_key='cat_c'):
                 commune_data['cat_c'] += 1
             else:
                 commune_data['cat_b'] += 1
-        
+
         data.append(commune_data)
 
-    data.sort(key=lambda com: com[sort_key]) # Sort the list on the given key 
+    data.sort(key=lambda com: com[sort_key])  # Sort the list on the given key
     return clustered_bar_chart(data, 'commune', ['cat_b', 'cat_c'])
 
-def time_of_day_distribution(truck_counts:list):
+
+def time_of_day_distribution(truck_counts: list):
     """
     Constructs a configuration for a barchart that displays the number of trucks 
     for each time-foday. Can be used for streets or communes interachangeably, as only 
@@ -274,7 +363,7 @@ def time_of_day_distribution(truck_counts:list):
     :return: Barchart configuration for Amcharts
     :rtype: dict
     """
-    #TODO: test with real data, might need formatter
+    # TODO: test with real data, might need formatter
 
     cat = 'time_of_day'
     val = 'truck_total'
@@ -287,8 +376,9 @@ def time_of_day_distribution(truck_counts:list):
             cat: i,
             val: truck_counts[i]
         })
-    
+
     return bar_chart(data_list, 'Truck activity', cat, val)
+
 
 def delay_distribution(delays, resolution='time_of_day'):
 
@@ -298,7 +388,7 @@ def delay_distribution(delays, resolution='time_of_day'):
 
     # Compute normal distribution of delays if no batch intervals to fit
     # NOTE: we assume delays are normally distibuted, we might want to investigate this. This figure can give an indication if it fits
-    # TODO: review how to do a histogram with amcharts 
+    # TODO: review how to do a histogram with amcharts
     # if batch_intervals is None:
     #     # Fit a normal distribution to the data:
     #     mu, std = norm.fit(delays)
@@ -327,5 +417,5 @@ def delay_distribution(delays, resolution='time_of_day'):
                 'batch_interval': time_intervals[i]
             }
         )
-    
+
     return bar_chart(columndata_list, 'Typical Delay', 'batch_interval', 'delay', 'Hour-of-the-Day', 'Delay')

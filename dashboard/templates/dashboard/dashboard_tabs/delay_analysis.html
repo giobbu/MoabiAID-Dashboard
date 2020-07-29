@@ -1,0 +1,22 @@
+{% extends 'analytics.html' %}
+
+{% block analysis_components %}
+
+<div id="{{timeframe}}-delay-analysis" class="analysis-content active">
+    <div class="row map-tables">
+        {% if time_frame == 'current' %}
+        <div class="col-8 map-analysis">
+        </div>
+        {% endif %}
+        <div class="col tables-analysis">
+
+        </div>
+
+    </div>
+
+    <div class="row figures">
+        {# Insert cols for each figure #}
+    </div>
+</div>
+
+{% endblock analysis_components %}
