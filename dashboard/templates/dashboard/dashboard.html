@@ -255,9 +255,11 @@ Dashboard
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
 <script type="text/javascript" src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
 <script src="https://unpkg.com/leaflet.featuregroup.subgroup@1.0.2/dist/leaflet.featuregroup.subgroup.js"></script>
+{# pre-load all relevant scripts that will be used #}
 <script src="{% static '/dashboard/js/drawUtils.js' %}"></script>
 <script src="{% static '/dashboard/js/charts.js' %}"></script>
 <script src="{% static '/dashboard/js/maps.js' %}"></script>
+<script src="{% static 'dashboard/js/analytics.js' %}"></script>
 <script src="{% static '/dashboard/js/dashboard.js' %}"></script>
 {{map_controls.media}}
 {% endblock %}

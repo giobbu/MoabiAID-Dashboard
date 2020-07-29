@@ -3,7 +3,10 @@ Module that handles incoming data requests related to a certain view and delegat
 """
 from .db import *
 from .realtime import get_rt
+from .analysis import delay_analysis
 from dashboard.utils import BadRequestError
+
+import numpy as np # NOTE: for testing purposes only
 
 def get_data(table, req_data, usage):
     """
@@ -45,3 +48,12 @@ def get_data(table, req_data, usage):
         raise BadRequestError(f'At least one of the provided request parameters (data_usage: {usage}, table: {table}, data: {req_data}) is invalid')
 
     return data
+
+def get_analysis_template(analysis, **params):
+    
+    if analysis == 'delay':
+        delays = np.random.rand(200) #TODO: retrieve delays
+
+        return delay_analysis(delays, params['timeFrame'])
+    
+    raise BadRequestError(f'Can not perform the {analysis} analysis with parameters {params}')

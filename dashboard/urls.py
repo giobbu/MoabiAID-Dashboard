@@ -9,4 +9,5 @@ urlpatterns = [
     path("data/", views.data, name="data"),
     path("about/", views.about, name="about"),
     path('select2/', include('django_select2.urls')),
+    path('analysis/<analysis>/', views.analysis, name='analysis')
 ]

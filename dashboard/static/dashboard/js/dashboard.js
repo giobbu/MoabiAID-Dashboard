@@ -462,12 +462,14 @@ function initAnalyticsTab() {
         e.preventDefault();
         var selected = $(this).text();
 
+        console.log(selected);
+
         switch (selected) {
             case 'Streets':
                 loadStreetAnalytics('params'); // NOTE: This still has to be implemented 
                 break;
             
-            case 'Delay':
+            case 'Data Delay':
                 loadDelayAnalysis();
                 break;
             default:

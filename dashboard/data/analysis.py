@@ -3,9 +3,12 @@ import os
 import matplotlib.pyplot as plt
 import numpy as np
 
+import django.forms as forms
 from django.template.loader import render_to_string
 
 from mobiaid.settings import MEDIA_ROOT
+
+from dashboard.data.figures import box_plot, delay_distribution
 
 
 def compute_delay_stats(delays, time_frame):
@@ -93,13 +96,36 @@ def plot_delay_messages(delay_list, minime, maxime, delay_min, delay_mean, delay
     # plt.show()
     plt.savefig(os.path.join(MEDIA_ROOT, 'figures/delay_boxplot.svg'))
 
+class TimeFrameSelect(forms.Form):
+    select_timeframe = forms.ChoiceField(choices=[('CU', 'Current batch'), ('DAY', 'Daily'), ('WEEK', 'Weekly'), ('ALL', 'All time')])
+
 
 def delay_analysis(delays, time_frame):
 
     delay_stats = compute_delay_stats(delays, time_frame)
 
-    ctx = {
-        'timeframe': time_frame
-    }  # TODO: build appropriate charts, tables (and maybe map) configurations and add them to the context
+    fig_configs = {} 
+    table_configs = {}
 
-    return render_to_string('/dashboard/dashboard_tabs/delay_analysis.html')
+    map_data = {} # TODO: read/generate the geojson for map display
+
+    # TODO: build appropriate chart and table configurations 
+    if time_frame == 'current':
+        fig_configs['boxplot'] = box_plot([{
+            'batch': 'Latest Batch',
+            'min': delay_stats['batch_delay_min'],
+            'max': delay_stats['batch_delay_max'],
+            'Q1': delay_stats['batch_delay_percentiles'][0],
+            'median': delay_stats['batch_delay_percentiles'][1],
+            'Q3': delay_stats['batch_delay_percentiles'][2],
+        }], 'batch')
+
+    ctx = {
+        'timeframe': time_frame,
+        'figure_configs': fig_configs,
+        'table_configs': table_configs,
+        'map_data': map_data,
+        'analytics_controls': TimeFrameSelect()
+    }  
+
+    return render_to_string('dashboard/dashboard_tabs/delay_analysis.html', context=ctx)

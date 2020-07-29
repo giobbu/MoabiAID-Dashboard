@@ -74,6 +74,13 @@ def data(request):
     # print(response.content)
     return response
 
+def analysis(request, analysis):
+    time_frame = request.GET.get('timeFrame')
+
+    response_html = get_analysis_template(analysis, **request.GET.dict())
+
+    return HttpResponse(response_html)
+
 def load_dashboard_tab(request):
     """
     View that renders the HTML for specified dashboard tab, to be included in the tab element of the Dashboard page.

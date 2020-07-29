@@ -11,7 +11,7 @@ function loadDelayAnalysis(timeFrame = 'current') {
         $(`#${timeFrame}-delay-analysis`).addClass('active');
     } else {
         // Retrieve data
-        $.get("/data/delay", {
+        $.get("/analysis/delay", {
                 timeFrame: timeFrame
             })
             .done(function (delayData) {
@@ -20,8 +20,19 @@ function loadDelayAnalysis(timeFrame = 'current') {
                 $('.analysis-content.active').removeClass('active');
                 $('#analytics-body').append(delayData);
 
-                // TODO: se up charts, tables and maps
-                
+                // TODO: set up charts, tables and maps
+                drawBxlMap('delay-map');
+
+                const figConfigs = JSON.parse(document.getElementById('figure_configs').textContent);
+
+                for (const config in figConfigs) {
+                    if (figConfigs.hasOwnProperty(config)) {
+                        const figConf = figConfigs[config];
+                        $(`#${timeFrame}-delay-analysis`).append(`<div id="figure-${config}" class="col"></div>"`);
+                        am4core.createFromConfig(figConf, `figure-${config}`);
+
+                    }
+                }
             });
     }
 
