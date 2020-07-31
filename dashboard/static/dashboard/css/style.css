@@ -81,8 +81,13 @@ nav .navbar-nav .nav-item.active {
     min-height: 100vh;
 }
 
+/*
+Page padding and ensure the container always takes the full bviewport height regardless of content
+*/
 #page {
-    padding-bottom: 5.3rem
+    padding-bottom: 5.3rem;
+    min-height: 100vh;
+    height: 100%;
         /* height of the footer + spacing between footer and page content */
 }
 

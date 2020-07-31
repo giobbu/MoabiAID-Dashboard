@@ -25,14 +25,25 @@ function loadDelayAnalysis(timeFrame = 'current') {
 
                 const figConfigs = JSON.parse(document.getElementById('figure_configs').textContent);
 
+                console.log(figConfigs);
+
+                var nColsRow = 0;
+                var nRows = 1;
                 for (const config in figConfigs) {
                     if (figConfigs.hasOwnProperty(config)) {
                         const figConf = figConfigs[config];
-                        $(`#${timeFrame}-delay-analysis`).append(`<div id="figure-${config}" class="col"></div>"`);
+                        $(`#${timeFrame}-delay-analysis .figures.fig-row-${nRows}`).append(`<div id="figure-${config}" class="col-4"></div>"`);
                         am4core.createFromConfig(figConf, `figure-${config}`);
+
+                        // 3 Figures per row. Insert new row when full
+                        if (++nColsRow >= 3) {
+                            $(`#${timeFrame}-delay-analysis`).append(`<div class="row figures fig-row-${++nRows}"></div>`);
+                        }
 
                     }
                 }
+
+                $('.table-analysis-div table').DataTable();
             });
     }
 

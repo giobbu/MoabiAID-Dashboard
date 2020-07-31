@@ -1,0 +1,16 @@
+
+.analysis-content:not(.active){
+    display: none;
+}
+
+#delay-map {
+    min-height: 40em;
+}
+
+.analysis-content .figures {
+    min-height: 30em;
+}
+
+#current-delay-analysis .map-analysis {
+    border-right: 1px solid rgba(0,0,0,.1);
+}

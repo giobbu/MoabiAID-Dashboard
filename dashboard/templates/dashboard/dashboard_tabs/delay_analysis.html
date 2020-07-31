@@ -5,17 +5,29 @@
 <div id="{{timeframe}}-delay-analysis" class="analysis-content active">
     <div class="row map-tables">
         {% if timeframe == 'current' %}
-        <div class="col-6 map-analysis">
+        <div class="col-4 map-analysis">
+            <h3>Batch Truck positions</h3>
             <div id="delay-map"></div>
         </div>
         {% endif %}
         <div class="col tables-analysis">
-
+            <h3>Tables</h3>
+            {% for table_name, table_html in table_data.items %}
+            <h5>{{ table_name|capfirst }}</h5>
+            <div id="table-{{ table_name }}" class="table-analysis-div">
+                {% autoescape off %}
+                {{ table_html }}
+                {% endautoescape %}
+            </div>
+            {% endfor %}
         </div>
 
     </div>
 
-    <div class="row figures">
+    <hr>
+
+    <div class="row figures fig-row-1">
+        <h3>Figures</h3>
         {# Insert cols for each figure #}
     </div>
 </div>

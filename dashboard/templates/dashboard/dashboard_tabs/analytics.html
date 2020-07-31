@@ -1,6 +1,7 @@
 {% load static %}
 {% load crispy_forms_tags %}
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.20/b-1.6.1/b-html5-1.6.1/cr-1.5.2/datatables.min.css"/>
+<link rel="stylesheet" href="{% static '/dashboard/css/analytics.css' %}">
 
 <div id="analysis-controls" class="row">
     {% crispy analytics_controls %}

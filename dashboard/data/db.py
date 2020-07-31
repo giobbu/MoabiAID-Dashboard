@@ -173,13 +173,13 @@ def get_layers(req_layers):
     if req_layers == 'areas_of_interest':
         layers_dir = os.path.join(BASE_DIR, 'dashboard/static/dashboard/json/Layers/')
         area_files = glob.glob(layers_dir + '*.geojson')
-        print(area_files)
+        # print(area_files)
         for layer_fname in area_files:
             with open(layer_fname, 'r') as layer_file:
                 features = json.load(layer_file)
                 features['layer_name'] = Path(layer_fname).stem
                 layers.append(features)
     
-    print(layers)
+    # print(layers)
     return layers
 

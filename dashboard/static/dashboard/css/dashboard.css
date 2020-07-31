@@ -127,3 +127,7 @@ label.leaflet-panel-layers-title {
 div.rt-chart{
     height: 30em;
 }
+
+#page > .row {
+    min-height: 100vh;
+}
