@@ -16,9 +16,12 @@ function loadDelayAnalysis(timeFrame = 'current') {
             })
             .done(function (delayData) {
 
+
                 // Retrieve html and hide current active (if any)
                 $('.analysis-content.active').removeClass('active');
                 $('#analytics-body').append(delayData);
+
+                $('#analytics-body').bootstrapMaterialDesign();
 
                 // TODO: set up charts, tables and maps
                 drawBxlMap('delay-map');
@@ -33,7 +36,10 @@ function loadDelayAnalysis(timeFrame = 'current') {
                     if (figConfigs.hasOwnProperty(config)) {
                         const figConf = figConfigs[config];
                         $(`#${timeFrame}-delay-analysis .figures.fig-row-${nRows}`).append(`<div id="figure-${config}" class="col-4"></div>"`);
-                        am4core.createFromConfig(figConf, `figure-${config}`);
+                        var newFig = am4core.createFromConfig(figConf, `figure-${config}`);
+
+                        console.log(newFig);
+
 
                         // 3 Figures per row. Insert new row when full
                         if (++nColsRow >= 3) {
@@ -43,7 +49,11 @@ function loadDelayAnalysis(timeFrame = 'current') {
                     }
                 }
 
-                $('.table-analysis-div table').DataTable();
+                $('.table-analysis-div table').addClass('display table table-striped table-hover table-bordered').DataTable({
+                    paging: false,
+                    info: false,
+                    searching: false,
+                });
             });
     }
 

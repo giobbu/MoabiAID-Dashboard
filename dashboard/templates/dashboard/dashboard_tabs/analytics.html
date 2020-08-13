@@ -1,6 +1,6 @@
 {% load static %}
 {% load crispy_forms_tags %}
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.20/b-1.6.1/b-html5-1.6.1/cr-1.5.2/datatables.min.css"/>
+{% comment %} <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.20/b-1.6.1/b-html5-1.6.1/cr-1.5.2/datatables.min.css"/> {% endcomment %}
 <link rel="stylesheet" href="{% static '/dashboard/css/analytics.css' %}">
 
 <div id="analysis-controls" class="row">
@@ -12,7 +12,7 @@
 {% comment %} Load required scripts, might already be loaded by other tab {% endcomment %}
 <script src="//www.amcharts.com/lib/4/core.js"></script>
 <script src="//www.amcharts.com/lib/4/charts.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.20/b-1.6.1/b-html5-1.6.1/cr-1.5.2/datatables.min.js"></script>
+{% comment %} <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.20/b-1.6.1/b-html5-1.6.1/cr-1.5.2/datatables.min.js"></script> {% endcomment %}
 
 {% block additional_js %}
 {% endblock additional_js%}

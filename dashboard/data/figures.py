@@ -260,8 +260,8 @@ def boxplot_line(category, value, start, end):
         'noRisers': True,
         'startLocation': start,
         'endLocation': end,
-        'strokeWidth': 2
-        # Color will have to be customized on client side
+        'strokeWidth': 2,
+        'stroke': 'black'
     }
 
 
@@ -285,13 +285,20 @@ def box_plot(data, category, xlabel=None, ylabel=None):
             },
             'columns': {
                 'column': {
-                    'tooltipText': 'Min:{min}\nQ1:{Q1}\nMedian:{median}\nQ3:{Q3}\nMax:{max}'
+                    'tooltipText': 'Min:{min}\nQ1:{Q1}\nMedian:{median}\nQ3:{Q3}\nMax:{max}',
+                    # Color customization
+                    'fill': 'rgba(0, 0, 0, 0.2)',
+                    'stroke': 'black',
                 }
             },
+
             # Customization for boxplot (drop some candlestick functionality)
             'simplifiedProcessing': True,
             'riseFromOpenState': None,
-            'dropFromOpenState': None
+            'dropFromOpenState': None,
+
+
+
         },
         # Median line
         boxplot_line(category, 'median', 0.1, 0.9),
