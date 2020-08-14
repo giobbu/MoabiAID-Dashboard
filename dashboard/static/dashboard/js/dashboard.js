@@ -478,6 +478,11 @@ function initAnalyticsTab() {
     });
 }
 
+function initPredictionsTab() {
+    // TODO: set up map and show relevant metrics and controls
+    drawBxlMap('predict-map');
+}
+
 
 
 $(document).ready(function () {
@@ -510,6 +515,11 @@ $(document).ready(function () {
     // Analytics tab
     $('#v-pills-analytics-tab').one('click', function (e) {
         initAnalyticsTab();
+    });
+
+    // Predictions tab
+    $('#v-pills-pred-tab').one('click', function (e) {  
+        initPredictionsTab();
     });
 
 });

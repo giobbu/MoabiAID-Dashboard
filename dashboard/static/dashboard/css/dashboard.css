@@ -99,6 +99,8 @@ Chart related styling
 
 #hist-map { height: 100em; }
 
+#predict-map { height: 80em;}
+
 .leaflet-panel-layers-icon {
     width: auto;
     justify-content: bottom;
